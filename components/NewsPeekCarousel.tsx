@@ -39,20 +39,18 @@ const INITIAL_NEWS: NewsItem[] = [
 ]
 
 export function NewsPeekCarousel() {
-  const [items, setItems] = useState<NewsItem[]>(INITIAL_NEWS)
   const [activeIndex, setActiveIndex] = useState(0)
-  const [centerPulse, setCenterPulse] = useState(0)
-  const [clickCount, setClickCount] = useState(0)
-  const [swapPhase, setSwapPhase] = useState<null | "crazy">(null)
   const touchStartRef = useRef(0)
+  const touchStartYRef = useRef(0)
   const stageRef = useRef<HTMLDivElement | null>(null)
   const [stageW, setStageW] = useState(0)
-  const lockRef = useRef(false)
+  const isDraggingRef = useRef(false)
+  const isMouseDownRef = useRef(false)
 
-  const len = items.length
-  const center = items[activeIndex]
-  const left = items[(activeIndex - 1 + len) % len]
-  const right = items[(activeIndex + 1) % len]
+  const len = INITIAL_NEWS.length
+  const center = INITIAL_NEWS[activeIndex]
+  const left = activeIndex > 0 ? INITIAL_NEWS[activeIndex - 1] : null
+  const right = activeIndex < len - 1 ? INITIAL_NEWS[activeIndex + 1] : null
 
   // Layout constants
   const CARD_W_RATIO = 0.78
@@ -80,102 +78,94 @@ export function NewsPeekCarousel() {
     right: { x: SIDE_X, scale: SIDE_SCALE, opacity: 0.78, zIndex: 1 },
   } as const
 
-  // Crazy swap animation phase
-  const crazyPhase = {
-    left: { x: SIDE_X, scale: 0.9, opacity: 0.95, zIndex: 6, rotate: 15 },
-    center: { x: 0, scale: 1, opacity: 1, zIndex: 3, rotate: 0 },
-    right: { x: -SIDE_X, scale: 0.9, opacity: 0.95, zIndex: 6, rotate: -15 },
-  } as const
-
-  const variants = swapPhase === "crazy" ? crazyPhase : base
-
-  const cards = useMemo(
-    () => [
-      { item: left, pos: "left" as Pos },
-      { item: center, pos: "center" as Pos },
-      { item: right, pos: "right" as Pos },
-    ],
-    [left, center, right]
-  )
-
-  const handleSwipe = (direction: "left" | "right") => {
-    if (lockRef.current) return
-    lockRef.current = true
-
-    const nextClick = clickCount + 1
-
-    if (nextClick === 1 || nextClick === 2) {
-      setCenterPulse((p) => p + 1)
-      if (direction === "left") {
-        setActiveIndex((prev) => (prev + 1) % len)
-      } else {
-        setActiveIndex((prev) => (prev - 1 + len) % len)
-      }
-      setClickCount(nextClick)
-      setTimeout(() => (lockRef.current = false), 500)
-      return
-    }
-
-    // On 3rd click - crazy swap animation
-    if (nextClick === 3) {
-      setSwapPhase("crazy")
-      setTimeout(() => {
-        setItems((prev) => {
-          const copy = [...prev]
-          // Swap left and right cards
-          ;[copy[0], copy[2]] = [copy[2], copy[0]]
-          return copy
-        })
-        setActiveIndex(0)
-        setClickCount(0)
-        setSwapPhase(null)
-        lockRef.current = false
-      }, 600)
-      return
-    }
-
-    lockRef.current = false
-  }
+  const cards = useMemo(() => {
+    const result = []
+    if (left) result.push({ item: left, pos: "left" as Pos })
+    result.push({ item: center, pos: "center" as Pos })
+    if (right) result.push({ item: right, pos: "right" as Pos })
+    return result
+  }, [left, center, right])
 
   // Touch swipe support
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = e.touches[0].clientX
+    touchStartYRef.current = e.touches[0].clientY
+    isDraggingRef.current = false
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const xDiff = Math.abs(e.touches[0].clientX - touchStartRef.current)
+    const yDiff = Math.abs(e.touches[0].clientY - touchStartYRef.current)
+    
+    // If horizontal movement is greater than vertical, it's a swipe
+    if (xDiff > yDiff && xDiff > 10) {
+      isDraggingRef.current = true
+      e.preventDefault() // Prevent scroll only when swiping
+    }
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isDraggingRef.current) return
+
     const touchEnd = e.changedTouches[0].clientX
     const diff = touchStartRef.current - touchEnd
 
     if (Math.abs(diff) > 50) {
-      handleSwipe(diff > 0 ? "left" : "right")
+      if (diff > 0 && activeIndex < len - 1) {
+        // Swipe left - go to next
+        setActiveIndex(activeIndex + 1)
+      } else if (diff < 0 && activeIndex > 0) {
+        // Swipe right - go to previous
+        setActiveIndex(activeIndex - 1)
+      }
     }
+
+    isDraggingRef.current = false
   }
 
-  // Mouse drag support (desktop)
+  // Mouse drag support
   const handleMouseDown = (e: React.MouseEvent) => {
     touchStartRef.current = e.clientX
+    isMouseDownRef.current = true
+    isDraggingRef.current = false
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDownRef.current) return
+
+    const xDiff = Math.abs(e.clientX - touchStartRef.current)
+    
+    if (xDiff > 10) {
+      isDraggingRef.current = true
+    }
   }
 
   const handleMouseUp = (e: React.MouseEvent) => {
-    const dragEnd = e.clientX
-    const diff = touchStartRef.current - dragEnd
+    if (!isMouseDownRef.current) return
+    
+    isMouseDownRef.current = false
+    
+    if (!isDraggingRef.current) return
+
+    const mouseEnd = e.clientX
+    const diff = touchStartRef.current - mouseEnd
 
     if (Math.abs(diff) > 50) {
-      handleSwipe(diff > 0 ? "left" : "right")
+      if (diff > 0 && activeIndex < len - 1) {
+        // Drag left - go to next
+        setActiveIndex(activeIndex + 1)
+      } else if (diff < 0 && activeIndex > 0) {
+        // Drag right - go to previous
+        setActiveIndex(activeIndex - 1)
+      }
     }
+
+    isDraggingRef.current = false
   }
 
-  // Direct click on card handler
-  const handleCardClick = (pos: Pos) => {
-    if (lockRef.current) return
-
-    if (pos === "center") {
-      handleSwipe("left")
-    } else if (pos === "left") {
-      handleSwipe("right")
-    } else if (pos === "right") {
-      handleSwipe("left")
-    }
+  const handleMouseLeave = () => {
+    isMouseDownRef.current = false
+    isDraggingRef.current = false
   }
 
   return (
@@ -201,66 +191,51 @@ export function NewsPeekCarousel() {
             }}
           />
 
-          <button
+          <div
             onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
-            className="relative w-full h-[560px] outline-none touch-none cursor-grab active:cursor-grabbing"
-            aria-label="Swipe or click to change news"
-            type="button"
+            onMouseLeave={handleMouseLeave}
+            className="relative w-full h-[560px] touch-pan-y cursor-grab active:cursor-grabbing select-none"
           >
             <div ref={stageRef} className="absolute inset-0 overflow-hidden rounded-[32px] bg-black">
               <div className="absolute inset-0 flex items-center justify-center">
-                <AnimatePresence mode="popLayout">
+                <AnimatePresence mode="sync">
                   {cards.map(({ item, pos }) => {
                     const isCenter = pos === "center"
 
                     return (
                       <motion.div
                         key={item.id}
-                        className="absolute left-1/2 top-1/2 h-[92%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-[30px] overflow-hidden cursor-pointer"
-                        initial={{
-                          ...base[pos],
-                          opacity: 0,
-                        }}
-                        animate={variants[pos]}
+                        className="absolute left-1/2 top-1/2 h-[92%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-[30px] overflow-hidden"
+                        initial={base[pos]}
+                        animate={base[pos]}
                         exit={{
                           opacity: 0,
-                          scale: 0.8,
-                          transition: { duration: 0.3, ease: "easeIn" },
+                          scale: 0.85,
+                          transition: { duration: 0.4, ease: "easeInOut" },
                         }}
                         transition={{
-                          x: { duration: 0.6, ease: [0.34, 1.56, 0.64, 1] },
-                          scale: { duration: 0.6, ease: [0.34, 1.56, 0.64, 1] },
-                          opacity: { duration: 0.6, ease: "easeOut" },
-                          rotate: { duration: 0.6, ease: "easeOut" },
+                          x: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+                          scale: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+                          opacity: { duration: 0.5, ease: "easeInOut" },
                         }}
-                        style={{ zIndex: variants[pos].zIndex as number }}
-                        onClick={() => handleCardClick(pos)}
+                        style={{ zIndex: base[pos].zIndex as number }}
                       >
                         <div className="relative w-full h-full">
                           <Image
                             src={item.image}
                             alt={item.title}
                             fill
-                            className="object-cover"
+                            className="object-cover pointer-events-none"
                             priority={isCenter}
+                            draggable={false}
                           />
 
                           <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
-
-                          {/* Center Pulse */}
-                          {isCenter && swapPhase !== "crazy" && (
-                            <motion.div
-                              key={`pulse-${centerPulse}`}
-                              className="absolute inset-0"
-                              initial={{ opacity: 1 }}
-                              animate={{ opacity: [1, 0.82, 1] }}
-                              transition={{ duration: 0.22, ease: "easeOut" }}
-                              style={{ pointerEvents: "none" }}
-                            />
-                          )}
 
                           {/* Center Overlay */}
                           {isCenter && (
@@ -304,17 +279,17 @@ export function NewsPeekCarousel() {
                 </AnimatePresence>
               </div>
             </div>
-          </button>
+          </div>
         </div>
 
-        {/* Progress Dots with Click Counter */}
+        {/* Progress Dots */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}
           className="mt-4 flex justify-center gap-2"
         >
-          {items.map((_, i) => (
+          {INITIAL_NEWS.map((_, i) => (
             <motion.span
               key={i}
               layout
@@ -327,16 +302,6 @@ export function NewsPeekCarousel() {
               }}
             />
           ))}
-        </motion.div>
-
-        {/* Click Counter Indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="mt-3 text-center text-white/60 text-xs"
-        >
-          Click {clickCount} of 3 • Next: {"•".repeat(3 - clickCount)}
         </motion.div>
       </div>
     </section>

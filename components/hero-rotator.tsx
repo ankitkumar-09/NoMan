@@ -42,25 +42,38 @@ const THEMES: Theme[] = [
 
 export function HeroRotator() {
   const [active, setActive] = useState(0)
+  const [progress, setProgress] = useState(0)
   const [paused, setPaused] = useState(false)
   const touchStartRef = useRef(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  const startTimeRef = useRef(Date.now())
 
   const slide = SLIDES[active]
   const theme = THEMES[active] ?? THEMES[0]
 
-  // Auto-rotate every 10 seconds
+  // Reset progress when slide changes
+  useEffect(() => {
+    setProgress(0)
+    startTimeRef.current = Date.now()
+  }, [active])
+
+  // Update progress smoothly
   useEffect(() => {
     if (paused) return
 
-    const id = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % SLIDES.length)
-    }, 10000)
+    const interval = setInterval(() => {
+      const elapsed = Date.now() - startTimeRef.current
+      const newProgress = Math.min(elapsed / 10000, 1)
+      setProgress(newProgress)
 
-    return () => window.clearInterval(id)
-  }, [paused])
+      if (newProgress >= 1) {
+        setActive((prev) => (prev + 1) % SLIDES.length)
+      }
+    }, 50)
 
-  // Left/Right click navigation
+    return () => clearInterval(interval)
+  }, [paused, active])
+
   const handleLeftClick = () => {
     setActive((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)
   }
@@ -69,7 +82,6 @@ export function HeroRotator() {
     setActive((prev) => (prev + 1) % SLIDES.length)
   }
 
-  // Touch swipe support
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = e.touches[0].clientX
   }
@@ -78,14 +90,21 @@ export function HeroRotator() {
     const touchEnd = e.changedTouches[0].clientX
     const diff = touchStartRef.current - touchEnd
 
-    // Minimum swipe distance threshold
     if (Math.abs(diff) > 50) {
       if (diff > 0) {
-        handleRightClick() // Swipe left → next
+        handleRightClick()
       } else {
-        handleLeftClick() // Swipe right → prev
+        handleLeftClick()
       }
     }
+  }
+
+  const getSegmentStates = () => {
+    return SLIDES.map((_, idx) => {
+      if (idx < active) return 1
+      if (idx === active) return progress
+      return 0
+    })
   }
 
   return (
@@ -101,7 +120,11 @@ export function HeroRotator() {
         image={slide.image}
         logo={slide.logo}
         showButtons
-        progress={{ active, total: SLIDES.length }}
+        progress={{ 
+          active, 
+          total: SLIDES.length,
+          segmentStates: getSegmentStates()
+        }}
         paused={paused}
         onPauseToggle={() => setPaused((p) => !p)}
         accentColor={theme.accent}
@@ -109,21 +132,21 @@ export function HeroRotator() {
         pageBgColor="#000000"
       />
 
-      {/* Left Click Area */}
-      <button
-        onClick={handleLeftClick}
-        className="absolute left-0 top-0 h-full w-1/4 cursor-pointer hover:bg-white/5 transition-colors"
-        aria-label="Previous card"
-        type="button"
-      />
+   {/* Left Click Area - smaller width, doesn't cover pause button */}
+<button
+  onClick={handleLeftClick}
+  className="absolute left-0 top-0 bottom-16 w-1/5 cursor-pointer hover:bg-white/5 transition-colors"
+  aria-label="Previous card"
+  type="button"
+/>
 
-      {/* Right Click Area */}
-      <button
-        onClick={handleRightClick}
-        className="absolute right-0 top-0 h-full w-1/4 cursor-pointer hover:bg-white/5 transition-colors"
-        aria-label="Next card"
-        type="button"
-      />
+{/* Right Click Area - smaller width, doesn't cover pause button */}
+<button
+  onClick={handleRightClick}
+  className="absolute right-0 top-0 bottom-16 w-1/5 cursor-pointer hover:bg-white/5 transition-colors"
+  aria-label="Next card"
+  type="button"
+/>
     </div>
   )
 }

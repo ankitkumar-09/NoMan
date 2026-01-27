@@ -14,7 +14,8 @@ export function Footer() {
     <footer className="w-full bg-black py-8 px-4">
       <div className="mx-auto max-w-6xl">
         {/* Device Wrapper */}
-        <div className="relative mx-auto w-full max-w-5xl aspect-[360/146.16]">
+       <div className="relative mx-auto w-full max-w-[960px] aspect-[360/146.16]">
+
           {/* Steam Deck Frame */}
           <img
             src="/images/steam-deck-frame.png"

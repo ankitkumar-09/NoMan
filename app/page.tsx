@@ -12,7 +12,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero Section - Landscape */}
-      <section className="w-full px-4 py-6 md:py-8">
+<section className="w-full px-4 pt-20 pb-6 md:pt-20 md:pb-8">
         <div className="w-full">
           <HeroRotator />
         </div>

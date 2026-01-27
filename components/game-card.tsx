@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ArrowUpRight, Play } from "lucide-react"
-import { motion } from "framer-motion"
 
 interface GameCardProps {
   title: string
@@ -11,7 +10,11 @@ interface GameCardProps {
   logo?: string
   showButtons?: boolean
   imageClassName?: string
-  progress?: { active: number; total: number }
+  progress?: { 
+    active: number
+    total: number
+    segmentStates?: number[]
+  }
   paused?: boolean
   onPauseToggle?: () => void
   accentColor?: string
@@ -60,7 +63,7 @@ export function GameCard(props: GameCardProps) {
 
   return (
     <div
-      className="relative w-full aspect-video group"
+      className="relative w-full h-[420px] group"
       style={
         {
           ["--primary" as any]: accentColor,
@@ -71,8 +74,11 @@ export function GameCard(props: GameCardProps) {
         } as React.CSSProperties
       }
     >
-      <div className="relative h-full w-full overflow-hidden" style={{ borderRadius: R }}>
-        {/* Background Image - Zoomed out so only center visible */}
+      <div className="relative h-full w-full overflow-hidden" style={{ borderRadius: R,
+        borderBottomRightRadius: 100,
+        
+       }}>
+        {/* Background Image */}
         <Image
           src={image || "/placeholder.svg"}
           alt={title}
@@ -82,10 +88,9 @@ export function GameCard(props: GameCardProps) {
           style={{ scale: 1.3 }}
         />
 
-        {/* Outward Cuts - repositioned near pause button */}
+        {/* Outward Cuts
         {showButtons && (
           <>
-            {/* Top cut near pause button */}
             <div
               className="absolute pointer-events-none"
               style={{
@@ -97,7 +102,6 @@ export function GameCard(props: GameCardProps) {
                 right: -20,
               }}
             />
-            {/* Bottom cut near pause button */}
             <div
               className="absolute pointer-events-none"
               style={{
@@ -110,9 +114,9 @@ export function GameCard(props: GameCardProps) {
               }}
             />
           </>
-        )}
+        )} */}
 
-        {/* Gradient Overlay - Lighter on right to show character, darker on left */}
+        Gradient Overlay
         <div
           className="absolute inset-0"
           style={{
@@ -122,7 +126,7 @@ export function GameCard(props: GameCardProps) {
           }}
         />
 
-        {/* Accent Glow */}
+        {/* Accent Glow*/}
         {showButtons && (
           <div
             className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
@@ -131,38 +135,45 @@ export function GameCard(props: GameCardProps) {
                 "linear-gradient(to top, color-mix(in oklab, var(--primary) 40%, transparent) 0%, transparent 100%)",
             }}
           />
-        )}
+        )} 
 
-        {/* Notch Cutout */}
-        {showButtons && (
-          <div
-            className="absolute bottom-0 right-0"
-            style={{
-              width: NOTCH_W,
-              height: NOTCH_H,
-              background: "var(--pageBg)",
-              borderTopLeftRadius: NOTCH_R,
-            }}
-          />
-        )}
+  {/* {showButtons && (
+  <div
+    className="absolute bottom-0 right-0 notch"
+    style={{
+      width: NOTCH_W,
+      height: NOTCH_H,
+      background: "var(--pageBg)",
+      borderTopLeftRadius: NOTCH_R,
+      boxShadow: "inset 8px 0 12px rgba(0,0,0,0.1)",
+      
+    }}
+  />
+)} */}
+
+<style jsx>{`
+  .notch {
+   
+  }
+`}</style>
 
         {/* Content */}
         <div
           className={[
-            "absolute inset-0 flex flex-col justify-end p-6 gap-2",
-            showButtons ? "pr-24 pb-6" : "",
+            "absolute inset-0 flex flex-col justify-end p-6 gap-3",
+            showButtons ? "pr-24 pb-8" : "",
           ].join(" ")}
         >
-          {/* Title Section - Left aligned */}
-          <div className="space-y-1 max-w-[50%]">
+          {/* Title Section */}
+          <div className="space-y-2 max-w-[60%]">
             {logo ? (
-              <div className="flex items-start gap-2">
-                <Image src={logo} alt={`${title} logo`} width={44} height={44} className="shrink-0 mt-0" />
+              <div className="flex items-start gap-3">
+                <Image src={logo} alt={`${title} logo`} width={54} height={54} className="shrink-0 mt-1" />
                 <div className="flex flex-col">
                   <p className="text-xs text-white/85 font-semibold tracking-wide uppercase leading-none">
                     {subtitle}
                   </p>
-                  <h2 className="text-xl md:text-2xl font-bold text-white text-balance leading-tight mt-1">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white text-balance leading-tight mt-2">
                     {title}
                   </h2>
                 </div>
@@ -170,61 +181,56 @@ export function GameCard(props: GameCardProps) {
             ) : (
               <>
                 <p className="text-xs text-white/70 font-medium tracking-wide uppercase">{subtitle}</p>
-                <h2 className="text-xl md:text-2xl font-bold text-white text-balance leading-tight">{title}</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-white text-balance leading-tight">{title}</h2>
               </>
             )}
           </div>
 
           {/* Action Buttons */}
           {showButtons && (
-            <div className="flex flex-col gap-1.5 items-start w-full max-w-xs">
+            <div className="flex flex-col gap-2 items-start w-full max-w-xs">
               <Button
                 onClick={handleWatchTrailer}
-                size="sm"
-                className="w-full h-9 px-5 text-[12px] font-semibold rounded-full bg-white text-black hover:opacity-90 cursor-pointer transition-all"
+                size="lg"
+                className="w-full h-11 px-6 text-[14px] font-semibold rounded-full bg-white text-black hover:opacity-90 cursor-pointer transition-all"
               >
                 Watch Trailer
-                <Play className="w-3 h-3 ml-1.5" />
+                <Play className="w-4 h-4 ml-2" />
               </Button>
 
               <Button
                 onClick={handleLearnMore}
-                size="sm"
+                size="lg"
                 variant="outline"
-                className="w-full h-9 px-5 text-[12px] font-semibold rounded-full border-2 border-white/30 cursor-pointer transition-all hover:border-white/60"
+                className="w-full h-11 px-6 text-[14px] font-semibold rounded-full border-2 border-white/30 cursor-pointer transition-all hover:border-white/60"
                 style={{ color: "white" }}
               >
                 Learn More
-                <ArrowUpRight className="w-3 h-3 ml-1.5" />
+                <ArrowUpRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
           )}
 
-          {/* WhatsApp Status-style Segmented Timeline */}
+          {/* Timeline */}
           {showButtons && totalDots > 0 && (
-            <div className="flex items-center gap-0.5 pt-2 w-full max-w-xs">
-              {Array.from({ length: totalDots }).map((_, idx) => (
-                <motion.div
-                  key={idx}
-                  className="flex-1 h-0.5 bg-white/25 rounded-full overflow-hidden"
-                  initial={{ opacity: 0.5 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.div
-                    className="h-full rounded-full"
-                    style={{ background: "var(--primary)" }}
-                    initial={{ width: idx < activeDot ? "100%" : "0%" }}
-                    animate={{
-                      width: idx < activeDot ? "100%" : idx === activeDot ? "100%" : "0%",
-                    }}
-                    transition={{
-                      duration: idx === activeDot ? 9.5 : 0.3,
-                      ease: idx === activeDot ? "linear" : "easeOut",
-                    }}
-                  />
-                </motion.div>
-              ))}
+            <div className="flex items-center gap-1 pt-3 w-full max-w-xs">
+              {Array.from({ length: totalDots }).map((_, idx) => {
+                const fillAmount = progress?.segmentStates?.[idx] ?? 0
+                return (
+                  <div
+                    key={idx}
+                    className="flex-1 h-1 bg-white/25 rounded-full overflow-hidden"
+                  >
+                    <div
+                      className="h-full rounded-full transition-all duration-100 ease-linear"
+                      style={{ 
+                        background: "var(--primary)",
+                        width: `${fillAmount * 100}%`
+                      }}
+                    />
+                  </div>
+                )
+              })}
             </div>
           )}
         </div>

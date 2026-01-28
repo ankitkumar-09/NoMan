@@ -1,0 +1,173 @@
+"use client"
+
+import { useRef, useEffect, useState } from "react"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
+
+const GAMES = [
+  {
+    id: "g1",
+    title: "Zero Hour City",
+    image: "/images/news1.png",
+  },
+  {
+    id: "g2",
+    title: "Burn Point",
+    image: "/images/news2.png",
+  },
+  {
+    id: "g3",
+    title: "Sky Raiders",
+    image: "/images/news3.png",
+  },
+  {
+    id: "g4",
+    title: "Action Game 1",
+    image: "/images/news1.png",
+  },
+  {
+    id: "g5",
+    title: "Racing Game",
+    image: "/images/news2.png",
+  },
+]
+
+export function GameLibrary() {
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const [marqueeGames, setMarqueeGames] = useState<typeof GAMES>([])
+
+  useEffect(() => {
+    // Create seamless loop by tripling the array
+    setMarqueeGames([...GAMES, ...GAMES, ...GAMES])
+  }, [])
+
+  const handleViewMore = () => {
+    window.location.href = "/games"
+  }
+
+  return (
+    <section className="w-full px-4 py-8 md:py-12 bg-black">
+      <div className="mx-auto w-full max-w-[420px] md:max-w-7xl">
+        {/* First Marquee - Left Direction */}
+        <div className="relative w-full mb-6 md:mb-8 overflow-hidden rounded-2xl bg-black">
+          <div
+            ref={marqueeRef}
+            className="relative h-64 md:h-80 overflow-hidden"
+          >
+            <motion.div
+              className="flex gap-4 md:gap-6"
+              animate={{ x: [0, -1200] }}
+              transition={{
+                duration: 40,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {marqueeGames.map((game, idx) => (
+                <button
+                  key={`left-${game.id}-${idx}`}
+                  onClick={handleViewMore}
+                  className="relative flex-shrink-0 w-48 h-64 md:w-72 md:h-80 rounded-xl overflow-hidden group cursor-pointer"
+                  type="button"
+                >
+                  <Image
+                    src={game.image}
+                    alt={game.title}
+                    fill
+                    className="object-cover w-full h-full"
+                    draggable={false}
+                  />
+                  
+                  {/* Subtle overlay for depth */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+                </button>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Gradient fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+        </div>
+
+        {/* Second Marquee - Right Direction */}
+        <div className="relative w-full mb-8 md:mb-10 overflow-hidden rounded-2xl bg-black">
+          {/* Floating Content Overlay */}
+          <div className="absolute inset-0 z-20 flex flex-col justify-center pl-4 md:pl-8 pointer-events-none">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="text-4xl md:text-5xl lg:text-6xl font-light tracking-wide text-white mb-4 md:mb-6 max-w-lg"
+            >
+              Game Library
+            </motion.h2>
+
+            {/* Description */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              className="text-base md:text-lg text-white/80 leading-relaxed mb-6 md:mb-8 max-w-xl"
+            >
+              Your ultimate Burn Point Library, featuring every Noman Production
+              game — from the highly anticipated Burn Point VI to legendary
+              favorites.
+            </motion.p>
+
+            {/* CTA Button */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              onClick={handleViewMore}
+              className="inline-flex items-center gap-2 px-8 md:px-10 py-3 md:py-4 bg-white text-black rounded-full font-medium text-sm md:text-base hover:bg-white/90 transition-all duration-300 active:scale-95 cursor-pointer pointer-events-auto w-fit"
+            >
+              View More
+              <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+            </motion.button>
+          </div>
+
+          {/* Background Gradient Overlay for Text Readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent pointer-events-none z-10" />
+          <div className="relative h-64 md:h-80 overflow-hidden">
+            <motion.div
+              className="flex gap-4 md:gap-6"
+              animate={{ x: [-1200, 0] }}
+              transition={{
+                duration: 40,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            >
+              {marqueeGames.map((game, idx) => (
+                <button
+                  key={`right-${game.id}-${idx}`}
+                  onClick={handleViewMore}
+                  className="relative flex-shrink-0 w-48 h-64 md:w-72 md:h-80 rounded-xl overflow-hidden group cursor-pointer"
+                  type="button"
+                >
+                  <Image
+                    src={game.image}
+                    alt={game.title}
+                    fill
+                    className="object-cover w-full h-full"
+                    draggable={false}
+                  />
+                  
+                  {/* Subtle overlay for depth */}
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+                </button>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Gradient fade edges */}
+          <div className="absolute left-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-12 md:w-20 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+        </div>
+      </div>
+    </section>
+  )
+}

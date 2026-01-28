@@ -74,10 +74,14 @@ export function GameCard(props: GameCardProps) {
         } as React.CSSProperties
       }
     >
-      <div className="relative h-full w-full overflow-hidden" style={{ borderRadius: R,
-        borderBottomRightRadius: 100,
-        
-       }}>
+      <div 
+        className="relative h-full w-full overflow-hidden" 
+        style={{ 
+          borderRadius: R,
+          borderBottomRightRadius: 100,
+          pointerEvents: "none"
+        }}
+      >
         {/* Background Image */}
         <Image
           src={image || "/placeholder.svg"}
@@ -86,37 +90,10 @@ export function GameCard(props: GameCardProps) {
           priority
           className={`${imageClassName ?? "object-cover object-center"} transition-transform duration-500 group-hover:scale-110`}
           style={{ scale: 1.3 }}
+          draggable={false}
         />
 
-        {/* Outward Cuts
-        {showButtons && (
-          <>
-            <div
-              className="absolute pointer-events-none"
-              style={{
-                width: CUT_SIZE_TOP,
-                height: CUT_SIZE_TOP,
-                borderRadius: 9999,
-                background: "var(--pageBg)",
-                bottom: CUT_TOP_Y,
-                right: -20,
-              }}
-            />
-            <div
-              className="absolute pointer-events-none"
-              style={{
-                width: CUT_SIZE_BOTTOM,
-                height: CUT_SIZE_BOTTOM,
-                borderRadius: 9999,
-                background: "var(--pageBg)",
-                bottom: CUT_BOTTOM_Y,
-                right: -20,
-              }}
-            />
-          </>
-        )} */}
-
-        Gradient Overlay
+        {/* Gradient Overlay */}
         <div
           className="absolute inset-0"
           style={{
@@ -126,7 +103,7 @@ export function GameCard(props: GameCardProps) {
           }}
         />
 
-        {/* Accent Glow*/}
+        {/* Accent Glow */}
         {showButtons && (
           <div
             className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
@@ -135,27 +112,7 @@ export function GameCard(props: GameCardProps) {
                 "linear-gradient(to top, color-mix(in oklab, var(--primary) 40%, transparent) 0%, transparent 100%)",
             }}
           />
-        )} 
-
-  {/* {showButtons && (
-  <div
-    className="absolute bottom-0 right-0 notch"
-    style={{
-      width: NOTCH_W,
-      height: NOTCH_H,
-      background: "var(--pageBg)",
-      borderTopLeftRadius: NOTCH_R,
-      boxShadow: "inset 8px 0 12px rgba(0,0,0,0.1)",
-      
-    }}
-  />
-)} */}
-
-<style jsx>{`
-  .notch {
-   
-  }
-`}</style>
+        )}
 
         {/* Content */}
         <div
@@ -163,6 +120,7 @@ export function GameCard(props: GameCardProps) {
             "absolute inset-0 flex flex-col justify-end p-6 gap-3",
             showButtons ? "pr-24 pb-8" : "",
           ].join(" ")}
+          style={{ pointerEvents: "auto" }}
         >
           {/* Title Section */}
           <div className="space-y-2 max-w-[60%]">
@@ -238,7 +196,7 @@ export function GameCard(props: GameCardProps) {
 
       {/* Pause Button */}
       {showButtons && (
-        <div className="absolute -bottom-1 -right-4">
+        <div className="absolute -bottom-1 -right-4" style={{ pointerEvents: "auto" }}>
           <button
             className="backdrop-blur-xl flex items-center justify-center transition-colors rounded-b-[28px] rounded-t-[18px]"
             style={{

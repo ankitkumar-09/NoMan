@@ -4,7 +4,7 @@ import { GameInfoSection } from "@/components/game-info-section"
 import { Footer } from "@/components/footer"
 import { HeroRotator } from "@/components/hero-rotator"
 import { NewsPeekCarousel } from "@/components/NewsPeekCarousel"
-
+import { GameLibrary } from "@/components/game-library"
 
 export default function HomePage() {
   return (
@@ -12,7 +12,7 @@ export default function HomePage() {
       <Navbar />
 
       {/* Hero Section - Landscape */}
-<section className="w-full px-4 pt-20 pb-6 md:pt-20 md:pb-8">
+      <section className="w-full px-4 pt-20 pb-6 md:pt-20 md:pb-8">
         <div className="w-full">
           <HeroRotator />
         </div>
@@ -31,16 +31,18 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Game Library Section */}
+      
+
       {/* News Carousel Section */}
       <section className="w-full px-4 py-4 md:py-6">
         <div className="container mx-auto max-w-7xl flex justify-center">
           <NewsPeekCarousel />
         </div>
       </section>
-
+      <GameLibrary />
       {/* Footer Section */}
       <Footer />
     </main>
   )
 }
-

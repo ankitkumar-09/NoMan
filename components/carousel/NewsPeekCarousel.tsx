@@ -1,7 +1,7 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
-import { useEffect, useMemo, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 type NewsItem = {
@@ -19,7 +19,8 @@ const INITIAL_NEWS: NewsItem[] = [
     id: "n1",
     image: "/images/news/news1.png",
     tag: "ZERO HOUR CITY",
-    title: "Fresh content update introduces enhanced combat mechanics and new missions.",
+    title:
+      "Fresh content update introduces enhanced combat mechanics and new missions.",
     date: "November 16, 2025",
   },
   {
@@ -36,10 +37,17 @@ const INITIAL_NEWS: NewsItem[] = [
     title: "Season rewards updated with new cosmetics and limited-time drops.",
     date: "November 28, 2025",
   },
+  {
+    id: "n4",
+    image: "/images/news/news3.png",
+    tag: "SKY RAIDERS",
+    title: "Season rewards updated with new cosmetics and limited-time drops.",
+    date: "November 28, 2025",
+  },
 ]
 
 export function NewsPeekCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [activeIndex, setActiveIndex] = useState(1)
   const touchStartRef = useRef(0)
   const touchStartYRef = useRef(0)
   const stageRef = useRef<HTMLDivElement | null>(null)
@@ -52,7 +60,6 @@ export function NewsPeekCarousel() {
   const left = activeIndex > 0 ? INITIAL_NEWS[activeIndex - 1] : null
   const right = activeIndex < len - 1 ? INITIAL_NEWS[activeIndex + 1] : null
 
-  // Layout constants
   const CARD_W_RATIO = 0.78
   const SIDE_SCALE = 0.88
   const GAP = 24
@@ -60,7 +67,9 @@ export function NewsPeekCarousel() {
 
   useEffect(() => {
     if (!stageRef.current) return
-    const ro = new ResizeObserver(() => setStageW(stageRef.current?.clientWidth || 0))
+    const ro = new ResizeObserver(() =>
+      setStageW(stageRef.current?.clientWidth || 0)
+    )
     ro.observe(stageRef.current)
     setStageW(stageRef.current.clientWidth)
     return () => ro.disconnect()
@@ -68,8 +77,10 @@ export function NewsPeekCarousel() {
 
   const cardW = stageW * CARD_W_RATIO
   const sideEffectiveW = cardW * SIDE_SCALE
-  const neededForGap = cardW * (1 + SIDE_SCALE) / 2 + GAP
-  const neededForEdgeFill = stageW ? stageW / 2 - sideEffectiveW / 2 + EDGE_FILL : 0
+  const neededForGap = (cardW * (1 + SIDE_SCALE)) / 2 + GAP
+  const neededForEdgeFill = stageW
+    ? stageW / 2 - sideEffectiveW / 2 + EDGE_FILL
+    : 0
   const SIDE_X = stageW ? Math.max(neededForGap, neededForEdgeFill) : 230
 
   const base = {
@@ -78,15 +89,12 @@ export function NewsPeekCarousel() {
     right: { x: SIDE_X, scale: SIDE_SCALE, opacity: 0.78, zIndex: 1 },
   } as const
 
-  const cards = useMemo(() => {
-    const result = []
-    if (left) result.push({ item: left, pos: "left" as Pos })
-    result.push({ item: center, pos: "center" as Pos })
-    if (right) result.push({ item: right, pos: "right" as Pos })
-    return result
-  }, [left, center, right])
+  const cards = [
+    { item: left, pos: "left" as Pos },
+    { item: center, pos: "center" as Pos },
+    { item: right, pos: "right" as Pos },
+  ].filter(({ item }) => item !== null)
 
-  // Touch swipe support
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartRef.current = e.touches[0].clientX
     touchStartYRef.current = e.touches[0].clientY
@@ -94,13 +102,16 @@ export function NewsPeekCarousel() {
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    const xDiff = Math.abs(e.touches[0].clientX - touchStartRef.current)
-    const yDiff = Math.abs(e.touches[0].clientY - touchStartYRef.current)
-    
-    // If horizontal movement is greater than vertical, it's a swipe
+    const xDiff = Math.abs(
+      e.touches[0].clientX - touchStartRef.current
+    )
+    const yDiff = Math.abs(
+      e.touches[0].clientY - touchStartYRef.current
+    )
+
     if (xDiff > yDiff && xDiff > 10) {
       isDraggingRef.current = true
-      e.preventDefault() // Prevent scroll only when swiping
+      e.preventDefault()
     }
   }
 
@@ -112,10 +123,8 @@ export function NewsPeekCarousel() {
 
     if (Math.abs(diff) > 50) {
       if (diff > 0 && activeIndex < len - 1) {
-        // Swipe left - go to next
         setActiveIndex(activeIndex + 1)
       } else if (diff < 0 && activeIndex > 0) {
-        // Swipe right - go to previous
         setActiveIndex(activeIndex - 1)
       }
     }
@@ -123,7 +132,6 @@ export function NewsPeekCarousel() {
     isDraggingRef.current = false
   }
 
-  // Mouse drag support
   const handleMouseDown = (e: React.MouseEvent) => {
     touchStartRef.current = e.clientX
     isMouseDownRef.current = true
@@ -134,7 +142,7 @@ export function NewsPeekCarousel() {
     if (!isMouseDownRef.current) return
 
     const xDiff = Math.abs(e.clientX - touchStartRef.current)
-    
+
     if (xDiff > 10) {
       isDraggingRef.current = true
     }
@@ -142,9 +150,9 @@ export function NewsPeekCarousel() {
 
   const handleMouseUp = (e: React.MouseEvent) => {
     if (!isMouseDownRef.current) return
-    
+
     isMouseDownRef.current = false
-    
+
     if (!isDraggingRef.current) return
 
     const mouseEnd = e.clientX
@@ -152,10 +160,8 @@ export function NewsPeekCarousel() {
 
     if (Math.abs(diff) > 50) {
       if (diff > 0 && activeIndex < len - 1) {
-        // Drag left - go to next
         setActiveIndex(activeIndex + 1)
       } else if (diff < 0 && activeIndex > 0) {
-        // Drag right - go to previous
         setActiveIndex(activeIndex - 1)
       }
     }
@@ -169,10 +175,9 @@ export function NewsPeekCarousel() {
   }
 
   return (
-    <section className="w-full px-4 pb-10">
-      <div className="mx-auto w-full max-w-[420px]">
+    <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 bg-black">
+      <div className="mx-auto w-full max-w-6xl">
         <div className="relative">
-          {/* Left Decorative Bar */}
           <motion.div
             initial={{ x: -60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
@@ -180,14 +185,14 @@ export function NewsPeekCarousel() {
             className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-r-3xl bg-gradient-to-r from-orange-600 to-orange-500 -z-10 pointer-events-none shadow-lg"
           />
 
-          {/* Right Decorative Bar */}
           <motion.div
             initial={{ x: 60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-l-3xl bg-gradient-to-l from-blue-600 via-blue-500 to-cyan-400 -z-10 pointer-events-none shadow-lg"
             style={{
-              backgroundImage: "linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(34,197,94,0.6) 50%, rgba(168,85,247,0.4) 100%)",
+              backgroundImage:
+                "linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(34,197,94,0.6) 50%, rgba(168,85,247,0.4) 100%)",
             }}
           />
 
@@ -201,10 +206,14 @@ export function NewsPeekCarousel() {
             onMouseLeave={handleMouseLeave}
             className="relative w-full h-[560px] touch-pan-y cursor-grab active:cursor-grabbing select-none"
           >
-            <div ref={stageRef} className="absolute inset-0 overflow-hidden rounded-[32px] bg-black">
+            <div
+              ref={stageRef}
+              className="absolute inset-0 overflow-hidden rounded-[32px] bg-black"
+            >
               <div className="absolute inset-0 flex items-center justify-center">
                 <AnimatePresence mode="sync">
                   {cards.map(({ item, pos }) => {
+                    if (!item) return null
                     const isCenter = pos === "center"
 
                     return (
@@ -237,13 +246,16 @@ export function NewsPeekCarousel() {
 
                           <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
 
-                          {/* Center Overlay */}
                           {isCenter && (
                             <motion.div
                               initial={{ y: 30, opacity: 0 }}
                               animate={{ y: 0, opacity: 1 }}
                               exit={{ y: -30, opacity: 0 }}
-                              transition={{ duration: 0.5, ease: "easeOut", delay: 0.1 }}
+                              transition={{
+                                duration: 0.5,
+                                ease: "easeOut",
+                                delay: 0.1,
+                              }}
                               className="absolute left-4 right-4 bottom-6 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl p-4 text-left shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
                             >
                               <motion.p
@@ -282,7 +294,6 @@ export function NewsPeekCarousel() {
           </div>
         </div>
 
-        {/* Progress Dots */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}

@@ -75,7 +75,6 @@ export default function GamesPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   const handleGameClick = (gameId: string) => {
-    // Navigate to game detail page
     router.push(`/games/${gameId}`)
   }
 
@@ -113,7 +112,11 @@ export default function GamesPage() {
                 key={game.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                transition={{
+                  duration: 0.6,
+                  delay: idx * 0.1,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
                 onMouseEnter={() => setHoveredId(game.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
@@ -182,8 +185,10 @@ export default function GamesPage() {
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-10"
                       animate={{ x: ["-100%", "100%"] }}
-                      transition={{ duration: 0.6,ease: [0.25, 0.1, 0.25, 1]
- }}
+                      transition={{
+                        duration: 0.6,
+                        ease: [0.25, 0.1, 0.25, 1],
+                      }}
                     />
                   )}
                 </button>

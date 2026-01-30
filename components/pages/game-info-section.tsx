@@ -9,15 +9,13 @@ interface GameInfoSectionProps {
   title: string
   subtitle: string
   description: string
-  videoSrc: string
 }
 
 export function GameInfoSection({ 
   logo, 
   title, 
   subtitle, 
-  description, 
-  videoSrc 
+  description
 }: GameInfoSectionProps) {
   
   const handleDownload = () => {
@@ -45,7 +43,7 @@ export function GameInfoSection({
             playsInline
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
           >
-            <source src={"/images/2.mp4"} type="video/mp4" />
+            <source src="/images/2.mp4" type="video/mp4" />
           </video>
 
           {/* Overlays: Darker at bottom for text, subtle vignette on left */}
@@ -104,6 +102,22 @@ export function GameInfoSection({
           {/* Subtle Shine Effect (matches your GamesPage) */}
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
         </div>
+      </div>
+    </section>
+  )
+}
+
+// Fixed usage with all required props
+export default function Page() {
+  return (
+    <section className="w-full px-4 py-4 md:py-6">
+      <div className="container mx-auto max-w-7xl">
+        <GameInfoSection
+          logo="/images/logos/burn-point-logo.png"
+          title="BURN POINT"
+          subtitle="RACING GAME"
+          description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift. Make your choices, face the consequences."
+        />
       </div>
     </section>
   )

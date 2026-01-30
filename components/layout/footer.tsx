@@ -1,7 +1,30 @@
 "use client"
 
 import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Github, Linkedin, Youtube, ArrowRight } from "lucide-react"
-import { motion } from "framer-motion"
+import { motion,Variants } from "framer-motion"
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2,
+    },
+  },
+} satisfies Variants
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: [0.25, 0.1, 0.25, 1], // 🔑 IMPORTANT
+    },
+  },
+} satisfies Variants
 
 export function Footer() {
   const handleSocialLink = (platform: string) => {
@@ -29,15 +52,7 @@ export function Footer() {
     },
   }
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  }
-
+ 
   return (
     <footer className="w-full bg-black relative overflow-hidden py-16 sm:py-20 md:py-24 px-3 sm:px-4 md:px-6 border-t border-white/10">
       {/* Animated background elements */}

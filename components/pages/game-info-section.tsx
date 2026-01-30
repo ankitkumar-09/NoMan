@@ -29,10 +29,6 @@ export function GameInfoSection({
   return (
     <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-12 md:py-16 bg-black">
       <div className="mx-auto w-full max-w-7xl">
-        {/* Container matches the cards:
-            - Same responsive height logic
-            - Same responsive rounded corners (rounded-xl to md:rounded-3xl)
-        */}
         <div className="relative w-full h-[400px] sm:h-[480px] md:h-[520px] rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden bg-black group">
           
           {/* Background Video */}
@@ -99,7 +95,7 @@ export function GameInfoSection({
             </div>
           </div>
 
-          {/* Subtle Shine Effect (matches your GamesPage) */}
+          {/* Subtle Shine Effect */}
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
         </div>
       </div>
@@ -107,7 +103,6 @@ export function GameInfoSection({
   )
 }
 
-// Fixed usage with all required props
 export default function Page() {
   return (
     <section className="w-full px-4 py-4 md:py-6">

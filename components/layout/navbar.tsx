@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/utils"
 
 const TEXT = "WELCOME TO REDCUBE STUDIOS!"
 const AUTO_RETURN_MS = 5000
@@ -83,7 +83,7 @@ export function Navbar() {
 				>
 					<div className="px-4 h-full flex items-center justify-between">
 						<img
-							src="/images/logo-cube.png"
+							src="/images/logos/logo-cube.png"
 							alt="Red Cube Logo"
 							className="w-6 h-6 select-none"
 							draggable={false}

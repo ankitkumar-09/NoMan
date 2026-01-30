@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { GameCard } from "@/components/game-card"
+import { GameCard } from "@/components/pages/game-card"
 
 type Slide = {
   title: string

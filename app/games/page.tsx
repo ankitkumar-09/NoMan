@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { ArrowLeft } from "lucide-react"
-import { Navbar } from "@/components/navbar"
+import { Navbar } from "@/components/layout/navbar"
 
 const GAMES = [
   {
@@ -97,7 +97,7 @@ export default function GamesPage() {
           >
             <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-wide text-white truncate">
+          <h1 className="text-3xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-white truncate">
             Game Library
           </h1>
         </div>
@@ -170,7 +170,7 @@ export default function GamesPage() {
                         <p className="text-[7px] sm:text-[9px] md:text-xs lg:text-sm text-white/70 font-medium mb-0.5 sm:mb-1 truncate">
                           BURN POINT
                         </p>
-                        <h3 className="text-xs sm:text-sm md:text-lg lg:text-2xl font-light text-white tracking-wide line-clamp-2">
+                        <h3 className="text-xs sm:text-sm md:text-lg lg:text-2xl font-bold text-white tracking-wide line-clamp-2">
                           {game.title}
                         </h3>
                       </div>

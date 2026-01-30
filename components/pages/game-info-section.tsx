@@ -52,7 +52,7 @@ export function GameInfoSection({ logo, description }: GameInfoSectionProps) {
         <div className="flex gap-3 pt-2">
           <Button
             onClick={handleDownload}
-            className="h-9 px-5 text-sm font-medium bg-white text-black rounded-full hover:bg-white/90 cursor-pointer"
+            className="h-9 px-5 text-sm font-extrabold bg-white text-black rounded-full hover:bg-white/90 cursor-pointer"
           >
             Download Now
           </Button>
@@ -60,7 +60,7 @@ export function GameInfoSection({ logo, description }: GameInfoSectionProps) {
           <Button
             onClick={handleLearnMore}
             variant="outline"
-            className="h-9 px-5 text-sm font-medium rounded-full border border-white/40 text-white hover:bg-white/10 cursor-pointer"
+            className="h-9 px-5 text-sm font-extrabold rounded-full border border-white/40 text-white hover:bg-white/10 cursor-pointer"
           >
             Learn More
             <ExternalLink className="w-3.5 h-3.5 ml-1.5" />

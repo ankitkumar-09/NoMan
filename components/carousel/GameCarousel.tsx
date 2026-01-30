@@ -2,7 +2,7 @@
 "use client"
 
 import { useState } from "react"
-import { GameCard } from "./game-card"
+import { GameCard } from "../pages/game-card"
 import { Button } from "@/components/ui/button"
 
 const CARDS = [

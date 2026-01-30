@@ -1,10 +1,10 @@
-import { Navbar } from "@/components/navbar"
-import { GameShowcase } from "@/components/game-showcase"
-import { GameInfoSection } from "@/components/game-info-section"
-import { Footer } from "@/components/footer"
-import { HeroRotator } from "@/components/hero-rotator"
-import { NewsPeekCarousel } from "@/components/NewsPeekCarousel"
-import { GameLibrary } from "@/components/game-library"
+import { Navbar } from "@/components/layout/navbar"
+import { GameShowcase } from "@/components/pages/game-showcase"
+import { GameInfoSection } from "@/components/pages/game-info-section"
+import { Footer } from "@/components/layout/footer"
+import { HeroRotator } from "@/components/pages/hero-rotator"
+import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
+import { GameLibrary } from "@/components/pages/game-library"
 
 export default function HomePage() {
   return (

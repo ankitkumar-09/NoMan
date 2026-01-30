@@ -1,4 +1,4 @@
-import { GameThumbnail } from "@/components/game-thumbnail"
+import { GameThumbnail } from "@/components/pages/game-thumbnail"
 
 const GAMES = [
 	{ title: "Game 1", image: "/action-game-cover-1.jpg" },
@@ -8,7 +8,7 @@ const GAMES = [
 	{ title: "Game 5", image: "/rpg-game-cover.png" },
 	{ title: "Game 6", image: "/strategy-game-cover.jpg" },
 	{ title: "Game 7", image: "/sports-game-cover.jpg" },
-	{ title: "Game 8", image: "/horror-game-cover.jpg" },
+	{ title: "Game 8", image: "/sports-game-cover.jpg" },
 ]
 
 export function GameShowcase() {

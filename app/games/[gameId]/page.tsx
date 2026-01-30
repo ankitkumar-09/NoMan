@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ChevronDown, Share2, Youtube, Twitter, Instagram, Download } from 'lucide-react'
-import { Navbar } from '@/components/navbar'
+import { Navbar } from '@/components/layout/navbar'
 
 const GAMES_DATA: Record<string, any> = {
   g1: {

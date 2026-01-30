@@ -111,20 +111,20 @@ export function GameLibrary() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: "easeOut" }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-light tracking-wide text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 max-w-sm md:max-w-lg"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wide text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 max-w-sm md:max-w-lg font-bold"
             >
               Game Library
             </motion.h2>
 
             {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-              className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 leading-relaxed mb-3 sm:mb-4 md:mb-6 lg:mb-8 max-w-xs sm:max-w-sm md:max-w-xl"
-            >
-              Your ultimate Burn Point Library, featuring every Noman Production game – from the highly anticipated Burn Point VI to legendary favorites.
-            </motion.p>
+         <motion.p
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+  className="text-xs sm:text-sm md:text-base lg:text-lg text-white leading-relaxed mb-3 sm:mb-4 md:mb-6 lg:mb-8 max-w-xs sm:max-w-sm md:max-w-xl font-light"
+>
+  Your ultimate Burn Point Library, featuring every Noman Production game – from the highly anticipated Burn Point VI to legendary favorites.
+</motion.p>
 
             {/* CTA Button */}
             <motion.button
@@ -132,7 +132,7 @@ export function GameLibrary() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
               onClick={handleViewMore}
-              className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-2.5 md:py-3 lg:py-4 bg-white text-black rounded-full font-medium text-xs sm:text-sm md:text-base hover:bg-white/90 transition-all duration-300 active:scale-95 cursor-pointer pointer-events-auto w-fit"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-2.5 md:py-3 lg:py-4 bg-white text-black rounded-full font-extrabold text-xs sm:text-sm md:text-base hover:bg-white/90 transition-all duration-300 active:scale-95 cursor-pointer pointer-events-auto w-fit"
             >
               View More
               <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
@@ -140,7 +140,8 @@ export function GameLibrary() {
           </div>
 
           {/* Background Gradient Overlay for Text Readability */}
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent pointer-events-none z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70
+ to-transparent pointer-events-none z-10" />
           
           <div className="relative h-40 sm:h-56 md:h-64 lg:h-80 overflow-hidden">
             <motion.div
@@ -177,6 +178,7 @@ export function GameLibrary() {
           {/* Gradient fade edges */}
           <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 lg:w-20 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
           <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 lg:w-20 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+
         </div>
       </div>
     </section>

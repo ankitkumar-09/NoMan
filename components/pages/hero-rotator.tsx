@@ -19,18 +19,20 @@ const SLIDES: Slide[] = [
   {
     title: "Own the Drift",
     subtitle: "BURN POINT",
-    image: "/images/hero-drift.png",
-    logo: "/images/burn-point-logo.png",
+    image: "/images/hero/hero-drift.png",
+    logo: "/images/logos/burn-point-logo.png",
   },
   {
     title: "Urban Warriors",
     subtitle: "TACTICAL ACTION",
-    image: "/images/hero3.png",
+    image: "/images/hero/hero3.png",
+    logo: "/images/logos/burn-point-logo.png",
   },
   {
     title: "Shadow Operations",
     subtitle: "STEALTH SHOOTER",
-    image: "/images/sniper.jpeg",
+    image: "/images/games/sniper.jpeg",
+    logo: "/images/logos/burn-point-logo.png",
   },
 ]
 

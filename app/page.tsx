@@ -25,7 +25,7 @@ export default function HomePage() {
       <section className="w-full px-4 py-4 md:py-6">
         <div className="container mx-auto max-w-7xl">
           <GameInfoSection
-            logo="/images/burn-point-logo.png"
+            logo="/images/logo/burn-point-logo.png"
             description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift. Make your choices, face the consequences."
           />
         </div>

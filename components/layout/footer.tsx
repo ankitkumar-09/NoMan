@@ -1,30 +1,6 @@
 "use client"
 
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Github, Linkedin, Youtube, ArrowRight } from "lucide-react"
-import { motion,Variants } from "framer-motion"
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.2,
-    },
-  },
-} satisfies Variants
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1], // 🔑 IMPORTANT
-    },
-  },
-} satisfies Variants
+import { Mail, Facebook, Twitter, Instagram, Github, Linkedin, Youtube } from "lucide-react"
 
 export function Footer() {
   const handleSocialLink = (platform: string) => {
@@ -41,209 +17,277 @@ export function Footer() {
 
   const currentYear = new Date().getFullYear()
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  }
-
- 
   return (
-    <footer className="w-full bg-black relative overflow-hidden py-16 sm:py-20 md:py-24 px-3 sm:px-4 md:px-6 border-t border-white/10">
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-red-500/5 rounded-full blur-3xl animate-pulse" />
-      </div>
-
-      <div className="mx-auto w-full max-w-6xl relative z-10">
+    <footer className="w-full bg-black py-12 sm:py-16 md:py-20 px-3 sm:px-4 md:px-6 border-t border-white/10">
+      <div className="mx-auto w-full max-w-6xl">
         
-        {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
-        >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">Join the Community</h2>
-          <p className="text-white/60 text-lg max-w-2xl mx-auto">
-            Be part of something extraordinary. Connect with us and stay updated on the latest releases and events.
-          </p>
-        </motion.div>
-
-        {/* Main Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-16"
-        >
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-12">
+          
           {/* Brand Column */}
-          <motion.div variants={itemVariants} className="space-y-6">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
-                  <span className="text-white font-bold">RC</span>
-                </div>
-                <span className="text-white font-bold text-xl">RedCube</span>
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-sm">RC</span>
               </div>
-              <p className="text-white/50 text-sm leading-relaxed">
-                Creating immersive gaming experiences that push boundaries and inspire millions of players worldwide.
-              </p>
+              <span className="text-white font-bold text-lg">RedCube</span>
             </div>
-            <div className="flex gap-3">
-              {[
-                { icon: Facebook, label: "facebook" },
-                { icon: Twitter, label: "twitter" },
-                { icon: Instagram, label: "instagram" },
-                { icon: Youtube, label: "youtube" },
-              ].map(({ icon: Icon, label }) => (
-                <motion.button
-                  key={label}
-                  whileHover={{ scale: 1.2, y: -4 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleSocialLink(label)}
-                  className="w-10 h-10 rounded-lg bg-gradient-to-br from-white/10 to-white/5 hover:from-orange-500/20 hover:to-red-500/20 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300 group border border-white/10"
-                  aria-label={label}
-                >
-                  <Icon className="w-4 h-4" />
-                </motion.button>
-              ))}
+            <p className="text-white/60 text-sm leading-relaxed">
+              Committed to Entertainment. Creating world-class games that inspire, challenge, and delight players worldwide.
+            </p>
+            <div className="flex gap-2 pt-2">
+              <button
+                onClick={() => handleSocialLink("facebook")}
+                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
+                aria-label="Facebook"
+              >
+                <Facebook className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleSocialLink("twitter")}
+                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
+                aria-label="Twitter"
+              >
+                <Twitter className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleSocialLink("instagram")}
+                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
+                aria-label="Instagram"
+              >
+                <Instagram className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => handleSocialLink("youtube")}
+                className="w-9 h-9 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300"
+                aria-label="YouTube"
+              >
+                <Youtube className="w-4 h-4" />
+              </button>
             </div>
-          </motion.div>
+          </div>
 
-          {/* Product */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h4 className="text-white font-semibold text-lg">Product</h4>
-            <ul className="space-y-3">
-              {[
-                { label: "Games", href: "#games" },
-                { label: "Features", href: "#features" },
-                { label: "Pricing", href: "#pricing" },
-                { label: "Updates", href: "#updates" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.href}
-                    className="text-white/60 hover:text-white text-sm transition-colors duration-300 flex items-center group"
-                  >
-                    {item.label}
-                    <ArrowRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Company */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h4 className="text-white font-semibold text-lg">Company</h4>
-            <ul className="space-y-3">
-              {[
-                { label: "About", href: "#about" },
-                { label: "Blog", href: "#blog" },
-                { label: "Careers", href: "#careers" },
-                { label: "Contact", href: "#contact" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.href}
-                    className="text-white/60 hover:text-white text-sm transition-colors duration-300 flex items-center group"
-                  >
-                    {item.label}
-                    <ArrowRight className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-300" />
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-
-          {/* Contact */}
-          <motion.div variants={itemVariants} className="space-y-4">
-            <h4 className="text-white font-semibold text-lg">Contact</h4>
-            <ul className="space-y-3">
+          {/* Quick Links */}
+          <div className="space-y-4">
+            <h4 className="text-white font-semibold text-base">Quick Links</h4>
+            <ul className="space-y-2.5">
               <li>
                 <a
-                  href="mailto:info.redcube@gmail.com"
-                  className="text-white/60 hover:text-white text-sm transition-colors duration-300 flex items-start gap-2 group"
+                  href="#games"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
                 >
-                  <Mail className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>info.redcube@gmail.com</span>
+                  Games
                 </a>
               </li>
               <li>
-                <div className="text-white/60 text-sm flex items-start gap-2">
-                  <Phone className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>+1 (555) 000-0000</span>
-                </div>
+                <a
+                  href="#news"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  News & Updates
+                </a>
               </li>
               <li>
-                <div className="text-white/60 text-sm flex items-start gap-2">
-                  <MapPin className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                  <span>123 Game Street, Studio City, CA</span>
-                </div>
+                <a
+                  href="#about"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  About Us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#careers"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Careers
+                </a>
               </li>
             </ul>
-          </motion.div>
-        </motion.div>
+          </div>
 
-        {/* Newsletter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mb-16 p-8 sm:p-10 rounded-2xl bg-gradient-to-r from-orange-500/10 via-red-500/10 to-purple-500/10 border border-white/10 backdrop-blur-sm"
-        >
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div className="flex-1">
-              <h4 className="text-white font-semibold text-xl mb-2">Stay in the Loop</h4>
-              <p className="text-white/60 text-sm">Get exclusive updates, game launches, and special offers.</p>
+          {/* Support */}
+          <div className="space-y-4">
+            <h4 className="text-white font-semibold text-base">Support</h4>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="#help"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Help Center
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#contact"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Contact Us
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  FAQ
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#community"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Community
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Legal */}
+          <div className="space-y-4">
+            <h4 className="text-white font-semibold text-base">Legal</h4>
+            <ul className="space-y-2.5">
+              <li>
+                <a
+                  href="#privacy"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#terms"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Terms of Service
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#cookies"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Cookie Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#health"
+                  className="text-white/60 hover:text-white text-sm transition-colors duration-300"
+                >
+                  Health Warning
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Newsletter Section */}
+        <div className="mb-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-orange-500/10 via-red-500/10 to-purple-500/10 border border-white/10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <h4 className="text-white font-semibold text-lg mb-1">Stay Updated</h4>
+              <p className="text-white/60 text-sm">Get the latest news and updates delivered to your inbox.</p>
             </div>
             <div className="flex gap-2 w-full sm:w-auto">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 px-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/30 focus:outline-none focus:border-orange-500/50 transition-all duration-300"
-              />
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold hover:shadow-lg hover:shadow-orange-500/30 transition-all duration-300 whitespace-nowrap"
-              >
+              <div className="flex-1 sm:flex-none relative">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/30 transition-colors duration-300"
+                />
+              </div>
+              <button className="px-4 sm:px-6 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 whitespace-nowrap">
                 Subscribe
-              </motion.button>
+              </button>
             </div>
           </div>
-        </motion.div>
+        </div>
 
-        {/* Bottom Links */}
-        <div className="border-t border-white/10 pt-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-            <div className="flex gap-4 text-white/60 text-xs sm:text-sm flex-wrap">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <span className="text-white/20">•</span>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
-              <span className="text-white/20">•</span>
-              <a href="#" className="hover:text-white transition-colors">Cookie Policy</a>
+        {/* Contact Info */}
+        <div className="mb-8 grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div className="flex gap-3">
+            <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-orange-500 flex-shrink-0">
+              <Mail className="w-5 h-5" />
             </div>
-            <div className="flex gap-4 text-white/60 text-xs sm:text-sm justify-end">
-              <a href="#" className="hover:text-white transition-colors">Accessibility</a>
-              <span className="text-white/20">•</span>
+            <div>
+              <p className="text-white/60 text-xs mb-1">Email</p>
+              <a
+                href="mailto:info.redcube@gmail.com"
+                className="text-white text-sm hover:text-orange-500 transition-colors duration-300"
+              >
+                info.redcube@gmail.com
+              </a>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-orange-500 flex-shrink-0">
+              <Twitter className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-white/60 text-xs mb-1">Social Media</p>
+              <p className="text-white text-sm">@redcube_studios</p>
+            </div>
+          </div>
+
+          <div className="flex gap-3">
+            <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-orange-500 flex-shrink-0">
+              <Globe className="w-5 h-5" />
+            </div>
+            <div>
+              <p className="text-white/60 text-xs mb-1">Website</p>
+              <a
+                href="https://redcube.com"
+                className="text-white text-sm hover:text-orange-500 transition-colors duration-300"
+              >
+                redcube.com
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="border-t border-white/10 pt-8 sm:pt-10">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-white/50 text-xs sm:text-sm text-center sm:text-left">
+              © {currentYear} RedCube Studios. All rights reserved. Committed to Entertainment.
+            </p>
+            <div className="flex gap-6 text-white/50 text-xs">
               <a href="#" className="hover:text-white transition-colors">Sitemap</a>
+              <span>•</span>
+              <a href="#" className="hover:text-white transition-colors">Accessibility</a>
+              <span>•</span>
+              <a href="#" className="hover:text-white transition-colors">Cookies Settings</a>
             </div>
           </div>
-
-          {/* Copyright */}
-          <p className="text-white/40 text-xs text-center">
-            © {currentYear} RedCube Studios. All rights reserved. Committed to Entertainment.
-          </p>
         </div>
       </div>
     </footer>
+  )
+}
+
+// Add this icon since lucide-react might not have Globe
+function Globe(props: any) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 2a14.5 14.5 0 0 1 0 20" />
+      <path d="M2 12h20" />
+    </svg>
   )
 }

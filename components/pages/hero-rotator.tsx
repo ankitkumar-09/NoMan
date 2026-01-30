@@ -17,11 +17,7 @@ interface GameCardProps {
   onPauseToggle?: () => void
   accentColor?: string
 }
-const THEMES = [
-  { accent: "#2B7BFF", fg: "#ffffff" }, // Theme for Slide 1
-  { accent: "#FF9A3D", fg: "#111111" }, // Theme for Slide 2
-  { accent: "#C9CED8", fg: "#111111" }, // Theme for Slide 3
-];
+
 function GameCard(props: GameCardProps) {
   const {
     title,
@@ -157,38 +153,38 @@ type Slide = {
   subtitle: string
   image: string
   logo?: string
-  focus: string;
 }
 
 type Theme = {
   accent: string
   fg: string
 }
+
 const SLIDES: Slide[] = [
   {
     title: "Own the Drift",
     subtitle: "BURN POINT",
     image: "/images/hero/hero-drift.png",
     logo: "/images/logos/burn-point-logo.png",
-    // Center is usually best for cars
-    focus: "object-center" 
   },
   {
     title: "Urban Warriors",
     subtitle: "TACTICAL ACTION",
     image: "/images/hero/hero3.png",
     logo: "/images/logos/burn-point-logo.png",
-    // Focus higher so heads aren't cut off
-    focus: "object-[center_20%]" 
   },
   {
     title: "Shadow Operations",
     subtitle: "STEALTH SHOOTER",
     image: "/images/games/sniper.jpeg",
     logo: "/images/logos/burn-point-logo.png",
-    // Focus on the eye/scope area
-    focus: "object-[center_30%]" 
   },
+]
+
+const THEMES: Theme[] = [
+  { accent: "#2B7BFF", fg: "#ffffff" },
+  { accent: "#FF9A3D", fg: "#111111" },
+  { accent: "#C9CED8", fg: "#111111" },
 ]
 
 export function HeroRotator() {

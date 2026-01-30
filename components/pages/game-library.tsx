@@ -9,27 +9,27 @@ const GAMES = [
   {
     id: "g1",
     title: "Zero Hour City",
-    image: "/images/news1.png",
+    image: "/images/news/news1.png",
   },
   {
     id: "g2",
     title: "Burn Point",
-    image: "/images/news2.png",
+    image: "/images/news/news2.png",
   },
   {
     id: "g3",
     title: "Sky Raiders",
-    image: "/images/news3.png",
+    image: "/images/news/news3.png",
   },
   {
     id: "g4",
     title: "Action Game 1",
-    image: "/images/news1.png",
+    image: "/images/news/news1.png",
   },
   {
     id: "g5",
     title: "Racing Game",
-    image: "/images/news2.png",
+    image: "/images/news/news2.png",
   },
 ]
 

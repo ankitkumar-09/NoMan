@@ -30,13 +30,24 @@ const GAMES = [
     image: "/images/news1.png",
     logo: "/images/burn-point-logo.png",
   },
+  {
+    id: "g5",
+    title: "Action Game 2",
+    image: "/images/news2.png",
+    logo: "/images/burn-point-logo.png",
+  },
+  {
+    id: "g6",
+    title: "Action Game 3",
+    image: "/images/news3.png",
+    logo: "/images/burn-point-logo.png",
+  },
 ]
 
 export default function GamesPage() {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
   const handleGameClick = (gameId: string) => {
-    // Handle game click - can navigate to game detail or launch game
     console.log(`Clicked game: ${gameId}`)
   }
 
@@ -46,25 +57,26 @@ export default function GamesPage() {
 
   return (
     <main className="min-h-screen bg-black">
-      {/* Header */}
-      <header className="w-full px-4 py-6 md:py-8 bg-black border-b border-white/10">
-        <div className="mx-auto max-w-7xl flex items-center gap-4">
+      {/* Header - Responsive padding and text */}
+      <header className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 bg-black border-b border-white/10">
+        <div className="mx-auto max-w-7xl flex items-center gap-3 sm:gap-4">
           <button
             onClick={handleGoBack}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors duration-300"
+            className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg transition-colors duration-300 shrink-0"
+            aria-label="Go back"
           >
-            <ArrowLeft className="w-6 h-6 text-white" />
+            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
-          <h1 className="text-3xl md:text-4xl font-light tracking-wide text-white">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-light tracking-wide text-white truncate">
             Game Library
           </h1>
         </div>
       </header>
 
-      {/* Games Grid */}
-      <section className="w-full px-4 py-8 md:py-12">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+      {/* Games Grid - Responsive columns and gaps */}
+      <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
             {GAMES.map((game, idx) => (
               <motion.div
                 key={game.id}
@@ -76,7 +88,7 @@ export default function GamesPage() {
               >
                 <button
                   onClick={() => handleGameClick(game.id)}
-                  className="relative w-full aspect-square rounded-3xl overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-black"
+                  className="relative w-full aspect-square rounded-2xl sm:rounded-3xl overflow-hidden group cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/30 focus:ring-offset-2 focus:ring-offset-black transition-transform hover:scale-105 active:scale-95"
                 >
                   {/* Game Image */}
                   <Image
@@ -87,13 +99,13 @@ export default function GamesPage() {
                     draggable={false}
                   />
 
-                  {/* Dark Overlay */}
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
+                  {/* Dark Overlay - Responsive opacity */}
+                  <div className="absolute inset-0 bg-black/50 sm:bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
 
-                  {/* Top Section - Logo and Tagline */}
-                  <div className="absolute top-0 inset-x-0 p-4 md:p-6">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-10 md:w-12 md:h-12 flex-shrink-0">
+                  {/* Top Section - Logo and Tagline - Responsive padding */}
+                  <div className="absolute top-0 inset-x-0 p-2 sm:p-3 md:p-4 lg:p-6">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 flex-shrink-0">
                         <Image
                           src={game.logo}
                           alt="Game Logo"
@@ -101,20 +113,20 @@ export default function GamesPage() {
                           className="object-contain"
                         />
                       </div>
-                      <div>
-                        <p className="text-xs md:text-sm text-white/70 font-medium">
+                      <div className="min-w-0">
+                        <p className="text-[10px] sm:text-xs md:text-sm text-white/70 font-medium truncate">
                           BURN POINT
                         </p>
-                        <p className="text-xs text-white/60">Own the Drift</p>
+                        <p className="text-[8px] sm:text-[10px] text-white/60 truncate">Own the Drift</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Bottom Section - Title and Logo */}
-                  <div className="absolute bottom-0 inset-x-0 p-4 md:p-6">
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <div className="relative w-12 h-12 md:w-14 md:h-14 mb-4 flex-shrink-0">
+                  {/* Bottom Section - Title and Logo - Responsive padding and text */}
+                  <div className="absolute bottom-0 inset-x-0 p-2 sm:p-3 md:p-4 lg:p-6">
+                    <div className="flex items-end justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="relative w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 mb-2 sm:mb-3 md:mb-4 flex-shrink-0">
                           <Image
                             src={game.logo}
                             alt="Game Logo"
@@ -122,10 +134,10 @@ export default function GamesPage() {
                             className="object-contain"
                           />
                         </div>
-                        <p className="text-xs md:text-sm text-white/70 font-medium mb-1">
+                        <p className="text-[8px] sm:text-xs md:text-sm text-white/70 font-medium mb-0.5 sm:mb-1 truncate">
                           BURN POINT
                         </p>
-                        <h3 className="text-2xl md:text-3xl font-light text-white tracking-wide">
+                        <h3 className="text-sm sm:text-lg md:text-2xl lg:text-3xl font-light text-white tracking-wide line-clamp-2">
                           {game.title}
                         </h3>
                       </div>

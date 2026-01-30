@@ -11,10 +11,10 @@ export function Footer() {
   }
 
   return (
-    <footer className="w-full bg-black py-8 px-4">
-      <div className="mx-auto max-w-6xl">
-        {/* Device Wrapper */}
-       <div className="relative mx-auto w-full max-w-[960px] aspect-[360/146.16]">
+    <footer className="w-full bg-black py-6 sm:py-8 md:py-10 lg:py-12 px-3 sm:px-4 md:px-6">
+      <div className="mx-auto w-full">
+        {/* Device Wrapper - Responsive aspect ratio */}
+        <div className="relative mx-auto w-full max-w-[280px] sm:max-w-[420px] md:max-w-[680px] lg:max-w-[960px] aspect-[360/146.16]">
 
           {/* Steam Deck Frame */}
           <img
@@ -25,20 +25,21 @@ export function Footer() {
 
           {/* Screen Overlay */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="relative w-[61%] h-[82%] rounded-[4px] overflow-hidden">
+            <div className="relative w-[61%] h-[82%] rounded-[2px] sm:rounded-[3px] md:rounded-[4px] overflow-hidden">
               {/* Background */}
               <div className="absolute inset-0 bg-black/75 backdrop-blur-md" />
               <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-transparent to-black/50" />
 
-              {/* Content */}
-              <div className="relative z-10 h-full w-full px-[5%] py-[5%] flex items-center">
-                <div className="w-full grid grid-cols-2 gap-x-[8%] gap-y-[8%]">
+              {/* Content - Stack on mobile */}
+              <div className="relative z-10 h-full w-full px-[3%] sm:px-[4%] md:px-[5%] py-[4%] sm:py-[5%] flex items-center">
+                <div className="w-full grid grid-cols-1 sm:grid-cols-2 gap-x-[6%] sm:gap-x-[8%] gap-y-[8%] sm:gap-y-[10%]">
+                  
                   {/* Left Column */}
                   <div className="min-w-0">
-                    <p className="font-semibold text-white mb-[10%] text-[clamp(10px,1.2vw,14px)]">
+                    <p className="font-semibold text-white mb-[8%] sm:mb-[10%] text-[clamp(9px,2vw,14px)]">
                       Terms &amp; Conditions
                     </p>
-                    <div className="space-y-[clamp(4px,0.6vw,8px)] text-white/80 text-[clamp(9px,1vw,12px)] leading-tight">
+                    <div className="space-y-[clamp(3px,0.8vw,8px)] text-white/80 text-[clamp(8px,1.2vw,12px)] leading-tight">
                       <a href="#support" className="block hover:text-white transition-colors cursor-pointer">
                         Support
                       </a>
@@ -59,10 +60,10 @@ export function Footer() {
 
                   {/* Right Column */}
                   <div className="min-w-0">
-                    <p className="font-semibold text-white underline underline-offset-2 mb-[10%] text-[clamp(10px,1.2vw,14px)]">
+                    <p className="font-semibold text-white underline underline-offset-1 sm:underline-offset-2 mb-[8%] sm:mb-[10%] text-[clamp(9px,2vw,14px)]">
                       Contact Us:
                     </p>
-                    <div className="space-y-[clamp(4px,0.6vw,8px)] text-white/80 text-[clamp(9px,1vw,12px)] leading-tight">
+                    <div className="space-y-[clamp(3px,0.8vw,8px)] text-white/80 text-[clamp(8px,1.2vw,12px)] leading-tight">
                       <a
                         href="mailto:info.redcube@gmail.com"
                         className="block truncate hover:text-white transition-colors cursor-pointer"
@@ -97,7 +98,7 @@ export function Footer() {
         </div>
 
         {/* Copyright */}
-        <p className="mt-4 text-center text-[9px] sm:text-xs text-white/50">
+        <p className="mt-3 sm:mt-4 md:mt-6 text-center text-[8px] sm:text-[9px] md:text-xs text-white/50">
           © 2025 RedCube. Committed to Entertainment.
         </p>
       </div>

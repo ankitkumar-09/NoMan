@@ -63,7 +63,7 @@ export function GameCard(props: GameCardProps) {
 
   return (
     <div
-      className="relative w-full h-[420px] group"
+      className="relative w-full h-[320px] sm:h-[380px] md:h-[420px] lg:h-[480px] group"
       style={
         {
           ["--primary" as any]: accentColor,
@@ -106,7 +106,7 @@ export function GameCard(props: GameCardProps) {
         {/* Accent Glow */}
         {showButtons && (
           <div
-            className="absolute inset-x-0 bottom-0 h-56 pointer-events-none"
+            className="absolute inset-x-0 bottom-0 h-40 sm:h-48 md:h-56 pointer-events-none"
             style={{
               background:
                 "linear-gradient(to top, color-mix(in oklab, var(--primary) 40%, transparent) 0%, transparent 100%)",
@@ -117,67 +117,77 @@ export function GameCard(props: GameCardProps) {
         {/* Content */}
         <div
           className={[
-            "absolute inset-0 flex flex-col justify-end p-6 gap-3",
-            showButtons ? "pr-24 pb-8" : "",
+            "absolute inset-0 flex flex-col justify-end p-3 sm:p-4 md:p-6 gap-2 sm:gap-3 md:gap-4",
+            showButtons ? "sm:pr-20 md:pr-24 pb-6 md:pb-8" : "",
           ].join(" ")}
           style={{ pointerEvents: "auto" }}
         >
           {/* Title Section */}
-          <div className="space-y-2 max-w-[60%]">
+          <div className="space-y-1 sm:space-y-2 max-w-[70%] sm:max-w-[65%] md:max-w-[60%]">
             {logo ? (
-              <div className="flex items-start gap-3">
-                <Image src={logo} alt={`${title} logo`} width={54} height={54} className="shrink-0 mt-1" />
+              <div className="flex items-start gap-2 sm:gap-3">
+                <Image 
+                  src={logo} 
+                  alt={`${title} logo`} 
+                  width={40}
+                  height={40}
+                  className="shrink-0 mt-0.5 sm:mt-1 w-9 h-9 sm:w-12 sm:h-12 md:w-[54px] md:h-[54px]"
+                />
                 <div className="flex flex-col">
-                  <p className="text-xs text-white/85 font-semibold tracking-wide uppercase leading-none">
+                  <p className="text-[10px] sm:text-xs md:text-xs text-white/85 font-semibold tracking-wide uppercase leading-none">
                     {subtitle}
                   </p>
-                  <h2 className="text-2xl md:text-3xl font-bold text-white text-balance leading-tight mt-2">
+                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white text-balance leading-tight mt-1 sm:mt-2">
                     {title}
                   </h2>
                 </div>
               </div>
             ) : (
               <>
-                <p className="text-xs text-white/70 font-medium tracking-wide uppercase">{subtitle}</p>
-                <h2 className="text-2xl md:text-3xl font-bold text-white text-balance leading-tight">{title}</h2>
+                <p className="text-[10px] sm:text-xs md:text-xs text-white/70 font-medium tracking-wide uppercase">
+                  {subtitle}
+                </p>
+                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-white text-balance leading-tight">
+                  {title}
+                </h2>
               </>
             )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Action Buttons - Stack on mobile */}
           {showButtons && (
-            <div className="flex flex-col gap-2 items-start w-full max-w-xs">
+            <div className="flex flex-col gap-1.5 sm:gap-2 items-start w-full max-w-xs pt-1 sm:pt-2 md:pt-3">
               <Button
                 onClick={handleWatchTrailer}
                 size="lg"
-                className="w-full h-11 px-6 text-[14px] font-semibold rounded-full bg-white text-black hover:opacity-90 cursor-pointer transition-all"
+                className="w-full h-9 sm:h-10 md:h-11 px-4 sm:px-5 md:px-6 text-[12px] sm:text-[13px] md:text-[14px] font-semibold rounded-full bg-white text-black hover:opacity-90 cursor-pointer transition-all"
               >
                 Watch Trailer
-                <Play className="w-4 h-4 ml-2" />
+                <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 ml-1.5 sm:ml-2" />
               </Button>
 
               <Button
                 onClick={handleLearnMore}
                 size="lg"
                 variant="outline"
-                className="w-full h-11 px-6 text-[14px] font-semibold rounded-full border-2 border-white/30 cursor-pointer transition-all hover:border-white/60"
+                className="w-full h-9 sm:h-10 md:h-11 px-4 sm:px-5 md:px-6 text-[12px] sm:text-[13px] md:text-[14px] font-semibold rounded-full border-2 border-white/30 cursor-pointer transition-all hover:border-white/60"
                 style={{ color: "white" }}
               >
                 Learn More
-                <ArrowUpRight className="w-4 h-4 ml-2" />
+                <ArrowUpRight className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 ml-1.5 sm:ml-2" />
               </Button>
             </div>
           )}
 
           {/* Timeline */}
           {showButtons && totalDots > 0 && (
-            <div className="flex items-center gap-1 pt-3 w-full max-w-xs">
+            <div className="flex items-center gap-0.5 sm:gap-1 pt-2 sm:pt-3 w-full max-w-xs">
               {Array.from({ length: totalDots }).map((_, idx) => {
                 const fillAmount = progress?.segmentStates?.[idx] ?? 0
                 return (
                   <div
                     key={idx}
-                    className="flex-1 h-1 bg-white/25 rounded-full overflow-hidden"
+                    className="flex-1 h-0.5 sm:h-1 bg-white/25 rounded-full overflow-hidden"
                   >
                     <div
                       className="h-full rounded-full transition-all duration-100 ease-linear"
@@ -194,9 +204,9 @@ export function GameCard(props: GameCardProps) {
         </div>
       </div>
 
-      {/* Pause Button */}
+      {/* Pause Button - Hide on very small screens */}
       {showButtons && (
-        <div className="absolute -bottom-1 -right-4" style={{ pointerEvents: "auto" }}>
+        <div className="absolute -bottom-1 -right-4 hidden sm:block" style={{ pointerEvents: "auto" }}>
           <button
             className="backdrop-blur-xl flex items-center justify-center transition-colors rounded-b-[28px] rounded-t-[18px]"
             style={{

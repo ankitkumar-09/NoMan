@@ -181,7 +181,8 @@ export function NewsPeekCarousel() {
           <motion.div
             initial={{ x: -60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1]
+ }}
             className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-r-3xl bg-gradient-to-r from-orange-600 to-orange-500 -z-10 pointer-events-none shadow-lg"
           />
 
@@ -225,12 +226,13 @@ export function NewsPeekCarousel() {
                         exit={{
                           opacity: 0,
                           scale: 0.85,
-                          transition: { duration: 0.4, ease: "easeInOut" },
+                          transition: { duration: 0.4,ease: [0.25, 0.1, 0.25, 1]
+ },
                         }}
                         transition={{
                           x: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
                           scale: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
-                          opacity: { duration: 0.5, ease: "easeInOut" },
+                          opacity: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
                         }}
                         style={{ zIndex: base[pos].zIndex as number }}
                       >
@@ -253,7 +255,7 @@ export function NewsPeekCarousel() {
                               exit={{ y: -30, opacity: 0 }}
                               transition={{
                                 duration: 0.5,
-                                ease: "easeOut",
+                                ease: [0.25, 0.1, 0.25, 1],
                                 delay: 0.1,
                               }}
                               className="absolute left-4 right-4 bottom-6 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl p-4 text-left shadow-[0_10px_40px_rgba(0,0,0,0.45)]"

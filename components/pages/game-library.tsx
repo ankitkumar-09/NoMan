@@ -68,7 +68,8 @@ export function GameLibrary() {
               transition={{
                 duration: animationDuration,
                 repeat: Infinity,
-                ease: "linear",
+                ease: [0.25, 0.1, 0.25, 1]
+,
               }}
             >
               {marqueeGames.map((game, idx) => (
@@ -101,7 +102,8 @@ export function GameLibrary() {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1]
+}}
               className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wide text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 max-w-sm md:max-w-lg font-bold"
             >
               Game Library
@@ -110,7 +112,8 @@ export function GameLibrary() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.1, 0.25, 1]
+ }}
               className="text-xs sm:text-sm md:text-base lg:text-lg text-white leading-relaxed mb-3 sm:mb-4 md:mb-6 lg:mb-8 max-w-xs sm:max-w-sm md:max-w-xl font-light"
             >
               Your ultimate Burn Point Library, featuring every Noman Production
@@ -121,7 +124,8 @@ export function GameLibrary() {
             <motion.button
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1]
+ }}
               onClick={handleViewMore}
               className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 md:px-8 lg:px-10 py-2 sm:py-2.5 md:py-3 lg:py-4 bg-white text-black rounded-full font-extrabold text-xs sm:text-sm md:text-base hover:bg-white/90 transition-all duration-300 active:scale-95 cursor-pointer pointer-events-auto w-fit"
             >
@@ -139,7 +143,7 @@ export function GameLibrary() {
               transition={{
                 duration: animationDuration,
                 repeat: Infinity,
-                ease: "linear",
+                ease: [0.25, 0.1, 0.25, 1]
               }}
             >
               {marqueeGames.map((game, idx) => (

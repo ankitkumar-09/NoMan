@@ -17,21 +17,21 @@ type Pos = "left" | "center" | "right"
 const INITIAL_NEWS: NewsItem[] = [
   {
     id: "n1",
-    image: "/images/news1.png",
+    image: "/images/news/news1.png",
     tag: "ZERO HOUR CITY",
     title: "Fresh content update introduces enhanced combat mechanics and new missions.",
     date: "November 16, 2025",
   },
   {
     id: "n2",
-    image: "/images/news2.png",
+    image: "/images/news/news2.png",
     tag: "BURN POINT",
     title: "New drift challenges and leaderboard events are now live for all players.",
     date: "November 20, 2025",
   },
   {
     id: "n3",
-    image: "/images/news3.png",
+    image: "/images/news/news3.png",
     tag: "SKY RAIDERS",
     title: "Season rewards updated with new cosmetics and limited-time drops.",
     date: "November 28, 2025",

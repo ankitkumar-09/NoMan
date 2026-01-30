@@ -1,14 +1,14 @@
 import { GameThumbnail } from "@/components/pages/game-thumbnail"
 
 const GAMES = [
-	{ title: "Game 1", image: "/action-game-cover-1.jpg" },
-	{ title: "Game 2", image: "/racing-game-cover.png" },
-	{ title: "Game 3", image: "/fps-game-cover.jpg" },
-	{ title: "Game 4", image: "/adventure-game-cover.jpg" },
-	{ title: "Game 5", image: "/rpg-game-cover.png" },
-	{ title: "Game 6", image: "/strategy-game-cover.jpg" },
-	{ title: "Game 7", image: "/sports-game-cover.jpg" },
-	{ title: "Game 8", image: "/sports-game-cover.jpg" },
+	{ title: "Game 1", image: "/images/games/action-game-cover-1.jpg" },
+	{ title: "Game 2", image: "/images/games/racing-game-cover.png" },
+	{ title: "Game 3", image: "/images/games/fps-game-cover.jpg" },
+	{ title: "Game 4", image: "/images/games/adventure-game-cover.jpg" },
+	{ title: "Game 5", image: "/images/games/rpg-game-cover.png" },
+	{ title: "Game 6", image: "/images/games/strategy-game-cover.jpg" },
+	{ title: "Game 7", image: "/images/games/sports-game-cover.jpg" },
+	{ title: "Game 8", image: "/images/games/sports-game-cover.jpg" },
 ]
 
 export function GameShowcase() {

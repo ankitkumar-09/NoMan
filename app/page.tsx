@@ -26,13 +26,15 @@ export default function HomePage() {
         <div className="container mx-auto max-w-7xl">
           <GameInfoSection
             logo="/images/logos/burn-point-logo.png"
+            title="BURN POINT"
+            subtitle="RACING GAME"
             description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift. Make your choices, face the consequences."
           />
         </div>
       </section>
 
       {/* Game Library Section */}
-      
+      <GameLibrary />
 
       {/* News Carousel Section */}
       <section className="w-full px-4 py-4 md:py-6">
@@ -40,7 +42,7 @@ export default function HomePage() {
           <NewsPeekCarousel />
         </div>
       </section>
-      <GameLibrary />
+
       {/* Footer Section */}
       <Footer />
     </main>

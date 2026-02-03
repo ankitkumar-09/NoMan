@@ -48,7 +48,7 @@ Powered by dynamic physics and cinematic crash technology, Burnout delivers an u
     youtube: 'https://youtube.com/@zerohourcity',
     twitter: 'https://twitter.com/zerohourcity',
     instagram: 'https://instagram.com/zerohourcity',
-    screenshots: ['/images/news2.png', '/images/news3.png', '/images/news1.png', '/images/news2.png'],
+    screenshots: ['/images/news/news2.png', '/images/news/news3.png', '/images/news/news1.png', '/images/news/news2.png'],
   },
   g3: {
     id: 'g3',
@@ -368,7 +368,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
       </div>
 
       {/* Footer with Contact Details */}
-      <footer className="w-full bg-black border-t border-white/10 py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-6">
+      <footer className="w-full bg-black border-t border-white/10 py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-6" data-section="footer">
         <div className="mx-auto w-full max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 mb-8">
             {/* Left Column */}

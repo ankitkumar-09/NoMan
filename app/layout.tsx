@@ -7,19 +7,19 @@ const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "RedCube - Committed to Entertainment",
+  title: "NoMan - Committed to Entertainment",
   description:
-    "Experience unreal gaming with RedCube. Own the Drift and explore our immersive game collection.",
+    "Experience unreal gaming with NoMan. Own the Drift and explore our immersive game collection.",
   generator: "Next.js",
-  applicationName: "RedCube",
+  applicationName: "NoMan",
   keywords: ["gaming", "burn point", "own the drift", "video games", "entertainment"],
-  authors: [{ name: "RedCube" }],
-  creator: "RedCube",
+  authors: [{ name: "NoMan" }],
+  creator: "NoMan",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "RedCube",
+    title: "NoMan",
   },
   formatDetection: {
     telephone: false,

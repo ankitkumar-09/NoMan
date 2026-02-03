@@ -175,14 +175,13 @@ export function NewsPeekCarousel() {
   }
 
   return (
-    <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 bg-black">
+    <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 bg-black" data-section="news">
       <div className="mx-auto w-full max-w-6xl">
         <div className="relative">
           <motion.div
             initial={{ x: -60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1]
- }}
+            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
             className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-r-3xl bg-gradient-to-r from-orange-600 to-orange-500 -z-10 pointer-events-none shadow-lg"
           />
 
@@ -226,8 +225,7 @@ export function NewsPeekCarousel() {
                         exit={{
                           opacity: 0,
                           scale: 0.85,
-                          transition: { duration: 0.4,ease: [0.25, 0.1, 0.25, 1]
- },
+                          transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
                         }}
                         transition={{
                           x: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },

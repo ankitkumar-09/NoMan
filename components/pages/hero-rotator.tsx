@@ -12,6 +12,7 @@ interface GameCardProps {
   image: string
   logo?: string
   showButtons?: boolean
+  focusPoint?: string // "center" | "top" | "bottom" | "left" | "right" | custom like "center 25%"
   progress?: { active: number; total: number; segmentStates?: number[] }
   paused?: boolean
   onPauseToggle?: () => void
@@ -25,6 +26,7 @@ function GameCard(props: GameCardProps) {
     image,
     logo,
     showButtons = true,
+    focusPoint = "center 30%", // Focus on upper-center for character/face shots
     progress,
     paused,
     onPauseToggle,
@@ -50,7 +52,11 @@ function GameCard(props: GameCardProps) {
           alt={title}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 100vw"
-          className="object-cover object-center transition-transform duration-500 group-hover:scale-105"
+          className="transition-transform duration-500 group-hover:scale-105"
+          style={{
+            objectFit: "cover",
+            objectPosition: focusPoint, // ✅ Proper image framing
+          }}
           priority
           draggable={false}
         />
@@ -153,6 +159,7 @@ type Slide = {
   subtitle: string
   image: string
   logo?: string
+  focusPoint?: string // ✅ Added
 }
 
 type Theme = {
@@ -166,18 +173,21 @@ const SLIDES: Slide[] = [
     subtitle: "BURN POINT",
     image: "/images/hero/hero-drift.png",
     logo: "/images/logos/burn-point-logo.png",
+    focusPoint: "center", // ✅ Center for car image
   },
   {
     title: "Urban Warriors",
     subtitle: "TACTICAL ACTION",
     image: "/images/hero/hero3.png",
     logo: "/images/logos/burn-point-logo.png",
+    focusPoint: "center 35%", // ✅ Upper-center for character faces
   },
   {
     title: "Shadow Operations",
     subtitle: "STEALTH SHOOTER",
-    image: "/images/games/sniper.jpeg",
+    image: "/images/games/sniper.png",
     logo: "/images/logos/burn-point-logo.png",
+    focusPoint: "center 20%", // ✅ Higher up for sniper character
   },
 ]
 
@@ -266,6 +276,7 @@ export function HeroRotator() {
             subtitle={slide.subtitle}
             image={slide.image}
             logo={slide.logo}
+            focusPoint={slide.focusPoint} // ✅ Pass focusPoint
             showButtons
             progress={{
               active,

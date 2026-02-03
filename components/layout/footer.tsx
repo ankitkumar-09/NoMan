@@ -18,7 +18,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="w-full bg-black py-12 sm:py-16 md:py-20 px-3 sm:px-4 md:px-6 border-t border-white/10">
+    <footer className="w-full bg-black py-12 sm:py-16 md:py-20 px-3 sm:px-4 md:px-6 border-t border-white/10" data-section="footer">
       <div className="mx-auto w-full max-w-6xl">
         
         {/* Main Footer Content */}
@@ -30,7 +30,7 @@ export function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">RC</span>
               </div>
-              <span className="text-white font-bold text-lg">RedCube</span>
+              <span className="text-white font-bold text-lg">NoMan</span>
             </div>
             <p className="text-white/60 text-sm leading-relaxed">
               Committed to Entertainment. Creating world-class games that inspire, challenge, and delight players worldwide.
@@ -189,18 +189,16 @@ export function Footer() {
         <div className="mb-12 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-orange-500/10 via-red-500/10 to-purple-500/10 border border-white/10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <h4 className="text-white font-semibold text-lg mb-1">Stay Updated</h4>
-              <p className="text-white/60 text-sm">Get the latest news and updates delivered to your inbox.</p>
+              <h3 className="text-white font-bold text-lg mb-2">Stay Updated</h3>
+              <p className="text-white/60 text-sm">Subscribe to get the latest news and updates</p>
             </div>
             <div className="flex gap-2 w-full sm:w-auto">
-              <div className="flex-1 sm:flex-none relative">
-                <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-2.5 rounded-lg bg-white/5 border border-white/10 text-white placeholder-white/40 focus:outline-none focus:border-white/30 transition-colors duration-300"
-                />
-              </div>
-              <button className="px-4 sm:px-6 py-2.5 rounded-lg bg-gradient-to-r from-orange-500 to-red-600 text-white font-semibold hover:shadow-lg hover:shadow-orange-500/20 transition-all duration-300 whitespace-nowrap">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/40 focus:outline-none focus:border-white/40 transition-colors"
+              />
+              <button className="px-6 py-2.5 rounded-lg bg-orange-600 hover:bg-orange-700 text-white font-semibold transition-colors duration-300">
                 Subscribe
               </button>
             </div>
@@ -244,7 +242,7 @@ export function Footer() {
                 href="https://redcube.com"
                 className="text-white text-sm hover:text-orange-500 transition-colors duration-300"
               >
-                redcube.com
+                NoMan.com
               </a>
             </div>
           </div>

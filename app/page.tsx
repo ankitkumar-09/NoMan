@@ -1,3 +1,7 @@
+'use client'
+
+import { useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { Navbar } from "@/components/layout/navbar"
 import { GameShowcase } from "@/components/pages/game-showcase"
 import { GameInfoSection } from "@/components/pages/game-info-section"
@@ -7,6 +11,20 @@ import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
 import { GameLibrary } from "@/components/pages/game-library"
 
 export default function HomePage() {
+  const searchParams = useSearchParams()
+  const section = searchParams.get('section')
+
+  useEffect(() => {
+    if (section) {
+      setTimeout(() => {
+        const element = document.querySelector(`[data-section="${section}"]`)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 500)
+    }
+  }, [section])
+
   return (
     <main className="min-h-screen bg-black">
       <Navbar />
@@ -37,14 +55,16 @@ export default function HomePage() {
       <GameLibrary />
 
       {/* News Carousel Section */}
-      <section className="w-full px-4 py-4 md:py-6">
+      <section className="w-full px-4 py-4 md:py-6" data-section="news">
         <div className="container mx-auto max-w-7xl flex justify-center">
           <NewsPeekCarousel />
         </div>
       </section>
 
       {/* Footer Section */}
-      <Footer />
+      <div data-section="footer">
+        <Footer />
+      </div>
     </main>
   )
 }

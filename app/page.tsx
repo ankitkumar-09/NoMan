@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense } from 'react'
+import { useState, Suspense } from 'react'
 import { Navbar } from "@/components/layout/navbar"
 import { GameShowcase } from "@/components/pages/game-showcase"
 import { GameInfoSection } from "@/components/pages/game-info-section"
@@ -9,10 +9,28 @@ import { HeroRotator } from "@/components/pages/hero-rotator"
 import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
 import { GameLibrary } from "@/components/pages/game-library"
 import { HomePageContent } from "@/components/layout/home-page-content"
+import { WelcomeScreen } from "@/components/layout/welcome-screen"
+
+// This variable lives outside the component lifecycle.
+// It resets to false only when the page is hard-refreshed (F5).
+let hasPlayedIntro = false;
 
 export default function HomePage() {
+  // Initialize state based on whether it has played yet
+  const [showIntro, setShowIntro] = useState(!hasPlayedIntro)
+
+  const handleWelcomeComplete = () => {
+    hasPlayedIntro = true;
+    setShowIntro(false);
+  }
+
   return (
     <main className="min-h-screen bg-black">
+      {/* Welcome Screen logic controlled at page level */}
+      {showIntro && (
+        <WelcomeScreen onComplete={handleWelcomeComplete} />
+      )}
+
       <Navbar />
 
       <Suspense fallback={null}>

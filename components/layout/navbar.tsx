@@ -42,50 +42,58 @@ export function Navbar() {
 
     useEffect(() => {
         if (!showTypewriter) return
-        const timer = setTimeout(() => setShowTypewriter(false), AUTO_RETURN_MS)
-        return () => clearTimeout(timer)
+        const t = setTimeout(() => setShowTypewriter(false), AUTO_RETURN_MS)
+        return () => clearTimeout(t)
     }, [showTypewriter])
 
     const typed = useTypewriter(TEXT, showTypewriter, 45)
 
+    // ✅ RESTORED ORIGINAL SCROLL LOGIC
     const handleScrollToSection = (sectionId: string) => {
         setMenuOpen(false)
-        if (typeof window !== 'undefined') {
-            const element = document.querySelector(`[data-section="${sectionId}"]`)
-            
-            if (element) {
-                // Section exists on current page, scroll to it
-                setTimeout(() => {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                }, 200)
-            } else {
-                // Section doesn't exist, redirect to home and scroll after page loads
-                window.location.href = `/?section=${sectionId}`
-            }
+
+        const element = document.querySelector(
+            `[data-section="${sectionId}"]`
+        ) as HTMLElement | null
+
+        if (element) {
+            setTimeout(() => {
+                element.scrollIntoView({ behavior: "smooth", block: "start" })
+            }, 200)
+        } else {
+            window.location.href = `/?section=${sectionId}`
         }
     }
 
     const handleContactClick = () => {
         setMenuOpen(false)
-        if (typeof window !== 'undefined') {
-            window.location.href = "mailto:contact@nomans.com"
-        }
+        window.location.href = "mailto:contact@nomans.com"
     }
 
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 w-full pt-4 px-4">
-            <div className="relative h-[44px] max-w-6xl mx-auto">
-                
-                {/* 1. Typewriter View */}
+        <header className="fixed top-0 left-0 right-0 z-40 w-full pt-4 px-4">
+            <div className="relative h-[48px] max-w-6xl mx-auto">
+
+                {/* Background (visual only) */}
                 <div
                     className={cn(
-                        "absolute inset-0 rounded-full overflow-hidden isolate flex items-center justify-center transition-all duration-700",
-                        "bg-black/40 backdrop-blur-md ring-1 ring-white/10",
-                        "before:content-[''] before:absolute before:inset-0 before:rounded-full before:bg-linear-to-b before:from-white/10 before:to-transparent before:pointer-events-none",
-                        showTypewriter ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none",
+                        "absolute inset-0 rounded-full transition-all duration-700 pointer-events-none",
+                        scrolled
+                            ? "bg-black/60 backdrop-blur-xl ring-1 ring-white/20 shadow-lg shadow-black/40"
+                            : "bg-black/30 backdrop-blur-md ring-1 ring-white/10"
+                    )}
+                />
+
+                {/* Typewriter */}
+                <div
+                    className={cn(
+                        "absolute inset-0 z-20 flex items-center justify-center transition-all duration-700 pointer-events-none",
+                        showTypewriter
+                            ? "opacity-100 scale-100"
+                            : "opacity-0 scale-95"
                     )}
                 >
-                    <span className="relative z-10 text-white tracking-[0.3em] text-[10px] sm:text-[12px] font-medium px-4 text-center">
+                    <span className="text-white tracking-[0.3em] text-[10px] sm:text-[12px] font-medium px-4 text-center">
                         {typed}
                         {typed.length < TEXT.length && (
                             <span className="ml-1 animate-pulse text-red-600">|</span>
@@ -93,62 +101,58 @@ export function Navbar() {
                     </span>
                 </div>
 
-                {/* 2. Brand View */}
+                {/* Brand + Menu */}
                 <div
                     className={cn(
-                        "absolute inset-0 rounded-full overflow-hidden isolate transition-all duration-700",
-                        "before:content-[''] before:absolute before:inset-0 before:rounded-full before:bg-linear-to-b before:from-white/10 before:to-transparent before:pointer-events-none",
-                        scrolled
-                            ? "bg-black/60 backdrop-blur-lg ring-1 ring-white/20 shadow-lg shadow-black/40"
-                            : "bg-black/20 backdrop-blur-md ring-1 ring-white/10",
-                        !showTypewriter ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none",
+                        "relative z-30 h-full px-5 flex items-center justify-center transition-all duration-700",
+                        showTypewriter
+                            ? "opacity-0 scale-95 pointer-events-none"
+                            : "opacity-100 scale-100"
                     )}
                 >
-                    <div className="relative px-5 h-full flex items-center justify-center">
-                        
-                        <span className="text-white font-bold tracking-[0.25em] text-[11px] sm:text-xs select-none uppercase">
-                            NOMAN <span className="text-red-600">STUDIOS</span>
-                        </span>
+                    <span className="text-white font-bold tracking-[0.25em] text-[11px] sm:text-xs uppercase">
+                        NOMAN <span className="text-red-600">STUDIOS</span>
+                    </span>
 
-                        <button
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            className="absolute right-4 p-1 cursor-pointer text-white/80 hover:text-white transition-colors"
-                            aria-label="Toggle menu"
-                            type="button"
-                        >
-                            {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-                        </button>
-                    </div>
+                    <button
+                        onClick={() => setMenuOpen((v) => !v)}
+                        className="absolute right-4 p-1 text-white/80 hover:text-white transition-colors"
+                        aria-label="Toggle menu"
+                        type="button"
+                    >
+                        {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                    </button>
                 </div>
 
-                {/* Mobile Menu Dropdown - Positioned near button */}
+                {/* Dropdown (✅ original behavior restored) */}
                 {menuOpen && (
-                    <div className="absolute top-16 right-0 w-56 bg-black/95 backdrop-blur-2xl rounded-xl border border-white/10 p-3 animate-in fade-in zoom-in-95 duration-200 shadow-2xl z-50">
-                        <div className="space-y-2 text-white/80 text-sm font-medium tracking-wide">
-                            <a 
-                                href="/games" 
-                                className="block px-4 py-2.5 hover:bg-red-600/20 hover:text-red-500 rounded-lg transition-colors duration-200 cursor-pointer"
-                                onClick={(e) => {
-                                    setMenuOpen(false)
-                                }}
+                    <div className="absolute top-16 right-0 w-56 bg-black/95 backdrop-blur-2xl rounded-xl border border-white/10 p-3 shadow-2xl z-50">
+                        <div className="space-y-2 text-white/80 text-sm font-medium">
+                            <a
+                                href="/games"
+                                onClick={() => setMenuOpen(false)}
+                                className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
                             >
                                 GAMES
                             </a>
+
                             <button
-                                onClick={() => handleScrollToSection('news')}
-                                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 hover:text-red-500 rounded-lg transition-colors duration-200"
+                                onClick={() => handleScrollToSection("news")}
+                                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
                             >
                                 NEWS
                             </button>
+
                             <button
-                                onClick={() => handleScrollToSection('footer')}
-                                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 hover:text-red-500 rounded-lg transition-colors duration-200"
+                                onClick={() => handleScrollToSection("footer")}
+                                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
                             >
                                 ABOUT
                             </button>
+
                             <button
                                 onClick={handleContactClick}
-                                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 hover:text-red-500 rounded-lg transition-colors duration-200"
+                                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
                             >
                                 CONTACT
                             </button>
@@ -156,6 +160,6 @@ export function Navbar() {
                     </div>
                 )}
             </div>
-        </nav>
+        </header>
     )
 }

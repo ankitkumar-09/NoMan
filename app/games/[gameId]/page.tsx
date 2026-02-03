@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ChevronDown, Share2, Youtube, Twitter, Instagram, Download } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Youtube, Twitter, Instagram, Download } from 'lucide-react'
 import { Navbar } from '@/components/layout/navbar'
 
 const GAMES_DATA: Record<string, any> = {
@@ -132,8 +132,8 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
       <Navbar />
 
       {/* Header Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-40 pt-4 sm:pt-6 px-3 sm:px-4 md:px-6">
-        <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
+      <header className="fixed top-20 left-0 right-0 z-30 pt-4 sm:pt-6 px-3 sm:px-4 md:px-6">
+        <div className="flex items-start max-w-7xl mx-auto w-full">
           <button
             onClick={handleGoBack}
             className="p-2 sm:p-3 rounded-full border border-white/20 hover:bg-white/10 transition-all duration-300"
@@ -141,17 +141,11 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
           >
             <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
-
-          <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-white/30 backdrop-blur-sm" />
-
-          <button className="p-2 sm:p-3 rounded-full hover:bg-white/10 transition-all duration-300">
-            <Share2 className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-          </button>
         </div>
       </header>
 
       {/* Hero Image Card Section */}
-      <section className="relative w-full px-3 sm:px-4 md:px-6 pt-20 sm:pt-24 md:pt-28 pb-6 sm:pb-8 md:pb-10">
+      <section className="relative w-full px-3 sm:px-4 md:px-6 pt-32 sm:pt-36 md:pt-40 pb-6 sm:pb-8 md:pb-10">
         <div className="mx-auto w-full max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -2,21 +2,18 @@
 
 import { useState, Suspense } from 'react'
 import { Navbar } from "@/components/layout/navbar"
+import { HeroRotator } from "@/components/pages/hero-rotator"
 import { GameShowcase } from "@/components/pages/game-showcase"
 import { GameInfoSection } from "@/components/pages/game-info-section"
-import { Footer } from "@/components/layout/footer"
-import { HeroRotator } from "@/components/pages/hero-rotator"
-import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
 import { GameLibrary } from "@/components/pages/game-library"
+import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
+import { Footer } from "@/components/layout/footer"
 import { HomePageContent } from "@/components/layout/home-page-content"
 import { WelcomeScreen } from "@/components/layout/welcome-screen"
 
-// This variable lives outside the component lifecycle.
-// It resets to false only when the page is hard-refreshed (F5).
 let hasPlayedIntro = false;
 
 export default function HomePage() {
-  // Initialize state based on whether it has played yet
   const [showIntro, setShowIntro] = useState(!hasPlayedIntro)
 
   const handleWelcomeComplete = () => {
@@ -26,51 +23,46 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-black">
-      {/* Welcome Screen logic controlled at page level */}
-      {showIntro && (
-        <WelcomeScreen onComplete={handleWelcomeComplete} />
-      )}
+      {showIntro && <WelcomeScreen onComplete={handleWelcomeComplete} />}
 
       <Navbar />
 
       <Suspense fallback={null}>
         <HomePageContent>
-          {/* Hero Section - Landscape */}
-          <section className="w-full px-4 pt-20 pb-6 md:pt-20 md:pb-8">
-            <div className="w-full">
+          {/* Hero Section: Increased top padding for mobile to prevent Navbar overlap */}
+          <section className="w-full px-4 pt-28 pb-6 md:pt-32 md:pb-8">
+            <div className="w-full max-w-7xl mx-auto">
               <HeroRotator />
             </div>
           </section>
 
-          {/* Game Showcase Section */}
-          <GameShowcase />
+          {/* Consistent Width Container for Showcase */}
+          <div className="w-full max-w-7xl mx-auto">
+             <GameShowcase />
+          </div>
 
-          {/* Game Info Section */}
           <section className="w-full px-4 py-4 md:py-6">
             <div className="container mx-auto max-w-7xl">
               <GameInfoSection
                 logo="/images/logos/burn-point-logo.png"
                 title="BURN POINT"
                 subtitle="RACING GAME"
-                description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift. Make your choices, face the consequences."
+                description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift."
               />
             </div>
           </section>
 
-          {/* Game Library Section */}
-          <GameLibrary />
+          <div className="w-full max-w-7xl mx-auto">
+            <GameLibrary />
+          </div>
 
-          {/* News Carousel Section */}
           <section className="w-full px-4 py-4 md:py-6" data-section="news">
-            <div className="container mx-auto max-w-7xl flex justify-center">
+            <div className="container mx-auto max-w-7xl">
               <NewsPeekCarousel />
             </div>
           </section>
 
-          {/* Footer Section */}
-          <div data-section="footer">
-            <Footer />
-          </div>
+          <Footer />
         </HomePageContent>
       </Suspense>
     </main>

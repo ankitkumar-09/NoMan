@@ -325,19 +325,27 @@ export function HeroRotator() {
             accentColor={theme.accent}
           />
 
-          <button
-            onClick={handleLeftClick}
-            className="absolute left-0 top-0 bottom-16 w-1/5 cursor-pointer hover:bg-white/5 transition-colors z-20"
-            aria-label="Previous card"
-            type="button"
-          />
+        <button
+  onClick={handleLeftClick}
+  className="absolute left-0 top-0 h-2/3 
+             w-8 sm:w-10 md:w-12 
+             cursor-pointer hover:bg-white/5 
+             transition-colors z-20"
+  aria-label="Previous card"
+  type="button"
+/>
 
-          <button
-            onClick={handleRightClick}
-            className="absolute right-0 top-0 bottom-16 w-1/5 cursor-pointer hover:bg-white/5 transition-colors z-20"
-            aria-label="Next card"
-            type="button"
-          />
+<button
+  onClick={handleRightClick}
+  className="absolute right-0 top-0 h-2/3 
+             w-8 sm:w-10 md:w-12 
+             cursor-pointer hover:bg-white/5 
+             transition-colors z-20"
+  aria-label="Next card"
+  type="button"
+/>
+
+         
         </div>
       </div>
     </section>

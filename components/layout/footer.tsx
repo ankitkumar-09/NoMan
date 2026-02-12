@@ -11,7 +11,7 @@ export function Footer() {
          - px-6 ensures there is ALWAYS padding on the sides.
          - mx-auto ensures it stays in the center of the laptop screen.
       */}
-      <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 md:px-12">
+    <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 md:px-12">
         
         {/* Main Grid: Centered on mobile, left-aligned on desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 text-center sm:text-left">

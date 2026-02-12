@@ -46,13 +46,21 @@ export default function HomePage() {
           </section>
 
           {/* GAME INFO SECTION (Self-contained width control inside component) */}
-          <GameInfoSection
-            logo="/images/logos/burn-point-logo.png"
-            title="BURN POINT"
-            subtitle="RACING GAME"
-            description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift."
-          />
-
+          {/* GAME INFO SECTION */}
+{/* GAME INFO SECTION */}
+{/* GAME INFO SECTION */}
+{/* GAME INFO SECTION */}
+{/* GAME INFO SECTION */}
+<section className="w-full px-3 sm:px-4 md:px-6 py-6">
+  <div className="mx-auto w-full max-w-6xl">
+    <GameInfoSection
+      logo="/images/logos/burn-point-logo.png"
+      title="BURN POINT"
+      subtitle="RACING GAME"
+      description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift."
+    />
+  </div>
+</section>
           {/* GAME LIBRARY */}
           <section className="w-full py-6">
             <div className="w-full max-w-7xl mx-auto px-4">

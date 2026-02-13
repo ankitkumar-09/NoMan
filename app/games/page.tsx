@@ -6,7 +6,7 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { ArrowLeft } from "lucide-react"
 import { Navbar } from "@/components/layout/navbar"
-
+import { BackToTop } from "@/components/ui/back-to-top"
 const GAMES = [
   {
     id: "g1",
@@ -197,6 +197,6 @@ export default function GamesPage() {
           </div>
         </div>
       </section>
+      <BackToTop/>
     </main>
-  )
-}
+  )}

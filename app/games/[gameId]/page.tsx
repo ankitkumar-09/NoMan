@@ -1,12 +1,11 @@
 'use client'
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ChevronDown, Youtube, Twitter, Instagram, Download } from 'lucide-react'
 import { Navbar } from '@/components/layout/navbar'
-
+import { BackToTop } from '@/components/ui/back-to-top'
 const GAMES_DATA: Record<string, any> = {
   g1: {
     id: 'g1',
@@ -429,6 +428,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
           </div>
         </div>
       </footer>
+      <BackToTop />
     </main>
   )
 }

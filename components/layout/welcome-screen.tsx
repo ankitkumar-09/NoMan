@@ -8,9 +8,22 @@ const TEXT = "WELCOME TO NOMAN STUDIOS®"
 export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
     const [displayWeight, setDisplayWeight] = useState(0)
     const [isExiting, setIsExiting] = useState(false)
+    const [shouldRender, setShouldRender] = useState(false)
+
+    // Check if intro has played already on mount
+    useEffect(() => {
+        const hasPlayed = sessionStorage.getItem('intro_played')
+        if (hasPlayed) {
+            onComplete() // Skip straight to main content
+        } else {
+            setShouldRender(true) // Start the animation
+        }
+    }, [onComplete])
 
     // Typewriter effect
     useEffect(() => {
+        if (!shouldRender) return
+
         const interval = setInterval(() => {
             setDisplayWeight((prev) => {
                 if (prev >= TEXT.length) {
@@ -23,15 +36,21 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
         }, 60)
 
         return () => clearInterval(interval)
-    }, [])
+    }, [shouldRender])
 
     // Trigger removal after exit animation
     useEffect(() => {
         if (isExiting) {
-            const timer = setTimeout(onComplete, 800)
+            const timer = setTimeout(() => {
+                sessionStorage.setItem('intro_played', 'true') // Set the session flag
+                onComplete()
+            }, 800)
             return () => clearTimeout(timer)
         }
     }, [isExiting, onComplete])
+
+    // Don't render anything if we're skipping
+    if (!shouldRender) return null
 
     return (
         <div
@@ -47,20 +66,12 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
 
             <div className="relative flex flex-col items-center px-4">
                 <h1 className="max-w-[92vw] text-center text-white font-light uppercase transition-all">
-                    
-                    {/* FIRST LINE */}
                     <span className="block md:inline tracking-[0.25em] md:tracking-[0.4em] text-xs sm:text-sm md:text-xl">
                         {TEXT.slice(0, Math.min(displayWeight, 10))}
                     </span>
-
-                    {/* Line break ONLY on mobile */}
                     <span className="block md:hidden h-1" />
-
-                    {/* SECOND LINE */}
                     <span className="block md:inline tracking-[0.25em] md:tracking-[0.4em] text-xs sm:text-sm md:text-xl">
                         {TEXT.slice(10, displayWeight)}
-
-                        {/* Cursor */}
                         <span
                             className={cn(
                                 "inline-block w-[2px] h-3 md:h-6 bg-red-600 ml-1 align-middle",
@@ -69,8 +80,6 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
                         />
                     </span>
                 </h1>
-
-                {/* Underline */}
                 <div
                     className={cn(
                         "h-[1px] bg-linear-to-r from-transparent via-white/40 to-transparent transition-all duration-1000 mt-4",

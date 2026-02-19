@@ -23,7 +23,7 @@ export function GameInfoSection({
   }
 
   const handleLearnMore = () => {
-    window.open("https://redcube.com", "_blank")
+    window.open("https://noman.com", "_blank")
   }
 
   return (

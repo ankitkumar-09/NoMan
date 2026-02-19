@@ -20,7 +20,7 @@ export function Footer() {
           <div className="flex flex-col items-center sm:items-start space-y-6">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-white font-bold text-base">RC</span>
+                <span className="text-white font-bold text-base">NM</span>
               </div>
               <span className="text-white font-bold text-xl tracking-tight">NoMan</span>
             </div>
@@ -93,7 +93,7 @@ export function Footer() {
         {/* Bottom Bar: Centered on mobile */}
         <div className="border-t border-white/10 pt-10 flex flex-col sm:flex-row items-center justify-between gap-8 text-white/40 text-[13px]">
           <p className="order-2 sm:order-1">
-            © {currentYear} <span className="text-white/70">RedCube Studios</span>. All rights reserved.
+            © {currentYear} <span className="text-white/70">NoMan Studios</span>. All rights reserved.
           </p>
           <div className="flex flex-wrap justify-center gap-x-10 gap-y-4 order-1 sm:order-2">
             <a href="#" className="hover:text-white transition-colors">Sitemap</a>

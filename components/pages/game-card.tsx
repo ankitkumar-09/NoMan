@@ -21,7 +21,7 @@ export function GameCard(props: any) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
       </div>
-
+    <></>
       <div className="absolute inset-0 p-6 sm:p-10 flex flex-col justify-end">
         <div className="flex items-start gap-4">
           {logo && (

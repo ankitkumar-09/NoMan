@@ -19,8 +19,7 @@ const INITIAL_NEWS: NewsItem[] = [
     id: "n1",
     image: "/images/news/news1.png",
     tag: "ZERO HOUR CITY",
-    title:
-      "Fresh content update introduces enhanced combat mechanics and new missions.",
+    title: "Fresh content update introduces enhanced combat mechanics and new missions.",
     date: "November 16, 2025",
   },
   {
@@ -39,281 +38,136 @@ const INITIAL_NEWS: NewsItem[] = [
   },
   {
     id: "n4",
-    image: "/images/news/news3.png",
-    tag: "SKY RAIDERS",
-    title: "Season rewards updated with new cosmetics and limited-time drops.",
-    date: "November 28, 2025",
+    image: "/images/news/news1.png",
+    tag: "ACTION ZONE",
+    title: "Upcoming tournament series announced with major prize pools.",
+    date: "December 05, 2025",
   },
 ]
 
 export function NewsPeekCarousel() {
   const [activeIndex, setActiveIndex] = useState(1)
-  const touchStartRef = useRef(0)
-  const touchStartYRef = useRef(0)
-  const stageRef = useRef<HTMLDivElement | null>(null)
   const [stageW, setStageW] = useState(0)
+  const stageRef = useRef<HTMLDivElement | null>(null)
+  const touchStartRef = useRef(0)
   const isDraggingRef = useRef(false)
-  const isMouseDownRef = useRef(false)
 
   const len = INITIAL_NEWS.length
-  const center = INITIAL_NEWS[activeIndex]
-  const left = activeIndex > 0 ? INITIAL_NEWS[activeIndex - 1] : null
-  const right = activeIndex < len - 1 ? INITIAL_NEWS[activeIndex + 1] : null
-
-  const CARD_W_RATIO = 0.78
-  const SIDE_SCALE = 0.88
-  const GAP = 24
-  const EDGE_FILL = 6
 
   useEffect(() => {
     if (!stageRef.current) return
-    const ro = new ResizeObserver(() =>
-      setStageW(stageRef.current?.clientWidth || 0)
-    )
+    const ro = new ResizeObserver(() => setStageW(stageRef.current?.clientWidth || 0))
     ro.observe(stageRef.current)
     setStageW(stageRef.current.clientWidth)
     return () => ro.disconnect()
   }, [])
 
+  const CARD_W_RATIO = 0.75
+  const SIDE_SCALE = 0.82
   const cardW = stageW * CARD_W_RATIO
-  const sideEffectiveW = cardW * SIDE_SCALE
-  const neededForGap = (cardW * (1 + SIDE_SCALE)) / 2 + GAP
-  const neededForEdgeFill = stageW
-    ? stageW / 2 - sideEffectiveW / 2 + EDGE_FILL
-    : 0
-  const SIDE_X = stageW ? Math.max(neededForGap, neededForEdgeFill) : 230
+  const SIDE_X = stageW * 0.45 // Optimized spacing
 
   const base = {
-    left: { x: -SIDE_X, scale: SIDE_SCALE, opacity: 0.78, zIndex: 1 },
-    center: { x: 0, scale: 1, opacity: 1, zIndex: 3 },
-    right: { x: SIDE_X, scale: SIDE_SCALE, opacity: 0.78, zIndex: 1 },
+    left: { x: -SIDE_X, scale: SIDE_SCALE, opacity: 0.4, zIndex: 1, rotateY: 15 },
+    center: { x: 0, scale: 1, opacity: 1, zIndex: 10, rotateY: 0 },
+    right: { x: SIDE_X, scale: SIDE_SCALE, opacity: 0.4, zIndex: 1, rotateY: -15 },
   } as const
 
+  const handleSwipe = (diff: number) => {
+    if (Math.abs(diff) > 50) {
+      if (diff > 0 && activeIndex < len - 1) setActiveIndex(activeIndex + 1)
+      if (diff < 0 && activeIndex > 0) setActiveIndex(activeIndex - 1)
+    }
+  }
+
   const cards = [
-    { item: left, pos: "left" as Pos },
-    { item: center, pos: "center" as Pos },
-    { item: right, pos: "right" as Pos },
-  ].filter(({ item }) => item !== null)
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartRef.current = e.touches[0].clientX
-    touchStartYRef.current = e.touches[0].clientY
-    isDraggingRef.current = false
-  }
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const xDiff = Math.abs(
-      e.touches[0].clientX - touchStartRef.current
-    )
-    const yDiff = Math.abs(
-      e.touches[0].clientY - touchStartYRef.current
-    )
-
-    if (xDiff > yDiff && xDiff > 10) {
-      isDraggingRef.current = true
-      e.preventDefault()
-    }
-  }
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!isDraggingRef.current) return
-
-    const touchEnd = e.changedTouches[0].clientX
-    const diff = touchStartRef.current - touchEnd
-
-    if (Math.abs(diff) > 50) {
-      if (diff > 0 && activeIndex < len - 1) {
-        setActiveIndex(activeIndex + 1)
-      } else if (diff < 0 && activeIndex > 0) {
-        setActiveIndex(activeIndex - 1)
-      }
-    }
-
-    isDraggingRef.current = false
-  }
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    touchStartRef.current = e.clientX
-    isMouseDownRef.current = true
-    isDraggingRef.current = false
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDownRef.current) return
-
-    const xDiff = Math.abs(e.clientX - touchStartRef.current)
-
-    if (xDiff > 10) {
-      isDraggingRef.current = true
-    }
-  }
-
-  const handleMouseUp = (e: React.MouseEvent) => {
-    if (!isMouseDownRef.current) return
-
-    isMouseDownRef.current = false
-
-    if (!isDraggingRef.current) return
-
-    const mouseEnd = e.clientX
-    const diff = touchStartRef.current - mouseEnd
-
-    if (Math.abs(diff) > 50) {
-      if (diff > 0 && activeIndex < len - 1) {
-        setActiveIndex(activeIndex + 1)
-      } else if (diff < 0 && activeIndex > 0) {
-        setActiveIndex(activeIndex - 1)
-      }
-    }
-
-    isDraggingRef.current = false
-  }
-
-  const handleMouseLeave = () => {
-    isMouseDownRef.current = false
-    isDraggingRef.current = false
-  }
+    { item: activeIndex > 0 ? INITIAL_NEWS[activeIndex - 1] : null, pos: "left" as Pos, idx: activeIndex - 1 },
+    { item: INITIAL_NEWS[activeIndex], pos: "center" as Pos, idx: activeIndex },
+    { item: activeIndex < len - 1 ? INITIAL_NEWS[activeIndex + 1] : null, pos: "right" as Pos, idx: activeIndex + 1 },
+  ].filter(c => c.item !== null)
 
   return (
-    <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 bg-black" data-section="news">
-      <div className="mx-auto w-full max-w-6xl">
-        <div className="relative">
-          <motion.div
-            initial={{ x: -60, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-r-3xl bg-gradient-to-r from-orange-600 to-orange-500 -z-10 pointer-events-none shadow-lg"
-          />
+    <section className="w-full px-4 py-12 bg-black overflow-hidden">
+      <div className="mx-auto max-w-6xl relative">
+        
+        {/* Background Decorative Glows */}
+        <div className="absolute top-1/2 left-[-10%] -translate-y-1/2 w-64 h-[400px] bg-orange-600/20 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-1/2 right-[-10%] -translate-y-1/2 w-64 h-[400px] bg-blue-600/20 blur-[100px] rounded-full pointer-events-none" />
 
-          <motion.div
-            initial={{ x: 60, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-l-3xl bg-gradient-to-l from-blue-600 via-blue-500 to-cyan-400 -z-10 pointer-events-none shadow-lg"
-            style={{
-              backgroundImage:
-                "linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(34,197,94,0.6) 50%, rgba(168,85,247,0.4) 100%)",
-            }}
-          />
+        <div
+          ref={stageRef}
+          className="relative w-full h-[500px] md:h-[580px] perspective-[1200px]"
+          onMouseDown={(e) => (touchStartRef.current = e.clientX)}
+          onMouseUp={(e) => handleSwipe(touchStartRef.current - e.clientX)}
+          onTouchStart={(e) => (touchStartRef.current = e.touches[0].clientX)}
+          onTouchEnd={(e) => handleSwipe(touchStartRef.current - e.changedTouches[0].clientX)}
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            {cards.map(({ item, pos, idx }) => (
+              <motion.div
+                key={item!.id}
+                initial={base[pos]}
+                animate={base[pos]}
+                exit={{ opacity: 0, scale: 0.5 }}
+                transition={{ type: "spring", stiffness: 260, damping: 26 }}
+                onClick={() => setActiveIndex(idx)}
+                className={`absolute left-1/2 top-1/2 w-[85%] md:w-[75%] h-[90%] -translate-x-1/2 -translate-y-1/2 cursor-pointer select-none rounded-[40px] overflow-hidden border border-white/10`}
+                style={{ zIndex: base[pos].zIndex }}
+              >
+                <div className="relative w-full h-full group">
+                  <Image
+                    src={item!.image}
+                    alt={item!.title}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    priority={pos === "center"}
+                  />
+                  
+                  {/* Overlay for all cards */}
+                  <div className={`absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent ${pos !== 'center' ? 'bg-black/40' : ''}`} />
 
-          <div
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            onMouseDown={handleMouseDown}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseLeave}
-            className="relative w-full h-[560px] touch-pan-y cursor-grab active:cursor-grabbing select-none"
-          >
-            <div
-              ref={stageRef}
-              className="absolute inset-0 overflow-hidden rounded-[32px] bg-black"
-            >
-              <div className="absolute inset-0 flex items-center justify-center">
-                <AnimatePresence mode="sync">
-                  {cards.map(({ item, pos }) => {
-                    if (!item) return null
-                    const isCenter = pos === "center"
-
-                    return (
-                      <motion.div
-                        key={item.id}
-                        className="absolute left-1/2 top-1/2 h-[92%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-[30px] overflow-hidden"
-                        initial={base[pos]}
-                        animate={base[pos]}
-                        exit={{
-                          opacity: 0,
-                          scale: 0.85,
-                          transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] },
-                        }}
-                        transition={{
-                          x: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
-                          scale: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
-                          opacity: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
-                        }}
-                        style={{ zIndex: base[pos].zIndex as number }}
-                      >
-                        <div className="relative w-full h-full">
-                          <Image
-                            src={item.image}
-                            alt={item.title}
-                            fill
-                            className="object-cover pointer-events-none"
-                            priority={isCenter}
-                            draggable={false}
-                          />
-
-                          <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
-
-                          {isCenter && (
-                            <motion.div
-                              initial={{ y: 30, opacity: 0 }}
-                              animate={{ y: 0, opacity: 1 }}
-                              exit={{ y: -30, opacity: 0 }}
-                              transition={{
-                                duration: 0.5,
-                                ease: [0.25, 0.1, 0.25, 1],
-                                delay: 0.1,
-                              }}
-                              className="absolute left-4 right-4 bottom-6 rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl p-4 text-left shadow-[0_10px_40px_rgba(0,0,0,0.45)]"
-                            >
-                              <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.4, delay: 0.15 }}
-                                className="text-[10px] tracking-widest text-white/70"
-                              >
-                                {item.tag}
-                              </motion.p>
-                              <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.4, delay: 0.2 }}
-                                className="mt-2 text-[16px] font-semibold leading-snug text-white"
-                              >
-                                {item.title}
-                              </motion.p>
-                              <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 0.4, delay: 0.25 }}
-                                className="mt-3 text-[11px] text-white/55"
-                              >
-                                {item.date}
-                              </motion.p>
-                            </motion.div>
-                          )}
-                        </div>
-                      </motion.div>
-                    )
-                  })}
-                </AnimatePresence>
-              </div>
-            </div>
-          </div>
+                  {/* Center Card Content */}
+                  {pos === "center" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 40 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="absolute inset-x-6 bottom-8 p-6 rounded-[24px] border border-white/20 bg-black/40 backdrop-blur-md"
+                    >
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                        <p className="text-[10px] font-black tracking-[0.2em] text-white/60 uppercase">
+                          {item!.tag}
+                        </p>
+                      </div>
+                      <h3 className="text-xl md:text-2xl font-bold text-white mb-4 leading-tight">
+                        {item!.title}
+                      </h3>
+                      <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                        <span className="text-xs text-white/40 font-medium italic">{item!.date}</span>
+                        <button className="text-[10px] font-black uppercase tracking-widest text-white bg-orange-600 px-4 py-2 rounded-full hover:bg-orange-500 transition-colors">
+                          Read Story
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.2 }}
-          className="mt-4 flex justify-center gap-2"
-        >
+        {/* Pagination Dots */}
+        <div className="flex justify-center gap-3 mt-8">
           {INITIAL_NEWS.map((_, i) => (
-            <motion.span
+            <button
               key={i}
-              layout
-              className={[
-                "h-1.5 rounded-full transition-all",
-                i === activeIndex ? "w-6 bg-white/80" : "w-2 bg-white/30",
-              ].join(" ")}
-              animate={{
-                scale: i === activeIndex ? 1.1 : 1,
-              }}
+              onClick={() => setActiveIndex(i)}
+              className={`h-1.5 transition-all duration-500 rounded-full ${
+                i === activeIndex ? "w-10 bg-orange-500" : "w-2 bg-white/20"
+              }`}
             />
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

@@ -16,8 +16,8 @@ export interface Game {
 }
 
 export const GAMES_DATA: Record<string, Game> = {
-  g1: {
-    id: "g1",
+  FlappyAR: {
+    id: "FlappyAR",
     title: "Zero Hour City",
     image: "/images/news1.png",
     logo: "/images/burn-point-logo.png",
@@ -40,8 +40,8 @@ The city never sleeps, and neither do the threats. Face dynamic AI that adapts t
     ],
   },
   
-  g2: {
-    id: "g2",
+  BurnPoint: {
+    id: "BurnPoint",
     title: "Burn Point",
     image: "/images/news2.png",
     logo: "/images/burn-point-logo.png",

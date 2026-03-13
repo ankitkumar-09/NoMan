@@ -1,61 +1,114 @@
 "use client"
 
-import { Facebook, Twitter, Instagram, Youtube, Mail } from "lucide-react"
+import { useState } from "react"
+import { Linkedin, Instagram, Youtube, Mail, Loader2, CheckCircle2, X, Phone, MapPin } from "lucide-react"
+import { useForm, ValidationError } from "@formspree/react"
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
+  const [state, handleSubmit] = useForm("maqpbwaq")
+  
+  // Unified state for all Modals
+  const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null)
+
+  const legalDocs = {
+    privacy: {
+      title: "Privacy Policy",
+      content: <p>At NoMan Studios, we take your privacy seriously. We only collect the email addresses you provide via our newsletter to send updates. We do not sell your data to third parties.</p>
+    },
+    terms: {
+      title: "Terms of Service",
+      content: <p>All game assets, logos, and code displayed on this site are the property of NoMan Studios. Unauthorized reproduction or distribution is strictly prohibited.</p>
+    },
+    cookies: {
+      title: "Cookie Policy",
+      content: <p>We use essential cookies to keep our site functional and secure. You can disable cookies in your browser settings at any time.</p>
+    },
+    faq: {
+      title: "Frequently Asked Questions",
+      content: (
+        <div className="space-y-6">
+          <div>
+            <h4 className="text-orange-500 font-bold mb-2">What games do you develop?</h4>
+            <p>We specialize in high-octane indie titles and immersive storytelling experiences across PC and Console platforms.</p>
+          </div>
+          <div>
+            <h4 className="text-orange-500 font-bold mb-2">How can I join the Beta?</h4>
+            <p>Subscribe to our newsletter! We send out beta testing invites exclusively to our community members.</p>
+          </div>
+          <div>
+            <h4 className="text-orange-500 font-bold mb-2">Are your games free to play?</h4>
+            <p>We offer a mix of premium titles and free-to-play experiences. Check the individual game pages for details.</p>
+          </div>
+        </div>
+      )
+    },
+    contact: {
+      title: "Contact Us",
+      content: (
+        <div className="space-y-6">
+          <div className="flex items-start gap-4">
+            <Mail className="w-6 h-6 text-orange-500 shrink-0" />
+            <div>
+              <p className="font-bold text-white">Email</p>
+              <p>support@nomanstudios.com</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <Phone className="w-6 h-6 text-orange-500 shrink-0" />
+            <div>
+              <p className="font-bold text-white">Phone</p>
+              <p>+91 98765 43210</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-4">
+            <MapPin className="w-6 h-6 text-orange-500 shrink-0" />
+            <div>
+              <p className="font-bold text-white">Studio Address</p>
+              <p>123 Gaming Street, Tech Hub District<br />New Delhi, India - 110001</p>
+            </div>
+          </div>
+        </div>
+      )
+    }
+  }
 
   return (
-    <footer className="w-full bg-black py-12 sm:py-20 border-t border-white/10" data-section="footer">
-      {/* Outer Container: 
-         - px-6 ensures there is ALWAYS padding on the sides.
-         - mx-auto ensures it stays in the center of the laptop screen.
-      */}
-    <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 md:px-12">
+    <footer className="w-full bg-black py-12 sm:py-20 border-t border-white/10 relative" data-section="footer">
+      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 md:px-12">
         
-        {/* Main Grid: Centered on mobile, left-aligned on desktop */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-16 text-center sm:text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-16 text-center sm:text-left">
           
           {/* Brand Column */}
           <div className="flex flex-col items-center sm:items-start space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center shrink-0">
-                <span className="text-white font-bold text-base">NM</span>
+              <div className="w-12 h-12 flex items-center justify-center shrink-0">
+                <img src="/1.png" alt="NoMan Logo" className="w-full h-full object-contain rounded-lg" />
               </div>
               <span className="text-white font-bold text-xl tracking-tight">NoMan</span>
             </div>
             <p className="text-white/60 text-sm leading-relaxed max-w-[280px]">
-              Committed to Entertainment. Creating world-class games that inspire, challenge, and delight players worldwide.
+              Committed to Entertainment. Creating world-class games that inspire and delight.
             </p>
             <div className="flex gap-4 pt-2">
-              {[Facebook, Twitter, Instagram, Youtube].map((Icon, i) => (
-                <button 
-                  key={i} 
-                  className="w-10 h-10 rounded-full bg-white/5 hover:bg-orange-600 flex items-center justify-center text-white/70 hover:text-white transition-all border border-white/5"
-                >
-                  <Icon className="w-4 h-4" />
-                </button>
+              {[
+                { Icon: Linkedin, href: "#" },
+                { Icon: Instagram, href: "#" },
+                { Icon: Youtube, href: "#" },
+              ].map((social, i) => (
+                <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-orange-600 flex items-center justify-center text-white/70 hover:text-white transition-all border border-white/5">
+                  <social.Icon className="w-4 h-4" />
+                </a>
               ))}
             </div>
-          </div>
-
-          {/* Quick Links Column */}
-          <div className="flex flex-col items-center sm:items-start space-y-5">
-            <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] text-orange-500">Quick Links</h4>
-            <ul className="space-y-4 text-white/60 text-sm font-medium">
-              <li><a href="#games" className="hover:text-white transition-colors">Games</a></li>
-              <li><a href="#news" className="hover:text-white transition-colors">News & Updates</a></li>
-              <li><a href="#about" className="hover:text-white transition-colors">About Us</a></li>
-            </ul>
           </div>
 
           {/* Support Column */}
           <div className="flex flex-col items-center sm:items-start space-y-5">
             <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] text-orange-500">Support</h4>
             <ul className="space-y-4 text-white/60 text-sm font-medium">
-              <li><a href="#help" className="hover:text-white transition-colors">Help Center</a></li>
-              <li><a href="#contact" className="hover:text-white transition-colors">Contact Us</a></li>
-              <li><a href="#faq" className="hover:text-white transition-colors">FAQ</a></li>
+              <li><button onClick={() => setModalContent(legalDocs.contact)} className="hover:text-white transition-colors">Contact Us</button></li>
+              <li><button onClick={() => setModalContent(legalDocs.faq)} className="hover:text-white transition-colors">FAQ</button></li>
             </ul>
           </div>
 
@@ -63,45 +116,56 @@ export function Footer() {
           <div className="flex flex-col items-center sm:items-start space-y-5">
             <h4 className="text-white font-bold text-sm uppercase tracking-[0.2em] text-orange-500">Legal</h4>
             <ul className="space-y-4 text-white/60 text-sm font-medium">
-              <li><a href="#privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#terms" className="hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="#cookies" className="hover:text-white transition-colors">Cookie Policy</a></li>
+              <li><button onClick={() => setModalContent(legalDocs.privacy)} className="hover:text-white transition-colors">Privacy Policy</button></li>
+              <li><button onClick={() => setModalContent(legalDocs.terms)} className="hover:text-white transition-colors">Terms of Service</button></li>
+              <li><button onClick={() => setModalContent(legalDocs.cookies)} className="hover:text-white transition-colors">Cookie Policy</button></li>
             </ul>
           </div>
         </div>
 
-        {/* Newsletter: Centered Container */}
-        <div className="mb-16 p-8 sm:p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 text-center lg:text-left">
+        {/* Newsletter Section */}
+        <div className="mb-16 p-8 sm:p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/10 overflow-hidden relative">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 text-center lg:text-left relative z-10">
             <div className="space-y-3">
-              <h3 className="text-white font-bold text-3xl">Stay Updated</h3>
-              <p className="text-white/50 text-base">Subscribe to get the latest news and updates</p>
+              <h3 className="text-white font-bold text-3xl">{state.succeeded ? "You're on the list!" : "Stay Updated"}</h3>
+              <p className="text-white/50 text-base">{state.succeeded ? "Welcome to the studio!" : "Subscribe for the latest news"}</p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="px-6 py-4 rounded-2xl bg-black border border-white/10 text-white placeholder-white/20 focus:outline-none focus:border-orange-500 transition-all w-full lg:w-96"
-              />
-              <button className="px-10 py-4 rounded-2xl bg-orange-600 hover:bg-orange-700 text-white font-bold transition-all whitespace-nowrap">
-                Subscribe
-              </button>
-            </div>
+            {!state.succeeded && (
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+                <div className="relative w-full lg:w-96">
+                  <input id="email" type="email" name="email" required placeholder="Enter your email" className="px-6 py-4 rounded-2xl bg-black border border-white/10 text-white w-full" />
+                </div>
+                <button type="submit" disabled={state.submitting} className="px-10 py-4 rounded-2xl bg-orange-600 text-white font-bold flex items-center justify-center gap-2">
+                  {state.submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Subscribe"}
+                </button>
+              </form>
+            )}
           </div>
         </div>
 
-        {/* Bottom Bar: Centered on mobile */}
-        <div className="border-t border-white/10 pt-10 flex flex-col sm:flex-row items-center justify-between gap-8 text-white/40 text-[13px]">
-          <p className="order-2 sm:order-1">
-            © {currentYear} <span className="text-white/70">NoMan Studios</span>. All rights reserved.
-          </p>
-          <div className="flex flex-wrap justify-center gap-x-10 gap-y-4 order-1 sm:order-2">
-            <a href="#" className="hover:text-white transition-colors">Sitemap</a>
-            <a href="#" className="hover:text-white transition-colors">Accessibility</a>
-            <a href="#" className="hover:text-white transition-colors">Cookies Settings</a>
-          </div>
+        {/* Bottom Bar */}
+        <div className="border-t border-white/10 pt-10 text-center sm:text-left">
+          <p className="text-white/40 text-[13px]">© {currentYear} NoMan Studios. All rights reserved.</p>
         </div>
       </div>
+
+      {/* POP-UP MODAL */}
+      {modalContent && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-neutral-900 border border-white/10 w-full max-w-lg rounded-3xl overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-white/5 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-white">{modalContent.title}</h3>
+              <button onClick={() => setModalContent(null)} className="text-white/40 hover:text-white"><X /></button>
+            </div>
+            <div className="p-8 max-h-[60vh] overflow-y-auto text-white/70 leading-relaxed custom-scrollbar">
+              {modalContent.content}
+            </div>
+            <div className="p-6 border-t border-white/5 flex justify-end">
+              <button onClick={() => setModalContent(null)} className="px-6 py-2 bg-white/10 text-white rounded-xl">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   )
 }

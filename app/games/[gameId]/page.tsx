@@ -1,4 +1,5 @@
 'use client'
+import { Footer } from '@/components/layout/footerGames' // Import your new footer
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -7,8 +8,8 @@ import { ArrowLeft, ChevronDown, Youtube, Twitter, Instagram, Download } from 'l
 import { Navbar } from '@/components/layout/navbar'
 import { BackToTop } from '@/components/ui/back-to-top'
 const GAMES_DATA: Record<string, any> = {
-  g1: {
-    id: 'g1',
+  FlappyAR: {
+    id: 'FlappyAR',
     title: 'Burn Point',
     subtitle: 'BURN POINT',
     logo: '/images/logos/burn-point-logo.png',
@@ -32,8 +33,8 @@ Powered by dynamic physics and cinematic crash technology, Burnout delivers an u
     instagram: 'https://instagram.com/burnpoint',
     screenshots: ['/images/news/news1.png', '/images/news/news2.png', '/images/news/news3.png', '/images/news/news1.png'],
   },
-  g2: {
-    id: 'g2',
+  BurnPoint: {
+    id: 'BurnPoint',
     title: 'Zero Hour City',
     subtitle: 'ZERO HOUR CITY',
     logo: '/images/logos/burn-point-logo.png',
@@ -360,74 +361,8 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
         </div>
       </div>
 
-      {/* Footer with Contact Details */}
-      <footer className="w-full bg-black border-t border-white/10 py-8 sm:py-12 md:py-16 px-3 sm:px-4 md:px-6" data-section="footer">
-        <div className="mx-auto w-full max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 mb-8">
-            {/* Left Column */}
-            <div className="space-y-6">
-              <div className="space-y-4">
-                <h3 className="text-white font-bold text-lg">Contact</h3>
-                <p className="text-white/70 text-sm">Get in touch with us</p>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-white font-bold text-lg">Careers</h3>
-                <p className="text-white/70 text-sm">Join our team</p>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-white font-bold text-lg">Subscribe</h3>
-                <div className="flex gap-3">
-                  <button className="p-2.5 rounded-full border border-white/30 hover:border-white/60 hover:bg-white/10 transition-all">
-                    <Instagram className="w-5 h-5 text-white" />
-                  </button>
-                  <button className="p-2.5 rounded-full border border-white/30 hover:border-white/60 hover:bg-white/10 transition-all">
-                    <Twitter className="w-5 h-5 text-white" />
-                  </button>
-                  <button className="p-2.5 rounded-full border border-white/30 hover:border-white/60 hover:bg-white/10 transition-all">
-                    <Youtube className="w-5 h-5 text-white" />
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column */}
-            <div className="md:col-span-2 grid grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <a href="#" className="text-white/70 hover:text-white text-sm transition-colors">
-                  Terms & Conditions
-                </a>
-                <a href="#" className="block text-white/70 hover:text-white text-sm transition-colors">
-                  Support
-                </a>
-                <a href="#" className="block text-white/70 hover:text-white text-sm transition-colors">
-                  Privacy & Cookies
-                </a>
-              </div>
-
-              <div className="space-y-3">
-                <a href="#" className="text-white/70 hover:text-white text-sm transition-colors">
-                  Terms of Use
-                </a>
-                <a href="#" className="block text-white/70 hover:text-white text-sm transition-colors">
-                  Legal
-                </a>
-                <a href="#" className="block text-white/70 hover:text-white text-sm transition-colors">
-                  Health Warning
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* Bottom Copyright */}
-          <div className="border-t border-white/10 pt-6 sm:pt-8 text-center">
-            <p className="text-white/60 text-sm">
-              © 2025 NoMan Production Studio. Committed to Entertainment.
-            </p>
-          </div>
-        </div>
-      </footer>
+      {/* Shared Footer and Utilities */}
+      <Footer />
       <BackToTop />
     </main>
   )

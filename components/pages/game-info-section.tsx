@@ -37,7 +37,7 @@ export function GameInfoSection({
         playsInline
         className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
       >
-        <source src="/images/2.mp4" type="video/mp4" />
+        <source src="/images/3.mp4" type="video/mp4" />
       </video>
 
       {/* Overlays: Darker at bottom for text, subtle vignette on left */}

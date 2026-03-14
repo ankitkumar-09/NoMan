@@ -7,7 +7,7 @@ import { ArrowUpRight } from "lucide-react"
 
 const GAMES = [
   {
-    id: "g1",
+    id: "FlappyAR",
     title: "Zero Hour City",
     image: "/images/news/news1.png",
   },

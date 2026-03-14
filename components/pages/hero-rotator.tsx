@@ -194,10 +194,9 @@ type Theme = {
 
 const SLIDES: Slide[] = [
   {
-    title: "Own the Drift",
-    subtitle: "BURN POINT",
-    image: "/images/hero/hero-drift.png",
-    logo: "/images/logos/burn-point-logo.png",
+    title: "Flap Into Reality",
+    subtitle: "Flap, Fly, and Experience Reality",
+    image: "/images/flappyAR/10.png",
     focusPoint: "center",
   },
   {

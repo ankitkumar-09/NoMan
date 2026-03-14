@@ -1,34 +1,18 @@
 "use client"
 
-import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Image from "next/image"
 import { motion } from "framer-motion"
+import { useState } from "react"
 import { ArrowLeft } from "lucide-react"
 import { Navbar } from "@/components/layout/navbar"
 import { BackToTop } from "@/components/ui/back-to-top"
-
-const GAMES = [
-  {
-    id: "g1",
-    title: "FlappyAR",
-    image: "/images/flappyAR/flappy3.jpeg",
-    logo: "/images/logos/burn-point-logo.png", // Present
-    tagline: "BURN POINT"
-  },
-  {
-    id: "g2",
-    title: "Burn Point",
-    image: "/images/news/news2.png",
-    logo: "/images/logos/burn-point-logo.png", // Present
-    tagline: "BURN POINT"
-  },
-
-]
+import { GAMES_DATA } from "@/lib/data/game-data"
 
 export default function GamesPage() {
   const router = useRouter()
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const games = Object.values(GAMES_DATA)
 
   return (
     <main className="min-h-screen bg-black">
@@ -51,7 +35,7 @@ export default function GamesPage() {
       <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
         <div className="mx-auto w-full max-w-7xl">
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-6 lg:gap-8">
-            {GAMES.map((game, idx) => (
+            {games.map((game, idx) => (
               <motion.div
                 key={game.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -75,7 +59,7 @@ export default function GamesPage() {
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
 
-                  {/* Conditional Logo - Top Left Only */}
+                  {/* Logo - Top Left */}
                   {game.logo && (
                     <div className="absolute top-2 left-2 sm:top-4 sm:left-4 lg:top-6 lg:left-6">
                       <div className="relative w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14">
@@ -92,18 +76,19 @@ export default function GamesPage() {
                   {/* Bottom Content */}
                   <div className="absolute bottom-0 inset-x-0 p-2 sm:p-3 md:p-4 lg:p-6 bg-gradient-to-t from-black/80 to-transparent text-left">
                     <p className="text-[7px] sm:text-[9px] md:text-xs lg:text-sm text-white/70 font-medium mb-0.5 sm:mb-1 uppercase tracking-wider">
-                      {game.tagline}
+                      {game.subtitle}
                     </p>
                     <h3 className="text-xs sm:text-sm md:text-lg lg:text-2xl font-bold text-white tracking-wide truncate">
                       {game.title}
                     </h3>
                   </div>
 
-                  {/* Shine Effect */}
+                  {/* Shine Effect on Hover */}
                   {hoveredId === game.id && (
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                       animate={{ x: ["-100%", "100%"] }}
+                      transition={{ duration: 0.6 }}
                     />
                   )}
                 </button>
@@ -112,6 +97,7 @@ export default function GamesPage() {
           </div>
         </div>
       </section>
+
       <BackToTop />
     </main>
   )

@@ -38,19 +38,28 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${_geist.className} antialiased bg-black text-white`}>
 
-        {/* Google Analytics */}
+        {/* Google Analytics - load the gtag.js library first */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WVV46LS59D"
           strategy="afterInteractive"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-WVV46LS59D');
-          `}
-        </Script>
+
+        {/* Google Analytics - initialize with dangerouslySetInnerHTML to ensure execution */}
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){window.dataLayer.push(arguments);}
+              window.gtag = gtag;
+              gtag('js', new Date());
+              gtag('config', 'G-WVV46LS59D', {
+                page_path: window.location.pathname,
+              });
+            `,
+          }}
+        />
 
         {children}
       </body>

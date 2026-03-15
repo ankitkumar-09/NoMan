@@ -92,9 +92,9 @@ export function Footer() {
             </p>
             <div className="flex gap-3 sm:gap-4 pt-1 sm:pt-2">
               {[
-                { Icon: Linkedin, href: "#" },
-                { Icon: Instagram, href: "#" },
-                { Icon: Youtube, href: "#" },
+                { Icon: Linkedin, href: "https://www.linkedin.com/company/nomanprod/" },
+                { Icon: Instagram, href: "https://www.instagram.com/noman__.games/" },
+                { Icon: Youtube, href: "https://www.youtube.com/channel/UCQWzNg1ToM8umNt0YUaIVhw" },
               ].map((social, i) => (
                 <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 hover:bg-orange-600 flex items-center justify-center text-white/70 hover:text-white transition-all border border-white/5">
                   <social.Icon className="w-3 h-3 sm:w-4 sm:h-4" />

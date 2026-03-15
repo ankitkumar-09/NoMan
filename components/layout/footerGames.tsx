@@ -98,13 +98,13 @@ export function Footer() {
             <div className="space-y-4">
               <h3 className="text-white font-bold text-lg tracking-tight">Follow Us</h3>
               <div className="flex justify-center md:justify-start gap-4">
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full border border-white/20 hover:bg-orange-600 hover:border-orange-600 transition-all duration-300">
+                <a href="https://www.linkedin.com/company/nomanprod/" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full border border-white/20 hover:bg-orange-600 hover:border-orange-600 transition-all duration-300">
                   <Linkedin className="w-5 h-5 text-white" />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full border border-white/20 hover:bg-orange-600 hover:border-orange-600 transition-all duration-300">
+                <a href="https://www.instagram.com/noman__.games/" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full border border-white/20 hover:bg-orange-600 hover:border-orange-600 transition-all duration-300">
                   <Instagram className="w-5 h-5 text-white" />
                 </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full border border-white/20 hover:bg-orange-600 hover:border-orange-600 transition-all duration-300">
+                <a href="https://www.youtube.com/channel/UCQWzNg1ToM8umNt0YUaIVhw" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-full border border-white/20 hover:bg-orange-600 hover:border-orange-600 transition-all duration-300">
                   <Youtube className="w-5 h-5 text-white" />
                 </a>
               </div>

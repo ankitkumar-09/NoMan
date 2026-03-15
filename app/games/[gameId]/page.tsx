@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { ArrowLeft, ChevronDown, Youtube, Linkedin, Instagram, Download } from 'lucide-react'
+import { ArrowLeft, ChevronDown, Youtube, Linkedin, Instagram, Download, Clock } from 'lucide-react'
 import { Navbar } from '@/components/layout/navbar'
 import { BackToTop } from '@/components/ui/back-to-top'
 import { GAMES_DATA, Game } from '@/lib/data/game-data' // ✅ Import shared data
@@ -12,14 +12,52 @@ import { GAMES_DATA, Game } from '@/lib/data/game-data' // ✅ Import shared dat
 interface GameDetailPageProps {
   params: Promise<{ gameId: string }>
 }
+function CountdownTimer({ releaseDate }: { releaseDate: string }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
+  useEffect(() => {
+    const target = new Date(releaseDate)
+    const tick = () => {
+      const diff = target.getTime() - Date.now()
+      if (diff <= 0) return
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      })
+    }
+    tick()
+    const id = setInterval(tick, 1000)
+    return () => clearInterval(id)
+  }, [releaseDate])
+
+  const units = [
+    { label: 'Days', value: timeLeft.days },
+    { label: 'Hrs', value: timeLeft.hours },
+    { label: 'Min', value: timeLeft.minutes },
+    { label: 'Sec', value: timeLeft.seconds },
+  ]
+
+  return (
+    <div className="flex gap-2">
+      {units.map(({ label, value }) => (
+        <div key={label} className="text-center bg-white/8 border border-white/15 rounded-lg px-3 py-2 min-w-[50px]">
+          <div className="text-lg sm:text-xl font-bold text-white leading-none">
+            {String(value).padStart(2, '0')}
+          </div>
+          <div className="text-[10px] text-white/45 uppercase tracking-wider mt-1">{label}</div>
+        </div>
+      ))}
+    </div>
+  )
+}
 export default function GameDetailPage({ params }: GameDetailPageProps) {
   const router = useRouter()
   const [expandedDescription, setExpandedDescription] = useState(false)
   const [game, setGame] = useState<Game | null>(null)
   const [loaded, setLoaded] = useState(false)
 
-  // ✅ Correct: resolve params inside useEffect
   useEffect(() => {
     Promise.resolve(params).then((resolvedParams) => {
       const foundGame = GAMES_DATA[resolvedParams.gameId]
@@ -106,15 +144,28 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleDownload}
-                    className="flex items-center gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-3 border-2 border-white text-white rounded-full font-semibold text-sm sm:text-base hover:bg-white hover:text-black transition-all duration-300"
-                  >
-                    <Download className="w-4 h-4 sm:w-5 sm:h-5" />
-                    Download Now
-                  </motion.button>
+                  {game.status === 'upcoming' ? (
+                    <div className="flex flex-wrap items-center gap-3">
+                      <button
+                        disabled
+                        className="flex items-center gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-3 border-2 border-white/30 text-white/40 rounded-full font-semibold text-sm sm:text-base cursor-not-allowed"
+                      >
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+                        Coming Soon
+                      </button>
+                      <CountdownTimer releaseDate={game.releaseDate} />
+                    </div>
+                  ) : (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleDownload}
+                      className="flex items-center gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-3 border-2 border-white text-white rounded-full font-semibold text-sm sm:text-base hover:bg-white hover:text-black transition-all duration-300"
+                    >
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                      Download Now
+                    </motion.button>
+                  )}
 
                   <div className="flex gap-2 sm:gap-3">
                     {[

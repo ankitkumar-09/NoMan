@@ -32,7 +32,7 @@ const SLIDES: Slide[] = [
   {
     title: "Shadow Operations",
     subtitle: "STEALTH SHOOTER",
-    image: "/images/games/sniper.png",
+    image: "/images/2048/1.png",
     focusPoint: "center 20%",
   },
 ]

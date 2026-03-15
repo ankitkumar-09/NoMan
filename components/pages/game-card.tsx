@@ -83,7 +83,7 @@ export function GameCard(props: any) {
         {showButtons && (
           <div className="hidden sm:flex mt-6 flex-wrap gap-3">
             <button
-              onClick={() => window.open("https://youtube.com", "_blank", "noopener,noreferrer")}
+              onClick={() => window.open("https://www.youtube.com/channel/UCQWzNg1ToM8umNt0YUaIVhw", "_blank", "noopener,noreferrer")}
               className="px-6 py-2.5 rounded-full bg-white text-black font-bold text-sm uppercase hover:bg-gray-200 transition-all flex items-center gap-2"
             >
               Watch Trailer <Play className="w-4 h-4 fill-current" />

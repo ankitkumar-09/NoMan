@@ -22,7 +22,7 @@ export function GameInfoSection({
   const router = useRouter()
 
   const handleDownload = () => {
-    router.push("/games/flappyAR")
+    router.push("/games/FlappyAR")
   }
 
   const handleLearnMore = () => {

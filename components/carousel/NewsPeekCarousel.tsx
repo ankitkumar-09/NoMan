@@ -18,31 +18,30 @@ const INITIAL_NEWS: NewsItem[] = [
   {
     id: "n1",
     image: "/images/racing/5.png",
-    tag: "ZERO HOUR CITY",
-    title:
-      "Fresh content update introduces enhanced combat mechanics and new missions.",
-    date: "November 16, 2025",
+    tag: "FLAPPYAR",
+    title: "FlappyAR gets a sleek UI overhaul — cleaner menus, smoother animations, and a redesigned HUD are now live.",
+    date: "March 10, 2026",
   },
   {
     id: "n2",
     image: "/images/racing/8.png",
-    tag: "BURN POINT",
-    title: "New drift challenges and leaderboard events are now live for all players.",
-    date: "November 20, 2025",
+    tag: "FLAPPYAR",
+    title: "Leaderboard system coming soon — compete globally, track your best runs, and climb the ranks in real time.",
+    date: "March 13, 2026",
   },
   {
     id: "n3",
     image: "/images/racing/11.png",
-    tag: "SKY RAIDERS",
-    title: "Season rewards updated with new cosmetics and limited-time drops.",
-    date: "November 28, 2025",
+    tag: "2048 QUEST",
+    title: "2048 Quest launches tomorrow — merge tiles, unlock new game modes, and challenge your high score from day one.",
+    date: "March 14, 2026",
   },
   {
     id: "n4",
     image: "/images/racing/10.png",
-    tag: "SKY RAIDERS",
-    title: "Season rewards updated with new cosmetics and limited-time drops.",
-    date: "November 28, 2025",
+    tag: "BURN POINT",
+    title: "Burn Point enters active development — drift mechanics, city tracks, and the first gameplay footage dropping soon.",
+    date: "March 15, 2026",
   },
 ]
 

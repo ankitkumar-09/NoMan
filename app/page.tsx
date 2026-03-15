@@ -31,37 +31,37 @@ export default function HomePage() {
 
       <Suspense fallback={null}>
         <HomePageContent>
-          <section className="w-full pt-28 pb-6 md:pt-32 md:pb-8">
-            <div className="w-full max-w-7xl mx-auto px-4">
+          <section className="w-full pt-24 sm:pt-28 md:pt-32 pb-4 sm:pb-6 md:pb-8">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
               <HeroRotator />
             </div>
           </section>
 
-          <section className="w-full py-6">
-            <div className="w-full max-w-7xl mx-auto px-4">
+          <section className="w-full py-6 md:py-8">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
               <GameShowcase />
             </div>
           </section>
 
-          <section className="w-full px-3 sm:px-4 md:px-6 py-6">
+          <section className="w-full px-3 sm:px-4 md:px-6 py-6 md:py-8">
             <div className="mx-auto w-full max-w-6xl">
               <GameInfoSection
-                logo="/images/logos/burn-point-logo.png"
-                title="BURN POINT"
-                subtitle="RACING GAME"
-                description="In BURN POINT, you control your survival. As the last racer in a world where winning means everything, it's up to you to conquer the streets and own the drift."
+                logo="/image.png"
+                title="FLAPPY AR"
+                subtitle="AUGMENTED REALITY GAME"
+                description=''
               />
             </div>
           </section>
 
-          <section className="w-full py-6">
-            <div className="w-full max-w-7xl mx-auto px-4">
+          <section className="w-full py-6 md:py-8">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
               <GameLibrary />
             </div>
           </section>
 
-          <section className="w-full py-6" data-section="news">
-            <div className="w-full max-w-7xl mx-auto px-4">
+          <section className="w-full py-6 md:py-8" data-section="news">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
               <NewsPeekCarousel />
             </div>
           </section>

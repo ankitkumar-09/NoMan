@@ -23,14 +23,14 @@ function GameThumbnail({ image, title, className = "" }: GameThumbnailProps) {
 }
 
 const GAMES = [
-  { title: "Game 1", image: "/images/games/action-game-cover-1.jpg" },
-  { title: "Game 2", image: "/images/games/racing-game-cover.png" },
-  { title: "Game 3", image: "/images/games/fps-game-cover.jpg" },
-  { title: "Game 4", image: "/images/games/adventure-game-cover.jpg" },
-  { title: "Game 5", image: "/images/games/rpg-game-cover.png" },
-  { title: "Game 6", image: "/images/games/strategy-game-cover.jpg" },
-  { title: "Game 7", image: "/images/games/sports-game-cover.jpg" },
-  { title: "Game 8", image: "/images/games/sports-game-cover.jpg" },
+  { title: "Game 1", image: "/images/racing/3.png" },
+  { title: "Game 2", image: "/images/racing/6.png" },
+  { title: "Game 3", image: "/images/racing/10.png" },
+  { title: "Game 4", image: "/images/teacher/1.png" },
+  { title: "Game 5", image: "/images/racing/3.png" },
+  { title: "Game 6", image: "/images/racing/7.png" },
+  { title: "Game 7", image: "/images/racing/11.png"},
+  { title: "Game 8", image: "/images/racing/10.png" },
 ]
 
 export function GameShowcase() {
@@ -43,7 +43,7 @@ export function GameShowcase() {
           <h2
             className="
               text-white font-extrabold tracking-tight leading-[1.08]
-              text-[20px] xs:text-[22px] sm:text-[32px] md:text-[48px] lg:text-[72px]
+              text-lg xs:text-xl sm:text-3xl md:text-4xl lg:text-6xl
               flex-1 min-w-0
               pr-2
             "

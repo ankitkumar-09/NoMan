@@ -51,7 +51,7 @@ export function Footer() {
             <Mail className="w-6 h-6 text-orange-500 shrink-0" />
             <div>
               <p className="font-bold text-white">Email</p>
-              <p>support@nomanstudios.com</p>
+              <p>nomanproddigital@gmail.com</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
@@ -65,7 +65,7 @@ export function Footer() {
             <MapPin className="w-6 h-6 text-orange-500 shrink-0" />
             <div>
               <p className="font-bold text-white">Studio Address</p>
-              <p>123 Gaming Street, Tech Hub District<br />New Delhi, India - 110001</p>
+              <p>Chennai, India<br /></p>
             </div>
           </div>
         </div>
@@ -74,30 +74,30 @@ export function Footer() {
   }
 
   return (
-    <footer className="w-full bg-black py-12 sm:py-20 border-t border-white/10 relative" data-section="footer">
-      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 md:px-12">
+    <footer className="w-full bg-black py-8 sm:py-12 md:py-20 border-t border-white/10 relative" data-section="footer">
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-8 lg:px-12">
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 mb-16 text-center sm:text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-10 md:gap-12 mb-12 sm:mb-16 text-center sm:text-left">
           
           {/* Brand Column */}
-          <div className="flex flex-col items-center sm:items-start space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 flex items-center justify-center shrink-0">
+          <div className="flex flex-col items-center sm:items-start space-y-4 sm:space-y-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shrink-0">
                 <img src="/1.png" alt="NoMan Logo" className="w-full h-full object-contain rounded-lg" />
               </div>
-              <span className="text-white font-bold text-xl tracking-tight">NoMan</span>
+              <span className="text-white font-bold text-lg sm:text-xl tracking-tight">NoMan</span>
             </div>
-            <p className="text-white/60 text-sm leading-relaxed max-w-[280px]">
+            <p className="text-white/60 text-xs sm:text-sm leading-relaxed max-w-[280px]">
               Committed to Entertainment. Creating world-class games that inspire and delight.
             </p>
-            <div className="flex gap-4 pt-2">
+            <div className="flex gap-3 sm:gap-4 pt-1 sm:pt-2">
               {[
                 { Icon: Linkedin, href: "#" },
                 { Icon: Instagram, href: "#" },
                 { Icon: Youtube, href: "#" },
               ].map((social, i) => (
-                <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full bg-white/5 hover:bg-orange-600 flex items-center justify-center text-white/70 hover:text-white transition-all border border-white/5">
-                  <social.Icon className="w-4 h-4" />
+                <a key={i} href={social.href} target="_blank" rel="noopener noreferrer" className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-white/5 hover:bg-orange-600 flex items-center justify-center text-white/70 hover:text-white transition-all border border-white/5">
+                  <social.Icon className="w-3 h-3 sm:w-4 sm:h-4" />
                 </a>
               ))}
             </div>
@@ -124,19 +124,19 @@ export function Footer() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="mb-16 p-8 sm:p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/10 overflow-hidden relative">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 text-center lg:text-left relative z-10">
-            <div className="space-y-3">
-              <h3 className="text-white font-bold text-3xl">{state.succeeded ? "You're on the list!" : "Stay Updated"}</h3>
-              <p className="text-white/50 text-base">{state.succeeded ? "Welcome to the studio!" : "Subscribe for the latest news"}</p>
+        <div className="mb-12 sm:mb-16 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-[2.5rem] bg-white/[0.02] border border-white/10 overflow-hidden relative">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6 sm:gap-8 md:gap-10 text-center lg:text-left relative z-10">
+            <div className="space-y-2 sm:space-y-3">
+              <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl">{state.succeeded ? "You're on the list!" : "Stay Updated"}</h3>
+              <p className="text-white/50 text-xs sm:text-sm md:text-base">{state.succeeded ? "Welcome to the studio!" : "Subscribe for the latest news"}</p>
             </div>
             {!state.succeeded && (
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 w-full lg:w-auto">
                 <div className="relative w-full lg:w-96">
-                  <input id="email" type="email" name="email" required placeholder="Enter your email" className="px-6 py-4 rounded-2xl bg-black border border-white/10 text-white w-full" />
+                  <input id="email" type="email" name="email" required placeholder="Enter your email" className="px-4 sm:px-6 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-2xl bg-black border border-white/10 text-white text-xs sm:text-sm md:text-base w-full" />
                 </div>
-                <button type="submit" disabled={state.submitting} className="px-10 py-4 rounded-2xl bg-orange-600 text-white font-bold flex items-center justify-center gap-2">
-                  {state.submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Subscribe"}
+                <button type="submit" disabled={state.submitting} className="px-6 sm:px-8 md:px-10 py-2 sm:py-3 md:py-4 rounded-lg sm:rounded-2xl bg-orange-600 text-white font-bold flex items-center justify-center gap-2 text-xs sm:text-sm md:text-base">
+                  {state.submitting ? <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 animate-spin" /> : "Subscribe"}
                 </button>
               </form>
             )}
@@ -144,8 +144,8 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-10 text-center sm:text-left">
-          <p className="text-white/40 text-[13px]">© {currentYear} NoMan Studios. All rights reserved.</p>
+        <div className="border-t border-white/10 pt-6 sm:pt-8 md:pt-10 text-center sm:text-left">
+          <p className="text-white/40 text-[10px] xs:text-xs sm:text-[13px]">© {currentYear} NoMan Studios. All rights reserved.</p>
         </div>
       </div>
 

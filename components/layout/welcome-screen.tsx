@@ -64,17 +64,17 @@ export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
             {/* Film Grain */}
             <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-50 pointer-events-none" />
 
-            <div className="relative flex flex-col items-center px-4">
+            <div className="relative flex flex-col items-center px-3 sm:px-4">
                 <h1 className="max-w-[92vw] text-center text-white font-light uppercase transition-all">
-                    <span className="block md:inline tracking-[0.25em] md:tracking-[0.4em] text-xs sm:text-sm md:text-xl">
+                    <span className="block md:inline tracking-[0.2em] md:tracking-[0.4em] text-[10px] xs:text-xs sm:text-sm md:text-xl">
                         {TEXT.slice(0, Math.min(displayWeight, 10))}
                     </span>
                     <span className="block md:hidden h-1" />
-                    <span className="block md:inline tracking-[0.25em] md:tracking-[0.4em] text-xs sm:text-sm md:text-xl">
+                    <span className="block md:inline tracking-[0.2em] md:tracking-[0.4em] text-[10px] xs:text-xs sm:text-sm md:text-xl">
                         {TEXT.slice(10, displayWeight)}
                         <span
                             className={cn(
-                                "inline-block w-[2px] h-3 md:h-6 bg-red-600 ml-1 align-middle",
+                                "inline-block w-[2px] h-2 sm:h-3 md:h-6 bg-red-600 ml-1 align-middle",
                                 displayWeight < TEXT.length ? "animate-pulse" : "hidden"
                             )}
                         />

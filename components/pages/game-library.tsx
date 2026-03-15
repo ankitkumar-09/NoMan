@@ -9,28 +9,24 @@ const GAMES = [
   {
     id: "FlappyAR",
     title: "Zero Hour City",
-    image: "/images/news/news1.png",
+    image: "/images/racing/7.png",
   },
   {
     id: "BurnPoint",
     title: "Burn Point",
-    image: "/images/news/news2.png",
+    image: "/images/racing/16.png",
   },
   {
     id: "g3",
     title: "Sky Raiders",
-    image: "/images/news/news3.png",
+    image: "/images/flappyAR/7.png",
   },
   {
     id: "g4",
     title: "Action Game 1",
-    image: "/images/news/news1.png",
-  },
-  {
-    id: "g5",
-    title: "Racing Game",
-    image: "/images/news/news2.png",
-  },
+    image: "/images/racing/3.png",
+  }
+
 ]
 
 export function GameLibrary() {
@@ -60,11 +56,11 @@ export function GameLibrary() {
         <div className="relative w-full mb-4 sm:mb-6 md:mb-8 overflow-hidden rounded-xl sm:rounded-2xl bg-black">
           <div
             ref={marqueeRef}
-            className="relative h-40 sm:h-56 md:h-64 lg:h-80 overflow-hidden"
+            className="relative h-32 sm:h-40 md:h-56 lg:h-64 overflow-hidden"
           >
             <motion.div
               className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6"
-              animate={{ x: [0, -800] }}
+              animate={{ x: [0, -1200] }}
               transition={{
                 duration: animationDuration,
                 repeat: Infinity,
@@ -76,7 +72,7 @@ export function GameLibrary() {
                 <button
                   key={`left-${game.id}-${idx}`}
                   onClick={handleViewMore}
-                  className="relative flex-shrink-0 w-32 h-40 sm:w-44 sm:h-56 md:w-56 md:h-64 lg:w-72 lg:h-80 rounded-lg sm:rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform"
+                  className="relative flex-shrink-0 w-24 h-32 sm:w-32 sm:h-40 md:w-44 md:h-56 lg:w-56 lg:h-64 rounded-lg sm:rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform"
                   type="button"
                 >
                   <Image
@@ -104,7 +100,7 @@ export function GameLibrary() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1]
 }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl tracking-wide text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 max-w-sm md:max-w-lg font-bold"
+              className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-wide text-white mb-2 sm:mb-3 md:mb-4 lg:mb-6 max-w-sm md:max-w-lg font-bold"
             >
               Game Library
             </motion.h2>
@@ -136,10 +132,10 @@ export function GameLibrary() {
 
           <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-transparent pointer-events-none z-10" />
 
-          <div className="relative h-40 sm:h-56 md:h-64 lg:h-80 overflow-hidden">
+          <div className="relative h-32 sm:h-40 md:h-56 lg:h-64 overflow-hidden">
             <motion.div
               className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6"
-              animate={{ x: [-800, 0] }}
+              animate={{ x: [-1200, 0] }}
               transition={{
                 duration: animationDuration,
                 repeat: Infinity,
@@ -150,7 +146,7 @@ export function GameLibrary() {
                 <button
                   key={`right-${game.id}-${idx}`}
                   onClick={handleViewMore}
-                  className="relative flex-shrink-0 w-32 h-40 sm:w-44 sm:h-56 md:w-56 md:h-64 lg:w-72 lg:h-80 rounded-lg sm:rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform"
+                  className="relative flex-shrink-0 w-24 h-32 sm:w-32 sm:h-40 md:w-44 md:h-56 lg:w-56 lg:h-64 rounded-lg sm:rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform"
                   type="button"
                 >
                   <Image

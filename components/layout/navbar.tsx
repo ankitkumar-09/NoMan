@@ -93,7 +93,7 @@ export function Navbar() {
               : "opacity-0 scale-95"
           )}
         >
-          <span className="text-white tracking-[0.3em] text-[10px] sm:text-[12px] font-medium px-4 text-center">
+          <span className="text-white tracking-[0.2em] text-[8px] xs:text-[10px] sm:text-[12px] font-medium px-2 xs:px-4 text-center whitespace-nowrap">
             {typed}
             {typed.length < TEXT.length && (
               <span className="ml-1 animate-pulse text-red-600">|</span>
@@ -122,7 +122,7 @@ export function Navbar() {
           </div>
 
           {/* CENTER — BRAND TEXT */}
-          <span className="absolute left-1/2 -translate-x-1/2 text-white font-bold tracking-[0.25em] text-[11px] sm:text-xs uppercase">
+          <span className="absolute left-1/2 -translate-x-1/2 text-white font-bold tracking-[0.15em] text-[8px] xs:text-[10px] sm:text-xs uppercase">
             NOMAN <span className="text-red-600">STUDIOS</span>
           </span>
 
@@ -139,7 +139,7 @@ export function Navbar() {
 
         {/* Dropdown */}
         {menuOpen && (
-          <div className="absolute top-16 right-0 w-56 bg-black/95 backdrop-blur-2xl rounded-xl border border-white/10 p-3 shadow-2xl z-50">
+          <div className="absolute top-16 left-0 right-0 sm:right-0 sm:left-auto w-full sm:w-56 bg-black/95 backdrop-blur-2xl rounded-xl border border-white/10 p-3 shadow-2xl z-50 mx-0 sm:mx-0">
             <div className="space-y-2 text-white/80 text-sm font-medium">
               <a
                 href="/games"

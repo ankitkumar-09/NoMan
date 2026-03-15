@@ -17,7 +17,7 @@ type Pos = "left" | "center" | "right"
 const INITIAL_NEWS: NewsItem[] = [
   {
     id: "n1",
-    image: "/images/news/news1.png",
+    image: "/images/racing/5.png",
     tag: "ZERO HOUR CITY",
     title:
       "Fresh content update introduces enhanced combat mechanics and new missions.",
@@ -25,21 +25,21 @@ const INITIAL_NEWS: NewsItem[] = [
   },
   {
     id: "n2",
-    image: "/images/news/news2.png",
+    image: "/images/racing/8.png",
     tag: "BURN POINT",
     title: "New drift challenges and leaderboard events are now live for all players.",
     date: "November 20, 2025",
   },
   {
     id: "n3",
-    image: "/images/news/news3.png",
+    image: "/images/racing/11.png",
     tag: "SKY RAIDERS",
     title: "Season rewards updated with new cosmetics and limited-time drops.",
     date: "November 28, 2025",
   },
   {
     id: "n4",
-    image: "/images/news/news3.png",
+    image: "/images/racing/10.png",
     tag: "SKY RAIDERS",
     title: "Season rewards updated with new cosmetics and limited-time drops.",
     date: "November 28, 2025",
@@ -51,6 +51,7 @@ export function NewsPeekCarousel() {
   const touchStartRef = useRef(0)
   const touchStartYRef = useRef(0)
   const stageRef = useRef<HTMLDivElement | null>(null)
+  const containerRef = useRef<HTMLDivElement | null>(null)
   const [stageW, setStageW] = useState(0)
   const isDraggingRef = useRef(false)
   const isMouseDownRef = useRef(false)
@@ -73,6 +74,30 @@ export function NewsPeekCarousel() {
     ro.observe(stageRef.current)
     setStageW(stageRef.current.clientWidth)
     return () => ro.disconnect()
+  }, [])
+
+  // Handle passive event listeners for touch
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleTouchMoveNonPassive = (e: TouchEvent) => {
+      const xDiff = Math.abs(e.touches[0].clientX - touchStartRef.current)
+      const yDiff = Math.abs(e.touches[0].clientY - touchStartYRef.current)
+
+      if (xDiff > yDiff && xDiff > 10) {
+        isDraggingRef.current = true
+        if (e.cancelable) {
+          e.preventDefault()
+        }
+      }
+    }
+
+    container.addEventListener("touchmove", handleTouchMoveNonPassive, { passive: false })
+
+    return () => {
+      container.removeEventListener("touchmove", handleTouchMoveNonPassive)
+    }
   }, [])
 
   const cardW = stageW * CARD_W_RATIO
@@ -182,14 +207,14 @@ export function NewsPeekCarousel() {
             initial={{ x: -60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-r-3xl bg-gradient-to-r from-orange-600 to-orange-500 -z-10 pointer-events-none shadow-lg"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-[400px] md:h-[480px] lg:h-[560px] rounded-r-3xl bg-gradient-to-r from-orange-600 to-orange-500 -z-10 pointer-events-none shadow-lg"
           />
 
           <motion.div
             initial={{ x: 60, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
-            className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-[560px] rounded-l-3xl bg-gradient-to-l from-blue-600 via-blue-500 to-cyan-400 -z-10 pointer-events-none shadow-lg"
+            className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-[400px] md:h-[480px] lg:h-[560px] rounded-l-3xl bg-gradient-to-l from-blue-600 via-blue-500 to-cyan-400 -z-10 pointer-events-none shadow-lg"
             style={{
               backgroundImage:
                 "linear-gradient(135deg, rgba(59,130,246,0.8) 0%, rgba(34,197,94,0.6) 50%, rgba(168,85,247,0.4) 100%)",
@@ -197,14 +222,14 @@ export function NewsPeekCarousel() {
           />
 
           <div
+            ref={containerRef}
             onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseLeave}
-            className="relative w-full h-[560px] touch-pan-y cursor-grab active:cursor-grabbing select-none"
+            className="relative w-full h-[320px] sm:h-[400px] md:h-[480px] lg:h-[560px] touch-pan-y cursor-grab active:cursor-grabbing select-none"
           >
             <div
               ref={stageRef}

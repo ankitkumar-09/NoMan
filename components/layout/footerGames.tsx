@@ -32,11 +32,11 @@ export function Footer() {
         <div className="space-y-6 text-left">
           <div>
             <h4 className="text-orange-500 font-bold mb-2">When is the next game release?</h4>
-            <p>Burn Point is scheduled for February 2026. Stay tuned for more updates!</p>
+            <p>Burn Point is scheduled for April 2026. Stay tuned for more updates!</p>
           </div>
           <div>
             <h4 className="text-orange-500 font-bold mb-2">How can I contact support?</h4>
-            <p>You can reach us at support@nomanstudios.com for any technical issues or feedback.</p>
+            <p>You can reach us at nomanproddigital@gmail.com for any technical issues or feedback.</p>
           </div>
         </div>
       )
@@ -49,14 +49,14 @@ export function Footer() {
             <Mail className="w-6 h-6 text-orange-500 shrink-0" />
             <div>
               <p className="font-bold text-white">Email</p>
-              <p>support@nomanstudios.com</p>
+              <p>nomanproddigital@gmail.com</p>
             </div>
           </div>
           <div className="flex items-start gap-4">
             <Phone className="w-6 h-6 text-orange-500 shrink-0" />
             <div>
               <p className="font-bold text-white">Phone</p>
-              <p>+91 98765 43210</p>
+              <p>+91 79996 72109</p>
             </div>
           </div>
         </div>
@@ -64,7 +64,7 @@ export function Footer() {
     },
     careers: {
       title: "Join Our Team",
-      content: <p>We are always looking for passionate developers and artists. Please send your portfolio to <span className="text-orange-500">careers@nomanstudios.com</span>.</p>
+      content: <p>We are always looking for passionate developers and artists. Please send your portfolio to <span className="text-orange-500">nomanproddigital@gmail.com</span>.</p>
     }
   }
 

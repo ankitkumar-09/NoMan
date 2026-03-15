@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import { GoogleAnalytics } from "@next/third-parties/google"  // ← add this
+import { GoogleAnalytics } from "@next/third-parties/google"
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -38,7 +38,8 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body className={`${_geist.className} antialiased bg-black text-white`}>
         {children}
-        <GoogleAnalytics gaId="G-WVV46LS59D" />  {/* ← replaces both Script tags */}
+        {/* Official Next.js GA integration - handles timing automatically */}
+        <GoogleAnalytics gaId="G-WVV46LS59D" />
       </body>
     </html>
   )

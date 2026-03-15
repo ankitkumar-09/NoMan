@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense } from 'react'
+import { useState, Suspense, useEffect } from 'react'
 import { Navbar } from "@/components/layout/navbar"
 import { HeroRotator } from "@/components/pages/hero-rotator"
 import { GameShowcase } from "@/components/pages/game-showcase"
@@ -10,13 +10,18 @@ import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
 import { Footer } from "@/components/layout/footer"
 import { HomePageContent } from "@/components/layout/home-page-content"
 import { WelcomeScreen } from "@/components/layout/welcome-screen"
-// 1. IMPORT THE COMPONENT
 import { BackToTop } from "@/components/ui/back-to-top"
 
 let hasPlayedIntro = false
 
 export default function HomePage() {
   const [showIntro, setShowIntro] = useState(!hasPlayedIntro)
+
+  // ✅ useEffect is now at the TOP LEVEL of the component, not inside a function
+  useEffect(() => {
+    console.log('gtag exists:', typeof window.gtag)
+    console.log('dataLayer:', window.dataLayer)
+  }, [])
 
   const handleWelcomeComplete = () => {
     hasPlayedIntro = true
@@ -70,7 +75,6 @@ export default function HomePage() {
         </HomePageContent>
       </Suspense>
 
-      {/* 2. PLACE THE COMPONENT HERE */}
       <BackToTop />
     </main>
   )

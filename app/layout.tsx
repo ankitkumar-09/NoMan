@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
-import Script from "next/script"
+import { GoogleAnalytics } from "@next/third-parties/google"  // ← add this
 import "./globals.css"
 
 const _geist = Geist({ subsets: ["latin"] })
@@ -37,31 +37,8 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${_geist.className} antialiased bg-black text-white`}>
-
-        {/* Google Analytics - load the gtag.js library first */}
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-WVV46LS59D"
-          strategy="afterInteractive"
-        />
-
-        {/* Google Analytics - initialize with dangerouslySetInnerHTML to ensure execution */}
-        <Script
-          id="google-analytics"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){window.dataLayer.push(arguments);}
-              window.gtag = gtag;
-              gtag('js', new Date());
-              gtag('config', 'G-WVV46LS59D', {
-                page_path: window.location.pathname,
-              });
-            `,
-          }}
-        />
-
         {children}
+        <GoogleAnalytics gaId="G-WVV46LS59D" />  {/* ← replaces both Script tags */}
       </body>
     </html>
   )

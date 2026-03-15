@@ -84,7 +84,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
             transition={{ duration: 0.6 }}
             className="relative w-full h-64 sm:h-80 md:h-[400px] lg:h-[500px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl"
           >
-            <Image src={"/images/flappyAR/9.png"} alt={game.title} fill className="object-cover" priority />
+            <Image src={game.image} alt={game.title} fill className="object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">

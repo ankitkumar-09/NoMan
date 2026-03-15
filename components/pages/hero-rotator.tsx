@@ -30,11 +30,11 @@ const SLIDES: Slide[] = [
   focusPoint: "center 35%",
 },
   {
-    title: "Shadow Operations",
-    subtitle: "STEALTH SHOOTER",
-    image: "/images/2048/1.png",
-    focusPoint: "center 20%",
-  },
+  title: "2048",
+  subtitle: "MERGE THE NUMBERS",
+  image: "/images/2048/1.png",
+  focusPoint: "center 20%",
+},
 ]
 
 const THEMES: Theme[] = [

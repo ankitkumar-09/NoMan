@@ -1,0 +1,80 @@
+'use client'
+
+import { useState, Suspense, useEffect } from 'react'
+import { Navbar } from "@/components/layout/navbar"
+import { HeroRotator } from "@/components/pages/hero-rotator"
+import { GameShowcase } from "@/components/pages/game-showcase"
+import { GameInfoSection } from "@/components/pages/game-info-section"
+import { GameLibrary } from "@/components/pages/game-library"
+import { NewsPeekCarousel } from "@/components/carousel/NewsPeekCarousel"
+import { Footer } from "@/components/layout/footer"
+import { HomePageContent } from "@/components/layout/home-page-content"
+import { WelcomeScreen } from "@/components/layout/welcome-screen"
+import { BackToTop } from "@/components/ui/back-to-top"
+
+let hasPlayedIntro = false
+
+export default function HomePage() {
+  const [showIntro, setShowIntro] = useState(!hasPlayedIntro)
+
+  useEffect(() => {
+    console.log('gtag exists:', typeof window.gtag)
+    console.log('dataLayer:', window.dataLayer)
+  }, [])
+
+  const handleWelcomeComplete = () => {
+    hasPlayedIntro = true
+    setShowIntro(false)
+  }
+
+  return (
+    <main className="min-h-screen bg-black overflow-x-hidden relative">
+      {showIntro && <WelcomeScreen onComplete={handleWelcomeComplete} />}
+
+      <Navbar />
+
+      <Suspense fallback={null}>
+        <HomePageContent>
+          <section className="w-full pt-24 sm:pt-28 md:pt-32 pb-4 sm:pb-6 md:pb-8">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
+              <HeroRotator />
+            </div>
+          </section>
+
+          <section className="w-full py-6 md:py-8">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
+              <GameShowcase />
+            </div>
+          </section>
+
+          <section className="w-full px-3 sm:px-4 md:px-6 py-6 md:py-8">
+            <div className="mx-auto w-full max-w-6xl">
+              <GameInfoSection
+                logo="/image.png"
+                title="FLAPPY AR"
+                subtitle="AUGMENTED REALITY GAME"
+                description=''
+              />
+            </div>
+          </section>
+
+          <section className="w-full py-6 md:py-8">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
+              <GameLibrary />
+            </div>
+          </section>
+
+          <section className="w-full py-6 md:py-8" data-section="news">
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6">
+              <NewsPeekCarousel />
+            </div>
+          </section>
+
+          <Footer />
+        </HomePageContent>
+      </Suspense>
+
+      <BackToTop />
+    </main>
+  )
+}

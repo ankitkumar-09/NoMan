@@ -1,0 +1,166 @@
+"use client"
+
+import { useRef, useEffect, useState } from "react"
+import Image from "next/image"
+import { motion } from "framer-motion"
+import { ArrowUpRight } from "lucide-react"
+
+const GAMES = [
+  {
+    id: "FlappyAR",
+    title: "Zero Hour City",
+    image: "/images/racing/7.png",
+  },
+  {
+    id: "BurnPoint",
+    title: "Burn Point",
+    image: "/images/racing/16.png",
+  },
+  {
+    id: "g3",
+    title: "Sky Raiders",
+    image: "/images/flappyAR/7.png",
+  },
+  {
+    id: "g4",
+    title: "Action Game 1",
+    image: "/images/racing/3.png",
+  },
+]
+
+export function GameLibrary() {
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const [marqueeGames, setMarqueeGames] = useState<typeof GAMES>([])
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setMarqueeGames([...GAMES, ...GAMES, ...GAMES])
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener("resize", checkMobile)
+    return () => window.removeEventListener("resize", checkMobile)
+  }, [])
+
+  const handleViewMore = () => {
+    window.location.href = "/games"
+  }
+
+  const animationDuration = isMobile ? 30 : 40
+
+  return (
+    <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 bg-black">
+      <div className="mx-auto w-full max-w-6xl">
+
+        {/* First Marquee */}
+        <div className="relative w-full mb-4 sm:mb-6 md:mb-8 overflow-hidden rounded-xl sm:rounded-2xl bg-black">
+          <div
+            ref={marqueeRef}
+            className="relative h-32 sm:h-40 md:h-56 lg:h-64 overflow-hidden"
+          >
+            <motion.div
+              className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6"
+              animate={{ x: [0, -1200] }}
+              transition={{
+                duration: animationDuration,
+                repeat: Infinity,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+            >
+              {marqueeGames.map((game, idx) => (
+                <button
+                  key={`left-${game.id}-${idx}`}
+                  onClick={handleViewMore}
+                  className="relative flex-shrink-0 w-24 h-32 sm:w-32 sm:h-40 md:w-44 md:h-56 lg:w-56 lg:h-64 rounded-lg sm:rounded-xl overflow-hidden group cursor-pointer hover:scale-105 transition-transform"
+                  type="button"
+                >
+                  <Image
+                    src={game.image}
+                    alt={game.title}
+                    fill
+                    className="object-cover w-full h-full"
+                    draggable={false}
+                  />
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors duration-300" />
+                </button>
+              ))}
+            </motion.div>
+          </div>
+
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 lg:w-20 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 lg:w-20 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+        </div>
+
+        {/* Second Marquee with text overlay — height auto so text never overflows */}
+        <div className="relative w-full mb-6 sm:mb-8 md:mb-10 overflow-hidden rounded-xl sm:rounded-2xl bg-black">
+
+          {/* Images in background, height driven by text content */}
+          <div className="absolute inset-0 overflow-hidden h-32 sm:h-40 md:h-56 lg:h-64">
+            <motion.div
+              className="flex gap-2 sm:gap-3 md:gap-4 lg:gap-6 h-full"
+              animate={{ x: [-1200, 0] }}
+              transition={{
+                duration: animationDuration,
+                repeat: Infinity,
+                ease: [0.25, 0.1, 0.25, 1],
+              }}
+            >
+              {marqueeGames.map((game, idx) => (
+                <div
+                  key={`right-${game.id}-${idx}`}
+                  className="relative flex-shrink-0 w-24 sm:w-32 md:w-44 lg:w-56 h-full rounded-lg sm:rounded-xl overflow-hidden"
+                >
+                  <Image
+                    src={game.image}
+                    alt={game.title}
+                    fill
+                    className="object-cover"
+                    draggable={false}
+                  />
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-transparent pointer-events-none z-10" />
+          <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 lg:w-20 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-12 md:w-16 lg:w-20 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
+
+          {/* Text — drives the height, no absolute positioning */}
+          <div className="relative z-20 flex flex-col justify-center pl-4 sm:pl-6 md:pl-8 py-8 sm:py-10 md:py-12 lg:py-16">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+              className="text-lg sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl tracking-wide text-white mb-2 sm:mb-3 md:mb-4 font-bold"
+            >
+              Game Library
+            </motion.h2>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+              className="text-xs sm:text-sm md:text-base lg:text-lg text-white/70 leading-relaxed mb-4 sm:mb-5 md:mb-6 max-w-[200px] sm:max-w-xs md:max-w-sm font-light"
+            >
+              Your ultimate game library — every NoMan Production title, from the legendary FlappyAR to the highly anticipated Burn Point.
+            </motion.p>
+
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.1, 0.25, 1] }}
+              onClick={handleViewMore}
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 md:px-8 py-2 sm:py-2.5 md:py-3 bg-white text-black rounded-full font-extrabold text-xs sm:text-sm md:text-base hover:bg-white/90 transition-all duration-300 active:scale-95 cursor-pointer w-fit"
+            >
+              View More
+              <ArrowUpRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
+            </motion.button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+  )
+}

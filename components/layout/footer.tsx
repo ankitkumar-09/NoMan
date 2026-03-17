@@ -12,28 +12,34 @@ export function Footer() {
   const [modalContent, setModalContent] = useState<{ title: string; content: React.ReactNode } | null>(null)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email || !email.includes("@")) return
+  e.preventDefault()
+  if (!email || !email.includes("@")) return
 
-    setStatus("loading")
-    setErrorMsg("")
+  setStatus("loading")
+  setErrorMsg("")
 
-    try {
-      const res = await fetch("/api/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      })
+  try {
+    const res = await fetch("/api/subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email }),
+    })
 
-      if (!res.ok) throw new Error("Failed")
-
-      setStatus("success")
-      setEmail("")
-    } catch {
-      setErrorMsg("Something went wrong. Please try again.")
+    if (res.status === 409) {
+      setErrorMsg("This email is already subscribed!")
       setStatus("error")
+      return
     }
+
+    if (!res.ok) throw new Error("Failed")
+
+    setStatus("success")
+    setEmail("")
+  } catch {
+    setErrorMsg("Something went wrong. Please try again.")
+    setStatus("error")
   }
+}
 
   const legalDocs = {
     privacy: {

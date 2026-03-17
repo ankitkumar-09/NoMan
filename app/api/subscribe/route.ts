@@ -33,9 +33,22 @@ export async function POST(request: Request) {
     return Response.json({ error: "Server misconfigured" }, { status: 500 })
   }
 
-  try {
-    // Step 1: Add contact to Brevo list
-    await fetch("https://api.brevo.com/v3/contacts", {
+ try {
+  // Step 1: Check if contact already exists
+  const checkRes = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
+    method: "GET",
+    headers: {
+      "api-key": BREVO_API_KEY,
+    },
+  })
+
+  if (checkRes.ok) {
+    // Contact already exists — skip email, return 409
+    return Response.json({ error: "Already subscribed" }, { status: 409 })
+  }
+
+  // Step 2: Add contact to Brevo list
+  await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

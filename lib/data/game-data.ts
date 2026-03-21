@@ -26,7 +26,7 @@ export const GAMES_DATA: Record<string, Game> = {
     image: "/images/flappyAR/3.png",
     subtitle: "FlappyAR",
     developer: "NoMan Production",
-    platform: "Android, PC, PS5",
+    platform: "Android",
     releaseDate: "March 23, 2026",
     rating: "Everyone",
     status: "countdown",

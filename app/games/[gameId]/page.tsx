@@ -144,7 +144,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
                 </div>
 
                 <div className="flex flex-wrap items-center gap-3 sm:gap-4">
-                  {game.status === 'upcoming' ? (
+                  {game.status === 'countdown' ? (
                     <div className="flex flex-wrap items-center gap-3">
                       <button
                         disabled

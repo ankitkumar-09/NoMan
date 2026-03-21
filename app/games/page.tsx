@@ -44,10 +44,15 @@ export default function GamesPage() {
                 onMouseEnter={() => setHoveredId(game.id)}
                 onMouseLeave={() => setHoveredId(null)}
               >
-                <button
-                  onClick={() => router.push(`/games/${game.id}`)}
-                  className="relative w-full aspect-square rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer focus:outline-none transition-transform hover:scale-105"
-                >
+              <button
+  type="button"
+  onClick={() => {
+    if (game.status !== "upcoming") {
+      router.push(`/games/${game.id}`)
+    }
+  }}
+  className="relative w-full aspect-square rounded-xl sm:rounded-2xl md:rounded-3xl overflow-hidden group cursor-pointer focus:outline-none transition-transform hover:scale-105"
+>
                   <Image
                     src={game.image}
                     alt={game.title}
@@ -57,8 +62,18 @@ export default function GamesPage() {
                   />
 
                   {/* Overlay */}
-                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
+{/* Overlay */}
+<div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-300" />
 
+{/* Coming Soon Overlay ONLY for 2048 */}
+{/* Coming Soon Overlay - for ALL upcoming games */}
+{game.status === "upcoming" && (
+  <div className="absolute inset-0 flex items-center justify-center bg-black/70 z-10">
+    <span className="text-white text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-widest">
+      🚧 COMING SOON
+    </span>
+  </div>
+)}
                   {/* Logo - Top Left */}
                   {game.logo && (
                     <div className="absolute top-2 left-2 sm:top-4 sm:left-4 lg:top-6 lg:left-6">

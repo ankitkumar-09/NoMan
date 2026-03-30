@@ -172,7 +172,7 @@ export function Navbar() {
               </button>
 
               <button
-                onClick={handleContactClick}
+                onClick={() => handleScrollToSection("footer")}
                 className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
               >
                 CONTACT

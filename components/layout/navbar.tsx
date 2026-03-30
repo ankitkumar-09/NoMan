@@ -149,6 +149,14 @@ export function Navbar() {
                 GAMES
               </a>
 
+              <a
+                href="/play"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg text-red-500 font-black"
+              >
+                🎮 PLAY ARCADE
+              </a>
+
               <button
                 onClick={() => handleScrollToSection("news")}
                 className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"

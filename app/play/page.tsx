@@ -4,6 +4,7 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/navbar"
 import { Footer } from "@/components/layout/footer"
+import { BackToTop } from "@/components/ui/back-to-top"
 import { PLAY_GAMES, CATEGORIES } from "@/lib/data/play-games-data"
 import Link from "next/link"
 import { ArrowRight, Gamepad2, Rocket, Trophy, Puzzle, Sword } from "lucide-react"
@@ -37,7 +38,7 @@ export default function PlayPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter mb-4">
+            <h1 className="text-3xl sm:text-3xl md:text-5xl lg:text-7xl font-extrabold text-white tracking-wide mb-4 uppercase">
               NOMAN <span className="text-red-600">ARCADE</span>
             </h1>
             <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-medium">
@@ -127,7 +128,8 @@ export default function PlayPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer hideNewsletter={true} />
+      <BackToTop />
     </main>
   )
 }

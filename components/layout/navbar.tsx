@@ -142,19 +142,19 @@ export function Navbar() {
           <div className="absolute top-16 left-0 right-0 sm:right-0 sm:left-auto w-full sm:w-56 bg-black/95 backdrop-blur-2xl rounded-xl border border-white/10 p-3 shadow-2xl z-50 mx-0 sm:mx-0">
             <div className="space-y-2 text-white/80 text-sm font-medium">
               <a
+                href="/"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
+              >
+                HOME
+              </a>
+
+              <a
                 href="/games"
                 onClick={() => setMenuOpen(false)}
                 className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
               >
                 GAMES
-              </a>
-
-              <a
-                href="/play"
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg text-red-500 font-black"
-              >
-                🎮 PLAY ARCADE
               </a>
 
               <button
@@ -177,6 +177,14 @@ export function Navbar() {
               >
                 CONTACT
               </button>
+
+              <a
+                href="/play"
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg text-red-500 font-black border-t border-white/5 mt-1 pt-3"
+              >
+                🎮 PLAY ARCADE
+              </a>
             </div>
           </div>
         )}

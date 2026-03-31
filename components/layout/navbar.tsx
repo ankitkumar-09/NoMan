@@ -178,13 +178,13 @@ export function Navbar() {
                 CONTACT
               </button>
 
-              <a
+              {/* <a
                 href="/play"
                 onClick={() => setMenuOpen(false)}
                 className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg text-red-500 font-black border-t border-white/5 mt-1 pt-3"
               >
                 🎮 PLAY ARCADE
-              </a>
+              </a> */}
             </div>
           </div>
         )}

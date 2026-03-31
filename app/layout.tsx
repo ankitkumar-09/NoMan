@@ -3,8 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import "./globals.css"
 
-const _geist = Geist({ subsets: ["latin"] })
-const _geistMono = Geist_Mono({ subsets: ["latin"] })
+const geistSans = Geist({ subsets: ["latin"] })
+const geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "NoMan - Committed to Entertainment",
@@ -35,10 +35,9 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${_geist.className} antialiased bg-black text-white`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${geistSans.className} antialiased bg-black text-white min-h-screen`}>
         {children}
-        {/* Official Next.js GA integration - handles timing automatically */}
         <GoogleAnalytics gaId="G-WVV46LS59D" />
       </body>
     </html>

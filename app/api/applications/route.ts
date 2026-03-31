@@ -70,8 +70,8 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const result = await db.collection("applications").insertOne(application)
-
+const { _id, ...insertData } = application
+const result = await db.collection("applications").insertOne(insertData)
     return NextResponse.json({ id: result.insertedId }, { status: 201 })
   } catch (err) {
     console.error("Application submission error:", err)

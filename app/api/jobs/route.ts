@@ -53,7 +53,8 @@ export async function POST(req: NextRequest) {
 
     const client = await clientPromise
     const db = client.db("noman")
-    const result = await db.collection("jobs").insertOne(job)
+   const { _id, ...insertData } = job
+const result = await db.collection("jobs").insertOne(insertData)
 
     return NextResponse.json({ id: result.insertedId }, { status: 201 })
   } catch (err) {

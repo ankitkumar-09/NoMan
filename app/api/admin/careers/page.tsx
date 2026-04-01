@@ -46,21 +46,26 @@ export default function AdminCareersPage() {
 
   // ── Auth ──
   const handleAuth = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch("/api/jobs", { headers: { "x-admin-secret": secret } })
-      if (res.ok) {
-        setAuthed(true)
-        fetchAll()
-      } else {
-        setAuthError("Invalid secret. Try again.")
-      }
-    } catch (err) {
-      setAuthError("Connection error.")
-    } finally {
-      setLoading(false)
-    }
+  if (!secret.trim()) {
+    setAuthError("Please enter the admin secret.")
+    return
   }
+  setLoading(true)
+  setAuthError("")
+  try {
+    const res = await fetch("/api/jobs", { headers: { "x-admin-secret": secret } })
+    if (res.ok) {
+      setAuthed(true)
+      fetchAll()
+    } else {
+      setAuthError("Invalid secret. Try again.")
+    }
+  } catch {
+    setAuthError("Something went wrong. Try again.")
+  } finally {
+    setLoading(false)
+  }
+}
 
   // ── Fetch ──
   const fetchAll = async () => {

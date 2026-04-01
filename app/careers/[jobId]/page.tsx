@@ -23,7 +23,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
 
   const [form, setForm] = useState({
     fullName: "", email: "", phone: "",
-    college: "",city:"", degree: "", year: "",
+    university: "",city:"", degree: "", year: "",
     linkedin: "", portfolio: "", coverLetter: "",
   })
 
@@ -153,7 +153,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
 
               <Section title="Education">
                 <Row>
-                  <Field label="University" name="university" value={form.college} onChange={handleChange} required />
+                  <Field label="University" name="university" value={form.university} onChange={handleChange} required />
                    <Field label="City/State" name="city" value={form.city} onChange={handleChange} required />
                 </Row>
                 <Row>

@@ -23,7 +23,7 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
 
   const [form, setForm] = useState({
     fullName: "", email: "", phone: "",
-    university: "", college: "", degree: "", year: "",
+    college: "",city:"", degree: "", year: "",
     linkedin: "", portfolio: "", coverLetter: "",
   })
 
@@ -49,8 +49,8 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
       setFormStatus("error")
       return
     }
-    if (file.size > 4 * 1024 * 1024) {
-      setErrorMsg("Resume must be under 4MB")
+    if (file.size > 2 * 1024 * 1024) {
+      setErrorMsg("Resume must be under 2MB")
       setFormStatus("error")
       return
     }
@@ -123,9 +123,14 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
               <span className="flex items-center gap-2"><Briefcase className="w-4 h-4" />{job.type}</span>
             </div>
             <div className="border-t border-white/10 pt-4">
+              <p className="font-semibold">Description</p>
               <p className="text-white/60 text-sm leading-relaxed">{job.description}</p>
             </div>
+              <p className="font-semibold">Responsibilities</p>
+              <p className="text-white/60 text-sm leading-relaxed">{job.responsibilities}</p>
+          
           </div>
+  
         </div>
 
         {/* Right Side: Form */}
@@ -148,8 +153,8 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
 
               <Section title="Education">
                 <Row>
-                  <Field label="University" name="university" value={form.university} onChange={handleChange} required />
-                  <Field label="College" name="college" value={form.college} onChange={handleChange} required />
+                  <Field label="University" name="university" value={form.college} onChange={handleChange} required />
+                   <Field label="City/State" name="city" value={form.city} onChange={handleChange} required />
                 </Row>
                 <Row>
                   <Field label="Degree" name="degree" value={form.degree} onChange={handleChange} required />

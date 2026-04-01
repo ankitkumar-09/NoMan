@@ -164,6 +164,12 @@ export function Navbar() {
                 NEWS
               </button>
 
+                <button
+                onClick={() => window.location.href = "https://nomangames.store/careers"}
+                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
+              >
+                CAREERS
+              </button>
               <button
                 onClick={() => handleScrollToSection("footer")}
                 className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"

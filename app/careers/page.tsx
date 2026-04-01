@@ -103,14 +103,17 @@ export default function CareersPage() {
                     {job.title}
                   </h2>
                   
-                  <div className="flex flex-col gap-2 text-white/40 text-xs mb-8">
-                    <span className="flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5" /> {job.location}
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5" /> {job.experience}
-                    </span>
-                  </div>
+              <div className="flex flex-col gap-2 text-white/40 text-xs mb-8">
+  <div className="flex items-center gap-2">
+    <span className="font-medium text-white/70">Location:</span>
+    <span>{job.location}</span>
+  </div>
+
+  <div className="flex items-center gap-2">
+    <span className="font-medium text-white/70">Experience:</span>
+    <span>{job.experience}</span>
+  </div>
+</div>
                 </div>
 
                 <div className="flex items-center justify-between text-orange-500 text-xs font-semibold border-t border-white/5 pt-4">

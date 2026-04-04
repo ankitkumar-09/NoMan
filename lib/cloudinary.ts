@@ -15,14 +15,13 @@ export async function uploadResume(
     console.log("📄 File Name:", fileName)
     console.log("📦 Buffer Size:", fileBuffer.length)
 
-    const uploadStream = cloudinary.uploader.upload_stream(
-      {
-        resource_type: "raw", // ✅ MUST for PDFs
-        folder: "noman-resumes",
-        public_id: `${Date.now()}-${fileName
-          .replace(/\s+/g, "_")
-          .split(".")[0]}`,
-      },
+   const uploadStream = cloudinary.uploader.upload_stream(
+  {
+    resource_type: "raw",
+    folder: "noman-resumes",
+    public_id: `${Date.now()}-${fileName.replace(/\s+/g, "_").split(".")[0]}`,
+    flags: "attachment:false",  // ← add this
+  },
       (error, result) => {
         if (error) {
           console.error("❌ Cloudinary Upload Error:", error)

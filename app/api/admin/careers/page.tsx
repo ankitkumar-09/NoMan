@@ -7,7 +7,9 @@ import {
   Briefcase, Users, ToggleLeft, ToggleRight,
   Trash2, ExternalLink, FileText
 } from "lucide-react"
-
+function inlineResumeUrl(url: string) {
+  return `/api/resume?url=${encodeURIComponent(url)}`
+}
 const STATUS_COLORS: Record<string, string> = {
   pending: "bg-yellow-600/15 text-yellow-400 border-yellow-500/30",
   reviewing: "bg-blue-600/15 text-blue-400 border-blue-500/30",
@@ -46,26 +48,26 @@ export default function AdminCareersPage() {
 
   // ── Auth ──
   const handleAuth = async () => {
-  if (!secret.trim()) {
-    setAuthError("Please enter the admin secret.")
-    return
-  }
-  setLoading(true)
-  setAuthError("")
-  try {
-    const res = await fetch("/api/jobs", { headers: { "x-admin-secret": secret } })
-    if (res.ok) {
-      setAuthed(true)
-      fetchAll()
-    } else {
-      setAuthError("Invalid secret. Try again.")
+    if (!secret.trim()) {
+      setAuthError("Please enter the admin secret.")
+      return
     }
-  } catch {
-    setAuthError("Something went wrong. Try again.")
-  } finally {
-    setLoading(false)
+    setLoading(true)
+    setAuthError("")
+    try {
+      const res = await fetch("/api/jobs", { headers: { "x-admin-secret": secret } })
+      if (res.ok) {
+        setAuthed(true)
+        fetchAll()
+      } else {
+        setAuthError("Invalid secret. Try again.")
+      }
+    } catch {
+      setAuthError("Something went wrong. Try again.")
+    } finally {
+      setLoading(false)
+    }
   }
-}
 
   // ── Fetch ──
   const fetchAll = async () => {
@@ -214,9 +216,8 @@ export default function AdminCareersPage() {
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${
-                tab === t ? "bg-orange-600 text-white" : "text-white/40 hover:text-white"
-              }`}
+              className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all capitalize ${tab === t ? "bg-orange-600 text-white" : "text-white/40 hover:text-white"
+                }`}
             >
               {t === "jobs" ? <span className="flex items-center gap-2"><Briefcase className="w-3.5 h-3.5" />Jobs</span>
                 : <span className="flex items-center gap-2"><Users className="w-3.5 h-3.5" />Applications</span>}
@@ -248,11 +249,10 @@ export default function AdminCareersPage() {
                   <div className="flex items-center gap-2 flex-wrap">
                     <button
                       onClick={() => toggleJob(job._id as string, job.isOpen)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                        job.isOpen
-                          ? "bg-green-600/10 border-green-500/30 text-green-400 hover:bg-red-600/10 hover:border-red-500/30 hover:text-red-400"
-                          : "bg-white/5 border-white/10 text-white/40 hover:bg-green-600/10 hover:border-green-500/30 hover:text-green-400"
-                      }`}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${job.isOpen
+                        ? "bg-green-600/10 border-green-500/30 text-green-400 hover:bg-red-600/10 hover:border-red-500/30 hover:text-red-400"
+                        : "bg-white/5 border-white/10 text-white/40 hover:bg-green-600/10 hover:border-green-500/30 hover:text-green-400"
+                        }`}
                     >
                       {job.isOpen ? <ToggleRight className="w-3.5 h-3.5" /> : <ToggleLeft className="w-3.5 h-3.5" />}
                       {job.isOpen ? "Open" : "Closed"}
@@ -339,7 +339,7 @@ export default function AdminCareersPage() {
                   </div>
                   <div className="flex items-center gap-2 flex-wrap shrink-0">
                     <a
-                      href={app.resumeUrl}
+                      href={inlineResumeUrl(app.resumeUrl)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-orange-600/10 border border-orange-500/30 text-orange-400 hover:bg-orange-600/20 transition-all"
@@ -379,11 +379,10 @@ export default function AdminCareersPage() {
                     <button
                       key={s}
                       onClick={() => updateStatus(app._id as string, s)}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
-                        app.status === s
-                          ? STATUS_COLORS[s]
-                          : "bg-white/5 border-white/10 text-white/30 hover:text-white"
-                      }`}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${app.status === s
+                        ? STATUS_COLORS[s]
+                        : "bg-white/5 border-white/10 text-white/30 hover:text-white"
+                        }`}
                     >
                       {s}
                     </button>

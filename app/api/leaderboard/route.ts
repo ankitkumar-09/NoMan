@@ -11,7 +11,7 @@ export async function GET() {
       .collection("leaderboard")
       .find({})
       .sort({ bestMoves: 1 }) // lower moves = better
-      .limit(10)
+      .limit(100)
       .toArray()
 
     return NextResponse.json({ scores }, { status: 200 })

@@ -95,7 +95,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
   const shortDescription = game.gameDescription.split('\n\n')[0]
 
   const handleGoBack = () => router.push('/games')
-  const handleDownload = () => window.open('https://store.steampowered.com', '_blank')
+  const handleDownload = () => window.open('https://play.google.com/store/apps/details?id=com.noman.flappyAR', '_blank')
   const handleSocialClick = (url: string) => window.open(url, '_blank')
 
   return (

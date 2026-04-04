@@ -72,7 +72,10 @@ export async function POST(req: NextRequest) {
 
 const { _id, ...insertData } = application
 const result = await db.collection("applications").insertOne(insertData)
-    return NextResponse.json({ id: result.insertedId }, { status: 201 })
+
+await sendApplicationEmail(application.email, application.fullName, application.jobTitle)
+
+return NextResponse.json({ id: result.insertedId }, { status: 201 })
   } catch (err) {
     console.error("Application submission error:", err)
     return NextResponse.json(
@@ -80,4 +83,126 @@ const result = await db.collection("applications").insertOne(insertData)
       { status: 500 }
     )
   }
+}
+async function sendApplicationEmail(email: string, name: string, jobTitle: string) {
+  const BREVO_API_KEY = process.env.BREVO_API_KEY
+  if (!BREVO_API_KEY) return
+
+  const currentYear = new Date().getFullYear()
+
+  await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "api-key": BREVO_API_KEY,
+    },
+    body: JSON.stringify({
+      sender: {
+        name: "NoMan Studios",
+        email: "studios@nomangames.store",
+      },
+      to: [{ email, name }],
+      subject: `🎮 Application Received — ${jobTitle}`,
+      htmlContent: `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Received</title>
+</head>
+<body style="margin:0;padding:0;background-color:#050505;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#050505;padding:60px 20px;">
+    <tr>
+      <td align="center">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;background-color:#0f0f0f;border:1px solid #262626;border-radius:2px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.5);">
+
+          <!-- Logo -->
+          <tr>
+            <td align="center" style="padding:50px 0 20px;">
+              <img src="https://res.cloudinary.com/dpnpmkhmb/image/upload/v1773735174/1_knbqwl.png" alt="NoMan Studios" width="56" height="56" style="display:block;border-radius:4px;border:1px solid #333333;" />
+              <div style="height:1px;width:30px;background-color:#ea580c;margin-top:20px;"></div>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:0 45px 40px;text-align:center;">
+              <h1 style="color:#ffffff;font-size:22px;font-weight:900;margin:0 0 8px;letter-spacing:2px;text-transform:uppercase;">Application Received</h1>
+              <p style="color:#ea580c;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 30px;">${jobTitle}</p>
+
+             <p style="color:#888888;font-size:15px;line-height:1.9;margin:0 0 24px;">
+  Hi <span style="color:#ffffff;font-weight:700;">${name}</span>,
+</p>
+<p style="color:#888888;font-size:14px;line-height:1.9;margin:0 0 30px;">
+  Thank you for applying to <span style="color:#ffffff;font-weight:600;">${jobTitle}</span> at <span style="color:#ffffff;font-weight:600;">NoMan Studios</span>. We have received your application and our team will carefully review it.
+</p>
+<p style="color:#666666;font-size:13px;line-height:1.8;margin:0 0 35px;">
+  If shortlisted, we will reach out to you directly. In the meantime, feel free to explore our games and stay connected with us on social media.
+</p>
+              <!-- Divider -->
+              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:30px;">
+                <tr>
+                  <td style="border-top:1px solid #222222;"></td>
+                </tr>
+              </table>
+
+              <p style="color:#666666;font-size:13px;line-height:1.8;margin:0 0 35px;max-width:340px;display:inline-block;">
+                While you wait, explore our games and follow our journey — we're building something exciting.
+              </p>
+
+              <!-- CTA -->
+              <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
+                <tr>
+                  <td align="center" style="background-color:#ea580c;border-radius:2px;">
+                    <a href="https://www.nomangames.store" style="display:inline-block;color:#ffffff;font-size:12px;font-weight:800;text-decoration:none;padding:16px 45px;text-transform:uppercase;letter-spacing:2px;">
+                      Explore Our Games
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#444444;font-size:11px;margin:0;letter-spacing:0.5px;">
+                We'll be in touch if your profile is a match.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#0a0a0a;padding:40px;border-top:1px solid #222222;text-align:center;">
+              <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:25px;">
+                <tr>
+                  <td style="padding:0 15px;">
+                    <a href="https://www.linkedin.com/company/nomanprod/">
+                      <img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="18" height="18" alt="LinkedIn" style="filter:invert(1);opacity:0.6;" />
+                    </a>
+                  </td>
+                  <td style="padding:0 15px;">
+                    <a href="https://www.instagram.com/noman__.games/">
+                      <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="18" height="18" alt="Instagram" style="filter:invert(1);opacity:0.6;" />
+                    </a>
+                  </td>
+                  <td style="padding:0 15px;">
+                    <a href="https://www.youtube.com/channel/UCQWzNg1ToM8umNt0YUaIVhw">
+                      <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="18" height="18" alt="YouTube" style="filter:invert(1);opacity:0.6;" />
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="color:#444444;font-size:10px;margin:0;letter-spacing:1px;line-height:1.6;font-weight:600;text-transform:uppercase;">
+                &copy; ${currentYear} NOMAN STUDIOS &middot; CHENNAI, INDIA<br/>
+                THIS IS AN AUTOMATED MESSAGE — PLEASE DO NOT REPLY
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`,
+    }),
+  })
+  
 }

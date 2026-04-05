@@ -8,8 +8,8 @@ const H = 600
 const CAR_W = 40
 const CAR_H = 80
 const LANE_W = W / 3
-const TRAFFIC_SPEED = 5
-const SPAWN_RATE = 60 // frames
+const TRAFFIC_SPEED = 2.5
+const SPAWN_RATE = 100 // frames
 
 interface Obstacle {
   id: number
@@ -59,8 +59,8 @@ export default function CarRacing() {
     g.score += 0.1
     setScore(Math.floor(g.score))
     
-    // Increase speed over time
-    if (g.frame % 500 === 0) g.speed += 0.5
+    // Increase speed over time slower
+    if (g.frame % 800 === 0) g.speed += 0.2
 
     // Spawn obstacles
     if (g.frame % SPAWN_RATE === 0) {
@@ -183,6 +183,22 @@ export default function CarRacing() {
     return () => window.removeEventListener("keydown", handleKey)
   }, [startGame])
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!gameRef.current.running && !gameOver) {
+      startGame()
+      return
+    }
+    const touchX = e.touches[0].clientX
+    const screenWidth = window.innerWidth
+    if (touchX < screenWidth / 2) {
+      gameRef.current.lane = Math.max(0, gameRef.current.lane - 1)
+      setLane(gameRef.current.lane)
+    } else {
+      gameRef.current.lane = Math.min(2, gameRef.current.lane + 1)
+      setLane(gameRef.current.lane)
+    }
+  }
+
   return (
     <div className="flex flex-col items-center gap-6 select-none bg-black p-4">
       <div className="flex gap-6 mb-2">
@@ -196,8 +212,8 @@ export default function CarRacing() {
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden border-4 border-white/10 shadow-[0_0_50px_rgba(255,255,255,0.1)]">
-        <canvas ref={canvasRef} width={W} height={H} className="bg-[#1a1a1a] block" />
+      <div className="relative rounded-2xl overflow-hidden border-4 border-white/10 shadow-[0_0_50px_rgba(255,255,255,0.1)] w-full max-w-[400px] aspect-[2/3] flex justify-center items-center touch-none">
+        <canvas ref={canvasRef} width={W} height={H} className="bg-[#1a1a1a] block w-full h-auto aspect-[2/3] max-w-[400px]" onTouchStart={handleTouchStart} />
         
         <AnimatePresence>
           {(!started || gameOver) && (

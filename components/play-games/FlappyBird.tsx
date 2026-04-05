@@ -7,11 +7,11 @@ const W = 320
 const H = 500
 const BIRD_X = 80
 const BIRD_R = 14
-const GRAVITY = 0.45
-const FLAP = -7.5
+const GRAVITY = 0.08
+const FLAP = -3.0
 const PIPE_W = 52
-const GAP = 130
-const PIPE_SPEED = 2.5
+const GAP = 200
+const PIPE_SPEED = 0.6
 
 interface Pipe { x: number; top: number }
 
@@ -243,12 +243,12 @@ export default function FlappyBird() {
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
+      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl w-full max-w-[320px] aspect-[16/25] flex justify-center items-center">
         <canvas
           ref={canvasRef}
           width={W}
           height={H}
-          className="block cursor-pointer"
+          className="block cursor-pointer w-full max-w-[320px] h-auto aspect-[16/25]"
           onClick={() => (gameRef.current.running ? flap() : startGame())}
         />
 

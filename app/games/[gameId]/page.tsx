@@ -1,5 +1,5 @@
 'use client'
-import { Footer } from '@/components/layout/footerGames'
+
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -287,7 +287,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
         </div>
       </div>
 
-      <Footer />
+
       <BackToTop />
     </main>
   )

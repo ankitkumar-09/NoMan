@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/navbar"
-import { Footer } from "@/components/layout/footer"
+
 import { PLAY_GAMES } from "@/lib/data/play-games-data"
 import { ArrowLeft, Maximize2, RotateCcw, Info } from "lucide-react"
 import dynamic from "next/dynamic"
@@ -141,7 +141,7 @@ export default function GameDetailPage() {
         </div>
       </div>
 
-      <Footer />
+
     </main>
   )
 }

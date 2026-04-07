@@ -19,6 +19,7 @@ interface LeaderboardEntry {
 
 export default function SnakeGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const touchStartRef = useRef<Point | null>(null)
   const gameRef = useRef<{
     snake: Point[]
     dir: Point
@@ -253,6 +254,34 @@ export default function SnakeGame() {
     }
   }, [draw, startGame])
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }
+    // Start game on first touch if not running
+    if (!gameRef.current.running && !gameOver) {
+      startGame()
+    }
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return
+    const touchX = e.touches[0].clientX
+    const touchY = e.touches[0].clientY
+    const dx = touchX - touchStartRef.current.x
+    const dy = touchY - touchStartRef.current.y
+    
+    if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
+      const g = gameRef.current
+      if (Math.abs(dx) > Math.abs(dy)) {
+        const nd = dx > 0 ? {x: 1, y: 0} : {x: -1, y: 0}
+        if (!(nd.x === -g.dir.x && nd.y === -g.dir.y)) g.nextDir = nd
+      } else {
+        const nd = dy > 0 ? {x: 0, y: 1} : {x: 0, y: -1}
+        if (!(nd.x === -g.dir.x && nd.y === -g.dir.y)) g.nextDir = nd
+      }
+      touchStartRef.current = null
+    }
+  }
+
   const currentPlayerId = typeof window !== "undefined" ? getPlayerId() : ""
 
   return (
@@ -277,14 +306,21 @@ export default function SnakeGame() {
       </div>
 
       {/* Canvas */}
-      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-        <canvas ref={canvasRef} width={W} height={H} className="block" />
+      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl w-full max-w-[500px] aspect-square flex justify-center items-center touch-none">
+        <canvas 
+          ref={canvasRef} 
+          width={W} 
+          height={H} 
+          className="block w-full h-auto aspect-square max-w-[500px]"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+        />
 
         {!started && !gameOver && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm">
             <p className="text-4xl mb-2">🐍</p>
             <p className="text-white text-lg font-bold mb-1">Snake</p>
-            <p className="text-white/50 text-sm mb-4">Arrow keys or WASD</p>
+            <p className="text-white/50 text-sm mb-4">Arrow keys, WASD, or Swipe</p>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={startGame}
               className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-500 rounded-full text-white font-semibold text-sm transition-colors">
               Start Game

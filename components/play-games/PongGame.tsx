@@ -17,6 +17,7 @@ export default function PongGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const rafRef = useRef<number>(0)
   const keysRef = useRef<Set<string>>(new Set())
+  const touchStartRef = useRef<number | null>(null)
   const gameRef = useRef({
     playerY: H / 2 - PADDLE_H / 2,
     aiY: H / 2 - PADDLE_H / 2,
@@ -248,6 +249,25 @@ export default function PongGame() {
     }
   }, [draw, startGame])
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (!gameRef.current.running && !winner) {
+      startGame()
+      return
+    }
+    touchStartRef.current = e.touches[0].clientY
+  }
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (touchStartRef.current === null) return
+    const touchY = e.touches[0].clientY
+    const dy = touchY - touchStartRef.current
+    const g = gameRef.current
+    g.playerY = Math.max(0, Math.min(H - PADDLE_H, g.playerY + dy * 1.5))
+    touchStartRef.current = touchY
+  }
+  const handleTouchEnd = () => {
+    touchStartRef.current = null
+  }
+
   return (
     <div className="flex flex-col items-center gap-4 select-none">
       <div className="flex gap-6 text-sm font-semibold">
@@ -262,8 +282,16 @@ export default function PongGame() {
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
-        <canvas ref={canvasRef} width={W} height={H} className="block" />
+      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl w-full max-w-[500px] aspect-square flex justify-center items-center touch-none">
+        <canvas 
+          ref={canvasRef} 
+          width={W} 
+          height={H} 
+          className="block w-full h-auto aspect-square max-w-[500px]" 
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        />
 
         {!started && !winner && (
           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">

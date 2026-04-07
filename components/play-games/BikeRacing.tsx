@@ -7,10 +7,10 @@ const W = 800
 const H = 400
 const BIKE_W = 60
 const BIKE_H = 40
-const GRAVITY = 0.6
-const JUMP_FORCE = -12
-const OBSTACLE_SPEED = 6
-const SCORE_MUL = 0.1
+const GRAVITY = 0.35
+const JUMP_FORCE = -9
+const OBSTACLE_SPEED = 3.5
+const SCORE_MUL = 0.05
 
 interface Obstacle {
   id: number
@@ -74,8 +74,8 @@ export default function BikeRacing() {
       g.isJumping = false
     }
 
-    // Increase speed
-    if (g.frame % 300 === 0) g.speed += 0.5
+    // Increase speed slower
+    if (g.frame % 600 === 0) g.speed += 0.2
 
     // Spawn obstacles
     if (g.frame % 100 === 0) {
@@ -211,8 +211,8 @@ export default function BikeRacing() {
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden border-4 border-white/10 shadow-[0_0_50px_rgba(236,72,153,0.15)] max-w-full">
-        <canvas ref={canvasRef} width={W} height={H} className="bg-[#0c1220] block max-w-full h-auto" onClick={jump} />
+      <div className="relative rounded-2xl overflow-hidden border-4 border-white/10 shadow-[0_0_50px_rgba(236,72,153,0.15)] w-full max-w-[800px] aspect-[2/1] flex justify-center items-center">
+        <canvas ref={canvasRef} width={W} height={H} className="bg-[#0c1220] block w-full h-auto aspect-[2/1]" onClick={jump} />
         
         <AnimatePresence>
           {(!started || gameOver) && (

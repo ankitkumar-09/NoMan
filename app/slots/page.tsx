@@ -1,7 +1,17 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { Calendar, Clock, CheckCircle2, Loader2, Lock, ChevronRight } from "lucide-react"
+import { Suspense, useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
+import {
+  Calendar,
+  Clock,
+  CheckCircle2,
+  Loader2,
+  Lock,
+  ChevronRight,
+  ShieldAlert,
+  AlertTriangle,
+} from "lucide-react"
 
 interface Slot {
   _id: string
@@ -9,14 +19,25 @@ interface Slot {
   date: string
   time: string
   duration: string
-  link: string
+  note: string
   isBooked: boolean
   bookedBy: { name: string; email: string; bookedAt: string } | null
 }
 
-interface BookingForm {
+interface VerifyData {
+  valid: boolean
   name: string
   email: string
+  jobTitle: string
+  visitsRemaining: number
+  willExpireNext: boolean
+  alreadyBooked: boolean
+  bookedSlot: {
+    title: string
+    date: string
+    time: string
+    duration: string
+  } | null
 }
 
 function formatDate(dateStr: string) {
@@ -39,90 +60,242 @@ function groupByDate(slots: Slot[]): Record<string, Slot[]> {
   )
 }
 
-export default function SlotsPage() {
+function TokenErrorScreen({
+  message,
+  expired,
+}: {
+  message: string
+  expired?: boolean
+}) {
+  return (
+    <main className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full text-center space-y-6">
+        <div className="flex justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-red-600/10 border border-red-500/20 flex items-center justify-center">
+            <ShieldAlert className="w-8 h-8 text-red-400" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-white">
+            {expired ? "Link Expired" : "Access Denied"}
+          </h1>
+          <p className="text-white/40 text-sm leading-relaxed max-w-sm mx-auto">
+            {message}
+          </p>
+        </div>
+        <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/10 text-white/30 text-xs">
+          If you believe this is an error, please contact us at{" "}
+          <span className="text-orange-400">studios@nomangames.store</span>
+        </div>
+      </div>
+    </main>
+  )
+}
+
+function AlreadyBookedScreen({
+  name,
+  slot,
+}: {
+  name: string
+  slot: { title: string; date: string; time: string; duration: string }
+}) {
+  return (
+    <main className="min-h-screen bg-black text-white flex items-center justify-center px-4">
+      <div className="max-w-md w-full text-center space-y-6">
+        <div className="flex justify-center">
+          <div className="w-16 h-16 rounded-2xl bg-orange-600/10 border border-orange-500/20 flex items-center justify-center">
+            <CheckCircle2 className="w-8 h-8 text-orange-400" />
+          </div>
+        </div>
+        <div className="space-y-2">
+          <h1 className="text-2xl font-bold text-white">Already Booked!</h1>
+          <p className="text-white/40 text-sm">
+            Hi {name}, you have already reserved your slot.
+          </p>
+        </div>
+        <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/10 text-left space-y-3">
+          <p className="text-xs font-bold uppercase tracking-widest text-orange-500">
+            Your Slot
+          </p>
+          <h3 className="text-white font-bold text-lg">{slot.title}</h3>
+          <div className="flex flex-col gap-2 text-sm text-white/50">
+            <span className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-orange-500/70" />
+              {formatDate(slot.date)}
+            </span>
+            <span className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-orange-500/70" />
+              {slot.time} · {slot.duration}
+            </span>
+          </div>
+        </div>
+        <p className="text-white/25 text-xs">
+          Check your email for the confirmation details and interview link.
+        </p>
+      </div>
+    </main>
+  )
+}
+
+// ── Inner component that uses useSearchParams ──────────────────────────────
+function SlotsContent() {
+  const searchParams = useSearchParams()
+  const token = searchParams.get("token")
+
+  const [verifying, setVerifying] = useState(true)
+  const [verifyData, setVerifyData] = useState<VerifyData | null>(null)
+  const [tokenError, setTokenError] = useState<{
+    message: string
+    expired?: boolean
+  } | null>(null)
+
   const [slots, setSlots] = useState<Slot[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loadingSlots, setLoadingSlots] = useState(false)
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null)
-  const [form, setForm] = useState<BookingForm>({ name: "", email: "" })
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
+
+  // FIX: was missing the opening < for the generic type — syntax error
+  const [bookingStatus, setBookingStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle")
   const [errorMsg, setErrorMsg] = useState("")
 
   useEffect(() => {
+    if (!token) {
+      setTokenError({
+        message:
+          "No access token found. Please use the link provided in your invitation email.",
+      })
+      setVerifying(false)
+      return
+    }
+
+    fetch("/api/slots/verify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.expired) {
+          setTokenError({ message: data.error, expired: true })
+        } else if (data.error) {
+          setTokenError({ message: data.error })
+        } else {
+          setVerifyData(data)
+        }
+      })
+      .catch(() => {
+        setTokenError({
+          message: "Failed to verify your link. Please try again.",
+        })
+      })
+      .finally(() => setVerifying(false))
+  }, [token])
+
+  useEffect(() => {
+    if (!verifyData) return
+    setLoadingSlots(true)
     fetch("/api/slots")
       .then((r) => r.json())
       .then((d) => setSlots(d.slots || []))
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoadingSlots(false))
+  }, [verifyData])
 
   const handleBook = async () => {
-    if (!form.name.trim() || !form.email.trim()) {
-      setErrorMsg("Please fill in all fields.")
-      setStatus("error")
-      return
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-      setErrorMsg("Please enter a valid email.")
-      setStatus("error")
-      return
-    }
+    if (!selectedSlot || !verifyData) return
 
-    setStatus("loading")
+    setBookingStatus("loading")
     setErrorMsg("")
 
     try {
-      const res = await fetch(`/api/slots/${selectedSlot!._id}`, {
+      const res = await fetch(`/api/slots/${selectedSlot._id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: form.name.trim(), email: form.email.trim() }),
+        body: JSON.stringify({
+          name: verifyData.name,
+          email: verifyData.email,
+        }),
       })
 
       const data = await res.json()
 
       if (res.status === 409) {
         setErrorMsg(data.error || "This slot is already booked.")
-        setStatus("error")
+        setBookingStatus("error")
+        return
+      }
+
+      if (res.status === 403) {
+        setErrorMsg("Access denied. Your invitation could not be verified.")
+        setBookingStatus("error")
         return
       }
 
       if (!res.ok) throw new Error()
 
-      // Update local state
       setSlots((prev) =>
         prev.map((s) =>
-          s._id === selectedSlot!._id
+          s._id === selectedSlot._id
             ? {
                 ...s,
                 isBooked: true,
                 bookedBy: {
-                  name: form.name,
-                  email: form.email,
+                  name: verifyData.name,
+                  email: verifyData.email,
                   bookedAt: new Date().toISOString(),
                 },
               }
             : s
         )
       )
-      setStatus("success")
+      setBookingStatus("success")
     } catch {
       setErrorMsg("Something went wrong. Please try again.")
-      setStatus("error")
+      setBookingStatus("error")
     }
   }
 
   const resetModal = () => {
     setSelectedSlot(null)
-    setForm({ name: "", email: "" })
-    setStatus("idle")
+    setBookingStatus("idle")
     setErrorMsg("")
   }
 
-  const grouped = groupByDate(slots.filter((s) => !s.isBooked || s.isBooked))
+  if (verifying) {
+    return (
+      <main className="min-h-screen bg-black flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+          <p className="text-white/30 text-sm">Verifying your link...</p>
+        </div>
+      </main>
+    )
+  }
+
+  if (tokenError) {
+    return (
+      <TokenErrorScreen
+        message={tokenError.message}
+        expired={tokenError.expired}
+      />
+    )
+  }
+
+  if (verifyData?.alreadyBooked && verifyData.bookedSlot) {
+    return (
+      <AlreadyBookedScreen
+        name={verifyData.name}
+        slot={verifyData.bookedSlot}
+      />
+    )
+  }
+
+  const grouped = groupByDate(slots)
   const sortedDates = Object.keys(grouped).sort()
+  const availableCount = slots.filter((s) => !s.isBooked).length
 
   return (
     <main className="min-h-screen bg-black text-white">
-
-      {/* Hero */}
       <section className="relative pt-32 pb-20 px-4 text-center overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(234,88,12,0.12)_0%,_transparent_70%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,transparent_60%,black)] pointer-events-none" />
@@ -133,31 +306,55 @@ export default function SlotsPage() {
         </span>
 
         <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 relative z-10">
-          Book Your <span className="text-orange-500">Interview Slot</span>
+          Welcome,{" "}
+          <span className="text-orange-500">
+            {verifyData?.name.split(" ")[0]}
+          </span>
         </h1>
         <p className="text-white/50 text-sm sm:text-base max-w-xl mx-auto relative z-10">
-          Select an available slot below. Once booked, you'll receive a confirmation
-          email with further details.
+          You're invited to interview for{" "}
+          <span className="text-white font-semibold">{verifyData?.jobTitle}</span>.
+          Select your preferred slot below.
         </p>
+
+        {verifyData?.willExpireNext && (
+          <div className="mt-6 inline-flex items-center gap-2 bg-amber-600/10 border border-amber-500/20 text-amber-400 text-xs font-medium px-4 py-2 rounded-full">
+            <AlertTriangle className="w-3 h-3" />
+            This is your last visit — this link will expire after you leave
+          </div>
+        )}
+
+        {verifyData && verifyData.visitsRemaining > 0 && !verifyData.willExpireNext && (
+          <div className="mt-6 inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/30 text-xs font-medium px-4 py-2 rounded-full">
+            {verifyData.visitsRemaining} visit{verifyData.visitsRemaining !== 1 ? "s" : ""} remaining on this link
+          </div>
+        )}
       </section>
 
-      {/* Slots */}
       <section className="px-4 pb-32 max-w-3xl mx-auto">
-        {loading ? (
+        {loadingSlots ? (
           <div className="flex justify-center py-24">
             <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
           </div>
         ) : slots.length === 0 ? (
           <div className="text-center py-24 text-white/30">
             <Calendar className="w-12 h-12 mx-auto mb-4 opacity-30" />
-            <p className="text-lg font-medium">No slots available right now</p>
-            <p className="text-sm mt-1">Check back soon.</p>
+            <p className="text-lg font-medium">No slots available yet</p>
+            <p className="text-sm mt-1">Please check back soon or contact us.</p>
+          </div>
+        ) : availableCount === 0 ? (
+          <div className="text-center py-24 text-white/30">
+            <Lock className="w-12 h-12 mx-auto mb-4 opacity-30" />
+            <p className="text-lg font-medium">All slots are booked</p>
+            <p className="text-sm mt-1">
+              Please contact us at{" "}
+              <span className="text-orange-400">studios@nomangames.store</span>
+            </p>
           </div>
         ) : (
           <div className="space-y-10">
             {sortedDates.map((date) => (
               <div key={date}>
-                {/* Date Header */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="h-px flex-1 bg-white/10" />
                   <span className="text-xs font-bold uppercase tracking-[0.2em] text-orange-500 px-2">
@@ -166,7 +363,6 @@ export default function SlotsPage() {
                   <div className="h-px flex-1 bg-white/10" />
                 </div>
 
-                {/* Slots for this date */}
                 <div className="grid gap-3">
                   {grouped[date].map((slot) => (
                     <div
@@ -174,7 +370,7 @@ export default function SlotsPage() {
                       onClick={() => !slot.isBooked && setSelectedSlot(slot)}
                       className={`group flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 rounded-2xl border transition-all ${
                         slot.isBooked
-                          ? "bg-white/[0.01] border-white/5 opacity-50 cursor-not-allowed"
+                          ? "bg-white/[0.01] border-white/5 opacity-40 cursor-not-allowed"
                           : "bg-white/[0.02] border-white/10 hover:border-orange-500/40 hover:bg-white/[0.04] cursor-pointer"
                       }`}
                     >
@@ -192,7 +388,13 @@ export default function SlotsPage() {
                           )}
                         </div>
 
-                        <h3 className={`font-bold text-base ${slot.isBooked ? "text-white/30" : "text-white group-hover:text-orange-400 transition-colors"}`}>
+                        <h3
+                          className={`font-bold text-base ${
+                            slot.isBooked
+                              ? "text-white/30"
+                              : "text-white group-hover:text-orange-400 transition-colors"
+                          }`}
+                        >
                           {slot.title}
                         </h3>
 
@@ -205,7 +407,9 @@ export default function SlotsPage() {
                             <Calendar className="w-3 h-3" />
                             {slot.duration}
                           </span>
-                        
+                          {slot.note && (
+                            <span className="text-white/25 italic">{slot.note}</span>
+                          )}
                         </div>
                       </div>
 
@@ -224,22 +428,18 @@ export default function SlotsPage() {
         )}
       </section>
 
-      {/* Booking Modal */}
       {selectedSlot && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-neutral-900 border border-white/10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl">
-
-            {status === "success" ? (
+            {bookingStatus === "success" ? (
               <div className="p-10 flex flex-col items-center text-center gap-4">
                 <CheckCircle2 className="w-14 h-14 text-orange-500" />
-                <h3 className="text-xl font-bold text-white">Slot Booked!</h3>
+                <h3 className="text-xl font-bold text-white">Slot Confirmed!</h3>
                 <p className="text-white/50 text-sm max-w-xs">
                   Your slot for{" "}
                   <span className="text-white font-semibold">{selectedSlot.title}</span>{" "}
                   on{" "}
-                  <span className="text-white font-semibold">
-                    {formatDate(selectedSlot.date)}
-                  </span>{" "}
+                  <span className="text-white font-semibold">{formatDate(selectedSlot.date)}</span>{" "}
                   at{" "}
                   <span className="text-white font-semibold">{selectedSlot.time}</span>{" "}
                   is confirmed. Check your email for details.
@@ -261,43 +461,20 @@ export default function SlotsPage() {
                 </div>
 
                 <div className="p-6 space-y-4">
-                  {/* Name */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/40 font-medium uppercase tracking-wider">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      value={form.name}
-                      onChange={(e) => {
-                        setForm((p) => ({ ...p, name: e.target.value }))
-                        if (status === "error") setStatus("idle")
-                      }}
-                      placeholder="Your full name"
-                      className="px-4 py-3 rounded-xl bg-black border border-white/10 focus:border-orange-500/50 text-white text-sm outline-none transition-colors placeholder:text-white/20"
-                    />
+                  <div className="p-4 rounded-xl bg-white/[0.02] border border-white/10 space-y-2">
+                    <p className="text-xs text-white/30 uppercase tracking-wider font-medium">
+                      Booking As
+                    </p>
+                    <p className="text-white font-semibold text-sm">{verifyData?.name}</p>
+                    <p className="text-white/40 text-xs">{verifyData?.email}</p>
                   </div>
 
-                  {/* Email */}
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs text-white/40 font-medium uppercase tracking-wider">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={form.email}
-                      onChange={(e) => {
-                        setForm((p) => ({ ...p, email: e.target.value }))
-                        if (status === "error") setStatus("idle")
-                      }}
-                      onKeyDown={(e) => e.key === "Enter" && handleBook()}
-                      placeholder="you@example.com"
-                      className="px-4 py-3 rounded-xl bg-black border border-white/10 focus:border-orange-500/50 text-white text-sm outline-none transition-colors placeholder:text-white/20"
-                    />
-                  </div>
+                  <p className="text-white/30 text-xs text-center">
+                    This slot will be booked under your invitation details.
+                  </p>
 
-                  {status === "error" && (
-                    <p className="text-red-400 text-sm">{errorMsg}</p>
+                  {bookingStatus === "error" && (
+                    <p className="text-red-400 text-sm text-center">{errorMsg}</p>
                   )}
                 </div>
 
@@ -310,11 +487,14 @@ export default function SlotsPage() {
                   </button>
                   <button
                     onClick={handleBook}
-                    disabled={status === "loading"}
+                    disabled={bookingStatus === "loading"}
                     className="flex-1 py-3 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl text-sm flex items-center justify-center gap-2 transition-colors disabled:opacity-60"
                   >
-                    {status === "loading" ? (
-                      <><Loader2 className="w-4 h-4 animate-spin" /> Booking...</>
+                    {bookingStatus === "loading" ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Booking...
+                      </>
                     ) : (
                       "Confirm Booking"
                     )}
@@ -326,5 +506,20 @@ export default function SlotsPage() {
         </div>
       )}
     </main>
+  )
+}
+
+// FIX: Wrap with Suspense — required by Next.js 13+ for useSearchParams()
+export default function SlotsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main className="min-h-screen bg-black flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-orange-500" />
+        </main>
+      }
+    >
+      <SlotsContent />
+    </Suspense>
   )
 }

@@ -37,7 +37,7 @@ export default function PlayPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-5xl md:text-7xl font-black text-white italic tracking-tighter mb-4">
+            <h1 className="text-5xl md:text-7xl font-black text-white  tracking-tighter mb-4">
               NOMAN <span className="text-red-600">ARCADE</span>
             </h1>
             <p className="text-white/60 text-lg md:text-xl max-w-2xl mx-auto font-medium">

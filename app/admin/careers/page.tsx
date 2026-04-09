@@ -522,15 +522,59 @@ const handleInviteAllAccepted = async () => {
               {filteredApps.map(app => (
                 <div key={app._id} className="bg-white/[0.02] border border-white/10 rounded-3xl p-6">
                   <div className="flex flex-col sm:flex-row justify-between gap-6">
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className={`text-[9px] font-bold px-3 py-1 rounded-full border uppercase tracking-widest ${STATUS_COLORS[app.status]}`}>{app.status}</span>
-                        {app.inviteSent && <span className="text-[9px] font-bold px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 uppercase tracking-widest">Sent</span>}
-                        <span className="text-white/20 text-[10px] font-bold uppercase tracking-widest">{app.jobTitle}</span>
-                      </div>
-                      <h3 className="text-xl font-bold text-white">{app.fullName}</h3>
-                      <p className="text-white/40 text-sm">{app.email}</p>
-                    </div>
+                   <div className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 transition-all hover:border-white/20 hover:bg-white/[0.07]">
+  {/* Top Badge Row */}
+  <div className="flex flex-wrap items-center gap-3 mb-4">
+    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md border uppercase tracking-wider transition-colors ${STATUS_COLORS[app.status]}`}>
+      {app.status}
+    </span>
+    
+    {app.inviteSent && (
+      <span className="flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 uppercase tracking-wider">
+        <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+        Invite Sent
+      </span>
+    )}
+    
+    <span className="ml-auto text-white/40 text-[10px] font-semibold uppercase tracking-widest border-b border-transparent group-hover:border-white/10 transition-all">
+      {app.jobTitle}
+    </span>
+  </div>
+
+  {/* Main Identity */}
+  <div className="mb-6">
+    <h3 className="text-2xl font-bold text-white tracking-tight">{app.fullName}</h3>
+  </div>
+
+  {/* Contact Info Grid */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 mb-6 text-sm">
+    <div className="flex items-center gap-2.5 text-white/60">
+      <div className="p-1.5 rounded-lg bg-white/5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+      </div>
+      <span className="truncate">{app.email}</span>
+    </div>
+    
+    <div className="flex items-center gap-2.5 text-white/60">
+      <div className="p-1.5 rounded-lg bg-white/5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      </div>
+      <span>{app.phone}</span>
+    </div>
+  </div>
+
+  {/* Education Section */}
+  <div className="pt-4 border-t border-white/5 space-y-1">
+    <div className="flex items-baseline justify-between gap-4">
+      <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">University</span>
+      <span className="text-sm text-white/80 font-medium text-right">{app.university}</span>
+    </div>
+    <div className="flex items-baseline justify-between gap-4">
+      <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">Degree</span>
+      <span className="text-sm text-white/80 font-medium text-right">{app.degree}</span>
+    </div>
+  </div>
+</div>
                     
                     <div className="flex items-center gap-2 shrink-0 self-start">
                       <a href={inlineResumeUrl(app.resumeUrl)} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-orange-600/10 border border-orange-500/20 text-orange-400 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-orange-600/20 transition-all"><FileText className="w-3.5 h-3.5"/> Resume</a>

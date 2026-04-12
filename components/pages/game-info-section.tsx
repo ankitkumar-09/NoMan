@@ -22,7 +22,8 @@ export function GameInfoSection({
   const router = useRouter()
 
   const handleDownload = () => {
-    router.push("/games/FlappyAR")
+    // Redirect to playstore link
+    window.open("https://play.google.com/store", "_blank")
   }
 
   const handleLearnMore = () => {
@@ -30,7 +31,7 @@ export function GameInfoSection({
   }
 
   return (
-    <div className="relative w-full h-[320px] sm:h-[400px] md:h-[480px] lg:h-[520px] rounded-lg sm:rounded-2xl md:rounded-3xl overflow-hidden bg-black group">
+    <div className="relative w-full min-h-[320px] aspect-[4/3] sm:aspect-[16/9] md:aspect-video lg:aspect-video rounded-lg sm:rounded-2xl md:rounded-3xl overflow-hidden bg-black group">
 
       {/* Background Video */}
       <video
@@ -38,14 +39,14 @@ export function GameInfoSection({
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+        className="absolute inset-0 w-full h-full object-cover object-top scale-[1.15] origin-top transition-transform duration-700 group-hover:scale-[1.20]"
       >
         <source src="https://res.cloudinary.com/dpnpmkhmb/video/upload/v1773736207/video_urolzy.mp4" type="video/mp4" />
       </video>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-90" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 sm:opacity-80" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col justify-end p-4 sm:p-6 md:p-8 lg:p-10 space-y-3 sm:space-y-4">

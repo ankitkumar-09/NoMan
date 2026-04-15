@@ -8,7 +8,7 @@ import { BackToTop } from "@/components/ui/back-to-top"
 import { PLAY_GAMES } from "@/lib/data/play-games-data"
 import { ArrowLeft, Maximize2, RotateCcw, Info } from "lucide-react"
 import dynamic from "next/dynamic"
-import { useState, useMemo } from "react"
+import { useState, useMemo, type ComponentType } from "react"
 
 // Lazy load game components
 const TicTacToe = dynamic(() => import("@/components/play-games/TicTacToe"), { ssr: false })
@@ -20,7 +20,7 @@ const BikeRacing = dynamic(() => import("@/components/play-games/BikeRacing"), {
 const MemoryMatch = dynamic(() => import("@/components/play-games/MemoryMatch"), { ssr: false })
 const PongGame = dynamic(() => import("@/components/play-games/PongGame"), { ssr: false })
 
-const GAME_COMPONENTS: Record<string, any> = {
+const GAME_COMPONENTS: Record<string, ComponentType> = {
   "tic-tac-toe": TicTacToe,
   "snake": SnakeGame,
   "flappy-bird": FlappyBird,

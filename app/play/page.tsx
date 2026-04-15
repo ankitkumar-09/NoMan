@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type ReactNode } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/navbar"
 import { Footer } from "@/components/layout/footer"
@@ -9,7 +9,7 @@ import { PLAY_GAMES, CATEGORIES } from "@/lib/data/play-games-data"
 import Link from "next/link"
 import { ArrowRight, Gamepad2, Rocket, Trophy, Puzzle, Sword } from "lucide-react"
 
-const CATEGORY_ICONS: Record<string, any> = {
+const CATEGORY_ICONS: Record<string, ReactNode> = {
   arcade: <Rocket className="w-4 h-4" />,
   racing: <Gamepad2 className="w-4 h-4" />,
   puzzle: <Puzzle className="w-4 h-4" />,

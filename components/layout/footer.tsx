@@ -170,7 +170,7 @@ export function Footer({ hideNewsletter = false }: FooterProps) {
               {status === "success" ? (
                 <div className="flex flex-col items-center gap-4 py-4 text-center">
                   <CheckCircle2 className="w-12 h-12 text-orange-500" />
-                  <h3 className="text-white font-bold text-2xl sm:text-3xl">You're on the list!</h3>
+                  <h3 className="text-white font-bold text-2xl sm:text-3xl">You&apos;re on the list!</h3>
                   <p className="text-white/50 text-sm sm:text-base max-w-sm">
                     Check your inbox — a confirmation email is on its way. Beta invites go out to this list first.
                   </p>

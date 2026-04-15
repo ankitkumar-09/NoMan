@@ -79,7 +79,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
       <main className="min-h-screen bg-black text-white flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-4xl font-bold mb-4">Game Not Found</h1>
-          <p className="text-white/60 mb-8">The game you're looking for doesn't exist.</p>
+          <p className="text-white/60 mb-8">The game you&apos;re looking for doesn&apos;t exist.</p>
           <button
             onClick={() => router.push('/games')}
             className="px-6 py-3 bg-white text-black rounded-full font-semibold hover:bg-white/90"
@@ -122,7 +122,7 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
             transition={{ duration: 0.6 }}
             className="relative w-full h-64 sm:h-80 md:h-[400px] lg:h-[500px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl"
           >
-            <Image src={game.image} alt={game.title} fill className="object-cover" priority />
+            <Image src={game.image} alt={game.title} fill className="object-contain object-top -translate-y-4 sm:-translate-y-5 md:-translate-y-6 scale-[0.97] sm:scale-[0.98] md:scale-[0.99] md:object-cover" priority />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">

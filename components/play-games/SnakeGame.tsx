@@ -107,7 +107,7 @@ export default function SnakeGame() {
     }
   }, [W, H, cols, rows])
 
-  const tick = useCallback(() => {
+  const tick = useCallback(function tickFrame() {
     const g = gameRef.current
     if (!g.running) return
 
@@ -145,7 +145,7 @@ export default function SnakeGame() {
     }
 
     draw()
-    g.timer = setTimeout(tick, g.speed)
+    g.timer = setTimeout(tickFrame, g.speed)
   }, [cols, rows, draw, spawnFood])
 
   const startGame = useCallback(() => {

@@ -8,10 +8,17 @@ const H = 500
 const PADDLE_W = 10
 const PADDLE_H = 80
 const BALL_R = 8
-const BALL_SPEED = 4.5
+const BALL_SPEED = 3.4
+const MIN_BALL_SPEED = 3.2
+const MAX_BALL_SPEED = 7.2
+const WALL_REBOUND_BOOST = 0.995
+const PADDLE_REBOUND_BOOST = 1
+const WALL_HIT_SPEED_GAIN = 0
+const PADDLE_HIT_SPEED_GAIN = 0
+const WALL_PADDING = 6
+const PADDLE_EDGE_BUFFER = 6
 const AI_SPEED = 3.2
 const PLAYER_SPEED = 6
-const WIN_SCORE = 7
 
 export default function PongGame() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -34,6 +41,7 @@ export default function PongGame() {
   const [aiScore, setAiScore] = useState(0)
   const [started, setStarted] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
+  const [targetScore, setTargetScore] = useState(7)
 
   const resetBall = useCallback((dir: number) => {
     const g = gameRef.current
@@ -128,7 +136,7 @@ export default function PongGame() {
     ctx.fillText(String(g.aiScore), (W * 3) / 4, 70)
   }, [])
 
-  const tick = useCallback(() => {
+  const tick = useCallback(function tickFrame() {
     const g = gameRef.current
     if (!g.running) return
 
@@ -151,20 +159,34 @@ export default function PongGame() {
     g.ballY += g.ballVY
 
     // Top/bottom walls
-    if (g.ballY - BALL_R <= 0 || g.ballY + BALL_R >= H) {
-      g.ballVY = -g.ballVY
-      g.ballY = g.ballY - BALL_R <= 0 ? BALL_R : H - BALL_R
+    if (g.ballY - BALL_R <= WALL_PADDING || g.ballY + BALL_R >= H - WALL_PADDING) {
+      const hitTop = g.ballY - BALL_R <= WALL_PADDING
+      const speed = Math.hypot(g.ballVX, g.ballVY)
+      const boostedSpeed = Math.min(
+        MAX_BALL_SPEED,
+        Math.max(MIN_BALL_SPEED, speed * WALL_REBOUND_BOOST + WALL_HIT_SPEED_GAIN)
+      )
+      const horizontalRatio = Math.min(Math.max(Math.abs(g.ballVX) / Math.max(speed, 0.001), 0.32), 0.92)
+      const verticalRatio = Math.sqrt(1 - horizontalRatio * horizontalRatio)
+
+      g.ballVX = Math.sign(g.ballVX || 1) * boostedSpeed * horizontalRatio
+      g.ballVY = (hitTop ? 1 : -1) * boostedSpeed * verticalRatio
+      g.ballY = hitTop ? WALL_PADDING + BALL_R : H - WALL_PADDING - BALL_R
     }
 
     // Player paddle collision
     if (
       g.ballX - BALL_R <= 25 &&
-      g.ballX - BALL_R >= 15 &&
-      g.ballY >= g.playerY &&
-      g.ballY <= g.playerY + PADDLE_H
+      g.ballX + BALL_R >= 15 &&
+      g.ballY + BALL_R >= g.playerY - PADDLE_EDGE_BUFFER &&
+      g.ballY - BALL_R <= g.playerY + PADDLE_H + PADDLE_EDGE_BUFFER
     ) {
-      const relY = (g.ballY - g.playerY - PADDLE_H / 2) / (PADDLE_H / 2)
-      const speed = Math.sqrt(g.ballVX ** 2 + g.ballVY ** 2) * 1.05
+      const relYRaw = (g.ballY - g.playerY - PADDLE_H / 2) / (PADDLE_H / 2)
+      const relY = Math.max(-1, Math.min(1, relYRaw))
+      const speed = Math.min(
+        MAX_BALL_SPEED,
+        Math.max(MIN_BALL_SPEED, Math.sqrt(g.ballVX ** 2 + g.ballVY ** 2) * PADDLE_REBOUND_BOOST + PADDLE_HIT_SPEED_GAIN)
+      )
       const angle = relY * (Math.PI / 4)
       g.ballVX = Math.abs(speed * Math.cos(angle))
       g.ballVY = speed * Math.sin(angle)
@@ -174,12 +196,16 @@ export default function PongGame() {
     // AI paddle collision
     if (
       g.ballX + BALL_R >= W - 25 &&
-      g.ballX + BALL_R <= W - 15 &&
-      g.ballY >= g.aiY &&
-      g.ballY <= g.aiY + PADDLE_H
+      g.ballX - BALL_R <= W - 15 &&
+      g.ballY + BALL_R >= g.aiY - PADDLE_EDGE_BUFFER &&
+      g.ballY - BALL_R <= g.aiY + PADDLE_H + PADDLE_EDGE_BUFFER
     ) {
-      const relY = (g.ballY - g.aiY - PADDLE_H / 2) / (PADDLE_H / 2)
-      const speed = Math.sqrt(g.ballVX ** 2 + g.ballVY ** 2) * 1.05
+      const relYRaw = (g.ballY - g.aiY - PADDLE_H / 2) / (PADDLE_H / 2)
+      const relY = Math.max(-1, Math.min(1, relYRaw))
+      const speed = Math.min(
+        MAX_BALL_SPEED,
+        Math.max(MIN_BALL_SPEED, Math.sqrt(g.ballVX ** 2 + g.ballVY ** 2) * PADDLE_REBOUND_BOOST + PADDLE_HIT_SPEED_GAIN)
+      )
       const angle = relY * (Math.PI / 4)
       g.ballVX = -Math.abs(speed * Math.cos(angle))
       g.ballVY = speed * Math.sin(angle)
@@ -190,7 +216,7 @@ export default function PongGame() {
     if (g.ballX < 0) {
       g.aiScore++
       setAiScore(g.aiScore)
-      if (g.aiScore >= WIN_SCORE) {
+      if (g.aiScore >= targetScore) {
         g.running = false
         setWinner("AI")
         draw()
@@ -201,7 +227,7 @@ export default function PongGame() {
     if (g.ballX > W) {
       g.playerScore++
       setPlayerScore(g.playerScore)
-      if (g.playerScore >= WIN_SCORE) {
+      if (g.playerScore >= targetScore) {
         g.running = false
         setWinner("Player")
         draw()
@@ -211,8 +237,8 @@ export default function PongGame() {
     }
 
     draw()
-    rafRef.current = requestAnimationFrame(tick)
-  }, [draw, resetBall])
+    rafRef.current = requestAnimationFrame(tickFrame)
+  }, [draw, resetBall, targetScore])
 
   const startGame = useCallback(() => {
     const g = gameRef.current
@@ -255,11 +281,25 @@ export default function PongGame() {
           <span className="text-blue-400 text-xs">YOU</span>
           <span className="text-xl text-white">{playerScore}</span>
         </div>
-        <span className="flex items-center text-white/30 text-xs">First to {WIN_SCORE}</span>
+        <span className="flex items-center text-white/30 text-xs">First to {targetScore}</span>
         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/20 border border-red-500/30">
           <span className="text-red-400 text-xs">AI</span>
           <span className="text-xl text-white">{aiScore}</span>
         </div>
+      </div>
+
+      <div className="flex items-center gap-3 text-xs text-white/70">
+        <span className="uppercase tracking-widest text-white/40">Rounds</span>
+        <select
+          value={targetScore}
+          onChange={(e) => setTargetScore(Number(e.target.value))}
+          className="bg-white/5 border border-white/15 rounded-lg px-3 py-1.5 text-white outline-none"
+        >
+          <option value={3}>3</option>
+          <option value={5}>5</option>
+          <option value={7}>7</option>
+          <option value={9}>9</option>
+        </select>
       </div>
 
       <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
@@ -287,6 +327,7 @@ export default function PongGame() {
             animate={{ opacity: 1 }}
             className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-sm"
           >
+            <p className="text-white/60 text-xs uppercase tracking-[0.2em] mb-1">Game Over</p>
             <p className="text-white text-xl font-bold mb-1">
               {winner === "Player" ? "🎉 You Win!" : "🤖 AI Wins!"}
             </p>

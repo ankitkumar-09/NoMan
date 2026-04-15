@@ -22,8 +22,7 @@ export function GameInfoSection({
   const router = useRouter()
 
   const handleDownload = () => {
-    // Redirect to playstore link
-    window.open("https://play.google.com/store", "_blank")
+    window.open("https://play.google.com/store/apps/details?id=com.noman.flappyAR", "_blank", "noopener,noreferrer")
   }
 
   const handleLearnMore = () => {
@@ -31,7 +30,7 @@ export function GameInfoSection({
   }
 
   return (
-    <div className="relative w-full min-h-[320px] aspect-[4/3] sm:aspect-[16/9] md:aspect-video lg:aspect-video rounded-lg sm:rounded-2xl md:rounded-3xl overflow-hidden bg-black group">
+    <div className="relative w-full min-h-80 aspect-4/3 sm:aspect-video md:aspect-video lg:aspect-video rounded-lg sm:rounded-2xl md:rounded-3xl overflow-hidden bg-black group">
 
       {/* Background Video */}
       <video
@@ -39,14 +38,14 @@ export function GameInfoSection({
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover object-top scale-[1.15] origin-top transition-transform duration-700 group-hover:scale-[1.20]"
+        className="absolute inset-0 w-full h-full object-contain object-top scale-100 transition-transform duration-700 group-hover:scale-100"
       >
         <source src="https://res.cloudinary.com/dpnpmkhmb/video/upload/v1773736207/video_urolzy.mp4" type="video/mp4" />
       </video>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90 sm:opacity-80" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-t from-black via-black/40 to-transparent opacity-90 sm:opacity-80" />
+      <div className="absolute inset-0 bg-linear-to-r from-black/80 via-black/20 to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 flex h-full flex-col justify-end p-4 sm:p-6 md:p-8 lg:p-10 space-y-3 sm:space-y-4">
@@ -102,7 +101,7 @@ export function GameInfoSection({
       </div>
 
       {/* Shine Effect */}
-      <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
+      <div className="absolute inset-0 pointer-events-none bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]" />
 
     </div>
   )

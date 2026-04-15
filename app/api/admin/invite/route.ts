@@ -320,11 +320,11 @@ async function sendStatusUpdateEmail(
     },
     body: JSON.stringify({
       sender: {
-        name: "NoMan Studio",
+        name: "NoMan Game Studio",
         email: "studios@nomangames.store",
       },
       to: [{ email, name }],
-      subject: `Application Update — ${jobTitle} | NoMan Studio`,
+      subject: `Application Update — ${jobTitle} | NoMan Game Studio`,
       htmlContent: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -344,7 +344,7 @@ async function sendStatusUpdateEmail(
               <table width="100%" cellpadding="0" cellspacing="0" border="0">
                 <tr>
                   <td width="48%" valign="middle" style="padding:72px 52px;background-color:#0a0a0a;border-right:1px solid #1c1c1c;">
-  <p style="margin:0 0 14px;color:#ea580c;font-size:10px;font-weight:800;letter-spacing:5px;text-transform:uppercase;">NoMan Studio</p>
+  <p style="margin:0 0 14px;color:#ea580c;font-size:10px;font-weight:800;letter-spacing:5px;text-transform:uppercase;">NoMan Game Studio</p>
   <h2 style="margin:0;color:#ffffff;font-size:32px;font-weight:900;line-height:1.2;letter-spacing:-0.5px;">Committed<br/>to<br/>Entertainment.</h2>
   <div style="height:2px;width:36px;background-color:#ea580c;margin-top:24px;"></div>
   <p style="margin:22px 0 0;color:#555555;font-size:12px;line-height:1.9;letter-spacing:0.5px;">Building worlds.<br/>Crafting experiences.<br/>Hiring the bold.</p>
@@ -361,13 +361,12 @@ async function sendStatusUpdateEmail(
                         <td style="padding:40px 20px;text-align:center;">
                          <img
   src="https://res.cloudinary.com/dpnpmkhmb/image/upload/v1773735174/1_knbqwl.png"
-  alt="NoMan Studio"
+  alt="NoMan Game Studio"
   width="140"
   height="140"
   style="display:block;margin:0 auto 20px;border-radius:10px;border:1px solid #2c2c2c;box-shadow:0 0 60px rgba(234,88,12,0.15),0 8px 32px rgba(0,0,0,0.7);"
 />
-<p style="margin:0 0 6px;color:#ffffff;font-size:14px;font-weight:800;letter-spacing:4px;text-transform:uppercase;">NoMan Studio</p>
-<p style="margin:0;color:#ea580c;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;">Game Development</p>
+
                         </td>
                         <td></td>
                       </tr>
@@ -396,11 +395,11 @@ async function sendStatusUpdateEmail(
 
               <p style="color:#777777;font-size:14px;line-height:1.9;margin:0 0 16px;">
                 Thank you for applying to <span style="color:#ffffff;font-weight:600;">${jobTitle}</span> at
-                <span style="color:#ffffff;font-weight:600;">NoMan Studio</span>.
+                <span style="color:#ffffff;font-weight:600;">NoMan Game Studio</span>.
               </p>
 
               <p style="color:#777777;font-size:14px;line-height:1.9;margin:0 0 32px;">
-                Your application is currently being reviewed by our team. If you are shortlisted, we will reach out to you on this email with an invitation to our <span style="color:#ffffff;font-weight:600;">PPT round</span> along with all further details.
+                Your application is currently under review by our team. We are carefully assessing each profile based on role requirements, skill alignment, and overall fit within our organization.
               </p>
 
               <!-- Status pill -->
@@ -460,10 +459,17 @@ async function sendStatusUpdateEmail(
                       <img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="15" height="15" alt="YouTube" style="filter:invert(1);opacity:0.45;" />
                     </a>
                   </td>
+                  <td style="padding:0 13px;">
+  <a href="https://play.google.com/store/apps/details?id=com.noman.flappyAR&pcampaignid=web_share">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" 
+         width="70" 
+         alt="Get it on Google Play" />
+  </a>
+</td>
                 </tr>
               </table>
               <p style="color:#333333;font-size:12px;margin:0;letter-spacing:1px;line-height:1.8;font-weight:600;text-transform:uppercase;">
-                &copy; ${currentYear} NOMAN STUDIO &middot; CHENNAI, INDIA<br/>
+                &copy; ${currentYear} NOMAN GAME STUDIO &middot;INDIA<br/>
                 THIS IS AN AUTOMATED MESSAGE — PLEASE DO NOT REPLY
               </p>
             </td>

@@ -405,8 +405,8 @@ export default function AdminCareersPage() {
       return
     }
     const targets = applications.filter(a =>
-      selectedIds.has(a._id) && a.status === "accepted" && !a.inviteSent
-    )
+  selectedIds.has(a._id)
+)
     if (targets.length === 0) {
       alert("None of the selected applicants are accepted & uninvited.")
       return

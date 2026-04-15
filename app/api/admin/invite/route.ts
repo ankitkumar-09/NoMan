@@ -522,12 +522,12 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    if (application.status !== "accepted") {
-      return NextResponse.json(
-        { error: "Only accepted applicants can be notified" },
-        { status: 400 }
-      )
-    }
+    // if (application.status !== "accepted") {
+    //   return NextResponse.json(
+    //     { error: "Only accepted applicants can be notified" },
+    //     { status: 400 }
+    //   )
+    // }
 
     await sendStatusUpdateEmail(
       application.email,

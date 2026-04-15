@@ -317,16 +317,16 @@ function SlotsContent() {
           Select your preferred slot below.
         </p>
 
-        {verifyData?.willExpireNext && (
-          <div className="mt-6 inline-flex items-center gap-2 bg-amber-600/10 border border-amber-500/20 text-amber-400 text-xs font-medium px-4 py-2 rounded-full">
-            <AlertTriangle className="w-3 h-3" />
-            This is your last visit — this link will expire after you leave
-          </div>
-        )}
+       {verifyData && verifyData.visitsRemaining === 0 && (
+  <div className="mt-6 inline-flex items-center gap-2 bg-amber-600/10 border border-amber-500/20 text-amber-400 text-xs font-medium px-4 py-2 rounded-full">
+    <AlertTriangle className="w-3 h-3" />
+    This is your last visit — this link will expire after you leave
+  </div>
+)}
 
         {verifyData && verifyData.visitsRemaining > 0 && !verifyData.willExpireNext && (
           <div className="mt-6 inline-flex items-center gap-2 bg-white/5 border border-white/10 text-white/30 text-xs font-medium px-4 py-2 rounded-full">
-            {verifyData.visitsRemaining} visit{verifyData.visitsRemaining !== 1 ? "s" : ""} remaining on this link
+            {verifyData.visitsRemaining} visit{verifyData.visitsRemaining !== 2 ? "s" : ""} remaining on this link
           </div>
         )}
       </section>

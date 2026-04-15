@@ -98,10 +98,9 @@ function exportAcceptedCSV(applications: Application[]) {
 
   const headers = ["Full Name", "Email", "Phone", "Degree", "University", "Job Title", "Applied On", "Invite Sent"]
   const rows = accepted.map((a) => [
-    a.fullName, a.email, a.phone || "", a.degree || "", a.university || "", 
+    a.fullName, a.email, a.phone || "", a.degree || "", a.university || "",
     a.jobTitle, formatDate(a.createdAt), a.inviteSent ? "Yes" : "No"
   ])
-  
 
   const csvContent = [headers, ...rows]
     .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
@@ -143,14 +142,12 @@ function SlotsTab({ secret }: { secret: string }) {
     if (!form.title || !form.date || !form.time || !form.link) {
       return alert("Title, Date, Time, and Meeting Link are all required.")
     }
-
     try {
       const res = await fetch("/api/slots", {
         method: "POST",
         headers: { "Content-Type": "application/json", "x-admin-secret": secret },
         body: JSON.stringify(form),
       })
-      
       if (res.ok) {
         setShowForm(false)
         setForm({ title: "", date: "", time: "", duration: "30 min", link: "", note: "" })
@@ -207,16 +204,16 @@ function SlotsTab({ secret }: { secret: string }) {
         <div className="bg-neutral-900 border border-white/10 rounded-2xl p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-2xl">
           <div className="sm:col-span-2">
             <label className="text-[10px] text-white/40 uppercase font-bold mb-1 block tracking-widest">Slot Title / Role *</label>
-            <input type="text" value={form.title} onChange={e => setForm({...form, title: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded-xl text-white outline-none" placeholder="e.g. Gameplay Programmer Interview" />
+            <input type="text" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} className="w-full bg-black border border-white/10 p-3 rounded-xl text-white outline-none" placeholder="e.g. Gameplay Programmer Interview" />
           </div>
-          <input type="date" value={form.date} onChange={e => setForm({...form, date: e.target.value})} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none [color-scheme:dark]" />
-          <input type="time" value={form.time} onChange={e => setForm({...form, time: e.target.value})} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none [color-scheme:dark]" />
-          <select value={form.duration} onChange={e => setForm({...form, duration: e.target.value})} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none">
+          <input type="date" value={form.date} onChange={e => setForm({ ...form, date: e.target.value })} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none [color-scheme:dark]" />
+          <input type="time" value={form.time} onChange={e => setForm({ ...form, time: e.target.value })} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none [color-scheme:dark]" />
+          <select value={form.duration} onChange={e => setForm({ ...form, duration: e.target.value })} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none">
             <option>15 min</option><option>30 min</option><option>45 min</option><option>60 min</option>
           </select>
-          <input type="text" value={form.link} onChange={e => setForm({...form, link: e.target.value})} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none" placeholder="Meeting Link *" />
+          <input type="text" value={form.link} onChange={e => setForm({ ...form, link: e.target.value })} className="bg-black border border-white/10 p-3 rounded-xl text-white outline-none" placeholder="Meeting Link *" />
           <div className="sm:col-span-2">
-            <input type="text" value={form.note} onChange={e => setForm({...form, note: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded-xl text-white outline-none" placeholder="Note (Optional)" />
+            <input type="text" value={form.note} onChange={e => setForm({ ...form, note: e.target.value })} className="w-full bg-black border border-white/10 p-3 rounded-xl text-white outline-none" placeholder="Note (Optional)" />
           </div>
           <div className="sm:col-span-2 flex justify-end pt-2">
             <button onClick={handleCreate} className="px-10 py-3 bg-orange-600 rounded-xl font-bold">Create Slot</button>
@@ -270,9 +267,9 @@ function SlotsTab({ secret }: { secret: string }) {
 // ─── Main Admin Page ──────────────────────────────────────────────────────────
 
 export default function AdminCareersPage() {
-    const [isBulkInviting, setIsBulkInviting] = useState(false)
-const [inviteLogs, setInviteLogs] = useState<{ email: string; status: 'waiting' | 'sending' | 'success' | 'error' }[]>([])
-const [totalToInvite, setTotalToInvite] = useState(0)
+  const [isBulkInviting, setIsBulkInviting] = useState(false)
+  const [inviteLogs, setInviteLogs] = useState<{ email: string; status: 'waiting' | 'sending' | 'success' | 'error' }[]>([])
+  const [totalToInvite, setTotalToInvite] = useState(0)
   const [secret, setSecret] = useState("")
   const [authed, setAuthed] = useState(false)
   const [tab, setTab] = useState<"jobs" | "applications" | "slots">("jobs")
@@ -286,9 +283,18 @@ const [totalToInvite, setTotalToInvite] = useState(0)
   const [expandedJob, setExpandedJob] = useState<string | null>(null)
   const [filterJob, setFilterJob] = useState("All")
   const [filterStatus, setFilterStatus] = useState("All")
+  const [filterYear, setFilterYear] = useState("All")
+
+  // ─── Selection State ───────────────────────────────────────────────────────
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
 
   const fileInputRef = useRef<HTMLInputElement>(null)
   const headers = { "x-admin-secret": secret, "Content-Type": "application/json" }
+
+  const YEAR_ORDER = ["All", "1st Year", "2nd Year", "3rd Year", "4th Year", "Graduated", "Post-Graduate"]
+  const availableYears = YEAR_ORDER.filter(y =>
+    y === "All" || applications.some(a => a.year === y)
+  )
 
   const handleAuth = async () => {
     setLoading(true)
@@ -298,10 +304,11 @@ const [totalToInvite, setTotalToInvite] = useState(0)
       else alert("Unauthorized Secret Key")
     } finally { setLoading(false) }
   }
-const handlePostJob = async () => {
+
+  const handlePostJob = async () => {
     setLoading(true)
     const res = await fetch("/api/jobs", {
-      method: "POST", 
+      method: "POST",
       headers,
       body: JSON.stringify({
         ...jobForm,
@@ -309,13 +316,14 @@ const handlePostJob = async () => {
         requirements: jobForm.requirements.split("\n").filter(Boolean),
       }),
     })
-    if (res.ok) { 
+    if (res.ok) {
       setShowJobForm(false)
       setJobForm(BLANK_JOB)
-      fetchAll() 
+      fetchAll()
     }
     setLoading(false)
   }
+
   const fetchAll = async () => {
     setLoading(true)
     try {
@@ -330,108 +338,124 @@ const handlePostJob = async () => {
     } finally { setLoading(false) }
   }
 
-  const handleBulkInvite = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const file = e.target.files?.[0]
-  if (!file) return
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-  const reader = new FileReader()
-  reader.onload = async (event) => {
-    const csvData = event.target?.result as string
+  // ─── Selection Helpers ─────────────────────────────────────────────────────
 
-    const rows = csvData
-      .split("\n")
-      .map(r => r.trim())
-      .filter(r => r.length > 0)
+  const filteredApps = applications.filter((a) => {
+    const jobMatch = filterJob === "All" || a.jobId === filterJob
+    const statusMatch = filterStatus === "All" || a.status === filterStatus
+    const yearMatch = filterYear === "All" || a.year === filterYear
+    return jobMatch && statusMatch && yearMatch
+  })
 
-    // Skip header
-   const emails = rows.slice(1).map(r => {
-  const cleanRow = r.replace(/"/g, "").trim()
-  const [email] = cleanRow.split(",") 
-  return email.toLowerCase().trim()
-})
-  console.log("Parsed emails:", emails)
+  const allFilteredSelected = filteredApps.length > 0 && filteredApps.every(a => selectedIds.has(a._id))
 
-    alert(`Found ${emails.length} emails`)
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev)
+      next.has(id) ? next.delete(id) : next.add(id)
+      return next
+    })
+  }
 
-    for (const email of emails) {
-      const cleanEmail = email.toLowerCase().trim()
-
-      const applicant = applications.find(
-        a => a.email.toLowerCase().trim() === cleanEmail
-      )
-
-      if (!applicant) {
-        console.log("❌ Not found:", cleanEmail)
-        continue
-      }
-
-      if (applicant.status !== "accepted") {
-        console.log("⚠ Not accepted:", cleanEmail)
-        continue
-      }
-
-      await fetch("/api/admin/invite", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ applicationId: applicant._id })
+  const toggleSelectAll = () => {
+    if (allFilteredSelected) {
+      setSelectedIds(prev => {
+        const next = new Set(prev)
+        filteredApps.forEach(a => next.delete(a._id))
+        return next
       })
-
-      console.log("✅ Invited:", cleanEmail)
+    } else {
+      setSelectedIds(prev => {
+        const next = new Set(prev)
+        filteredApps.forEach(a => next.add(a._id))
+        return next
+      })
     }
+  }
 
-    alert("Bulk invite finished")
+  // ─── Invite Selected ───────────────────────────────────────────────────────
+
+  const handleInviteSelected = async (targets: Application[]) => {
+    setInviteLogs(targets.map(a => ({ email: a.email, status: 'waiting' })))
+    setTotalToInvite(targets.length)
+    setIsBulkInviting(true)
+
+    for (let i = 0; i < targets.length; i++) {
+      setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: 'sending' } : log))
+      try {
+        const res = await fetch("/api/admin/invite", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ applicationId: targets[i]._id })
+        })
+        setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: res.ok ? 'success' : 'error' } : log))
+      } catch {
+        setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: 'error' } : log))
+      }
+      if (i < targets.length - 1) await sleep(2000)
+    }
     fetchAll()
   }
 
-  reader.readAsText(file)
-}
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-const handleInviteAllAccepted = async () => {
-  const accepted = applications.filter(a => a.status === "accepted" && !a.inviteSent)
-
-  if (accepted.length === 0) {
-    alert("No pending accepted applicants to invite.")
-    return
+  const handleSendInvitesForSelected = () => {
+    if (selectedIds.size === 0) {
+      alert("No items selected.")
+      return
+    }
+    const targets = applications.filter(a =>
+      selectedIds.has(a._id) && a.status === "accepted" && !a.inviteSent
+    )
+    if (targets.length === 0) {
+      alert("None of the selected applicants are accepted & uninvited.")
+      return
+    }
+    handleInviteSelected(targets)
   }
 
-  // Initialize logs
-  setInviteLogs(accepted.map(a => ({ email: a.email, status: 'waiting' })))
-  setTotalToInvite(accepted.length)
-  setIsBulkInviting(true)
+  const handleExportSelected = () => {
+    if (selectedIds.size === 0) {
+      alert("No items selected.")
+      return
+    }
+    const targets = applications.filter(a => selectedIds.has(a._id))
+    exportAcceptedCSV(targets)
+  }
 
-  for (let i = 0; i < accepted.length; i++) {
-    const applicant = accepted[i];
-    
-    // Update status to 'sending'
-    setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: 'sending' } : log))
+  // ─── Original handlers ─────────────────────────────────────────────────────
 
-    try {
-      const res = await fetch("/api/admin/invite", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ applicationId: applicant._id })
+  const handleBulkInvite = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = async (event) => {
+      const csvData = event.target?.result as string
+      const rows = csvData.split("\n").map(r => r.trim()).filter(r => r.length > 0)
+      const emails = rows.slice(1).map(r => {
+        const cleanRow = r.replace(/"/g, "").trim()
+        const [email] = cleanRow.split(",")
+        return email.toLowerCase().trim()
       })
-
-      if (res.ok) {
-        setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: 'success' } : log))
-      } else {
-        setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: 'error' } : log))
+      console.log("Parsed emails:", emails)
+      alert(`Found ${emails.length} emails`)
+      for (const email of emails) {
+        const cleanEmail = email.toLowerCase().trim()
+        const applicant = applications.find(a => a.email.toLowerCase().trim() === cleanEmail)
+        if (!applicant) { console.log("❌ Not found:", cleanEmail); continue }
+        if (applicant.status !== "accepted") { console.log("⚠ Not accepted:", cleanEmail); continue }
+        await fetch("/api/admin/invite", {
+          method: "POST", headers,
+          body: JSON.stringify({ applicationId: applicant._id })
+        })
+        console.log("✅ Invited:", cleanEmail)
       }
-    } catch (err) {
-      setInviteLogs(prev => prev.map((log, idx) => idx === i ? { ...log, status: 'error' } : log))
+      alert("Bulk invite finished")
+      fetchAll()
     }
-
-    // Wait 2 seconds before the next one (except for the last one)
-    if (i < accepted.length - 1) {
-      await sleep(2000)
-    }
+    reader.readAsText(file)
   }
 
-  // Refresh data once done
-  fetchAll()
-}
   const handleSendInvite = async (id: string) => {
     setInviteLoading(id)
     try {
@@ -456,11 +480,7 @@ const handleInviteAllAccepted = async () => {
     fetchAll()
   }
 
-  const filteredApps = applications.filter((a) => {
-    const jobMatch = filterJob === "All" || a.jobId === filterJob
-    const statusMatch = filterStatus === "All" || a.status === filterStatus
-    return jobMatch && statusMatch
-  })
+  // ─── Auth Screen ───────────────────────────────────────────────────────────
 
   if (!authed) return (
     <main className="min-h-screen bg-black flex items-center justify-center px-4">
@@ -476,22 +496,29 @@ const handleInviteAllAccepted = async () => {
     <main className="min-h-screen bg-black text-white pb-32">
       <div className="max-w-6xl mx-auto px-4 pt-20 space-y-8">
 
-        {/* Header Section */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pt-10">
           <div>
             <h1 className="text-2xl font-bold">Dashboard</h1>
             <p className="text-white/40 text-sm mt-1">{jobs.length} roles · {applications.length} applications</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button onClick={() => exportAcceptedCSV(applications)} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/50 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-all">
+            {/* Export CSV — works on selection */}
+            <button
+              onClick={handleExportSelected}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/50 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-all"
+            >
               <Download className="w-4 h-4" /> Export CSV
             </button>
+
+            {/* Send All Invites — works on selection */}
             <button
-  onClick={handleInviteAllAccepted}
-  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600/10 border border-green-500/30 text-green-400 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-all"
->
-  Send All Invites
-</button>
+              onClick={handleSendInvitesForSelected}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-green-600/10 border border-green-500/30 text-green-400 text-[10px] font-bold uppercase tracking-widest hover:text-white transition-all"
+            >
+              Send All Invites
+            </button>
+
             <button onClick={() => setShowJobForm(true)} className="px-5 py-2.5 bg-orange-600 hover:bg-orange-500 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">Post Role</button>
           </div>
         </div>
@@ -505,97 +532,162 @@ const handleInviteAllAccepted = async () => {
           ))}
         </div>
 
-        {/* Applications Tab */}
+        {/* ── Applications Tab ── */}
         {tab === "applications" && (
           <div className="space-y-6">
-            <div className="flex flex-wrap gap-2">
+
+            {/* Filters + Selection Controls */}
+            <div className="flex flex-wrap items-center gap-2">
               <select value={filterJob} onChange={(e) => setFilterJob(e.target.value)} className="bg-white/5 border border-white/10 p-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider outline-none">
                 <option value="All">All Jobs</option>
                 {jobs.map(j => <option key={j._id} value={j._id}>{j.title}</option>)}
               </select>
+
               <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="bg-white/5 border border-white/10 p-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider outline-none">
                 {["All", "pending", "reviewing", "accepted", "rejected"].map(s => <option key={s} value={s}>{s}</option>)}
               </select>
+
+              <select value={filterYear} onChange={(e) => setFilterYear(e.target.value)} className="bg-white/5 border border-white/10 p-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider outline-none">
+                {availableYears.map(y => <option key={y} value={y}>{y === "All" ? "All Years" : y}</option>)}
+              </select>
+
+              {/* Divider */}
+              <div className="h-6 w-px bg-white/10 mx-1" />
+
+              {/* Select All / Deselect All */}
+              <button
+                onClick={toggleSelectAll}
+                className={`px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-widest border transition-all ${
+                  allFilteredSelected
+                    ? "bg-orange-600/20 border-orange-500/40 text-orange-400"
+                    : "bg-white/5 border-white/10 text-white/40 hover:text-white"
+                }`}
+              >
+                {allFilteredSelected ? "Deselect All" : "Select All"}
+              </button>
+
+              {/* Selection Count Badge */}
+              <span className={`text-[10px] font-bold uppercase tracking-widest px-3 py-2.5 rounded-xl border transition-all ${
+                selectedIds.size > 0
+                  ? "bg-orange-500/10 border-orange-500/20 text-orange-400"
+                  : "bg-white/[0.03] border-white/5 text-white/20"
+              }`}>
+                {selectedIds.size > 0 ? `${selectedIds.size} selected` : "No items selected"}
+              </span>
             </div>
 
+            {/* Application Cards */}
             <div className="grid gap-3">
-              {filteredApps.map(app => (
-                <div key={app._id} className="bg-white/[0.02] border border-white/10 rounded-3xl p-6">
-                  <div className="flex flex-col sm:flex-row justify-between gap-6">
-                   <div className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 transition-all hover:border-white/20 hover:bg-white/[0.07]">
-  {/* Top Badge Row */}
-  <div className="flex flex-wrap items-center gap-3 mb-4">
-    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md border uppercase tracking-wider transition-colors ${STATUS_COLORS[app.status]}`}>
-      {app.status}
-    </span>
-    
-    {app.inviteSent && (
-      <span className="flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 uppercase tracking-wider">
-        <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
-        Invite Sent
-      </span>
-    )}
-    
-    <span className="ml-auto text-white/40 text-[10px] font-semibold uppercase tracking-widest border-b border-transparent group-hover:border-white/10 transition-all">
-      {app.jobTitle}
-    </span>
-  </div>
+              {filteredApps.map(app => {
+                const isSelected = selectedIds.has(app._id)
+                return (
+                  <div
+                    key={app._id}
+                    className={`border rounded-3xl p-6 transition-all ${
+                      isSelected
+                        ? "bg-orange-500/[0.04] border-orange-500/40"
+                        : "bg-white/[0.02] border-white/10"
+                    }`}
+                  >
+                    {/* Selection Row */}
+                    <div className="flex items-center gap-3 mb-5">
+                      <button
+                        onClick={() => toggleSelect(app._id)}
+                        className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all shrink-0 ${
+                          isSelected
+                            ? "bg-orange-500 border-orange-500"
+                            : "border-white/20 hover:border-white/40 bg-transparent"
+                        }`}
+                      >
+                        {isSelected && <Check className="w-3 h-3 text-white" strokeWidth={3} />}
+                      </button>
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">
+                        {isSelected ? "Selected" : "Select"}
+                      </span>
+                    </div>
 
-  {/* Main Identity */}
-  <div className="mb-6">
-    <h3 className="text-2xl font-bold text-white tracking-tight">{app.fullName}</h3>
-  </div>
+                    <div className="flex flex-col sm:flex-row justify-between gap-6">
+                      <div className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 transition-all hover:border-white/20 hover:bg-white/[0.07]">
+                        {/* Top Badge Row */}
+                        <div className="flex flex-wrap items-center gap-3 mb-4">
+                          <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md border uppercase tracking-wider transition-colors ${STATUS_COLORS[app.status]}`}>
+                            {app.status}
+                          </span>
+                          {app.inviteSent && (
+                            <span className="flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 uppercase tracking-wider">
+                              <span className="h-1 w-1 rounded-full bg-emerald-400 animate-pulse" />
+                              Invite Sent
+                            </span>
+                          )}
+                          <span className="ml-auto text-white/40 text-[10px] font-semibold uppercase tracking-widest border-b border-transparent group-hover:border-white/10 transition-all">
+                            {app.jobTitle}
+                          </span>
+                        </div>
 
-  {/* Contact Info Grid */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 mb-6 text-sm">
-    <div className="flex items-center gap-2.5 text-white/60">
-      <div className="p-1.5 rounded-lg bg-white/5">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-      </div>
-      <span className="truncate">{app.email}</span>
-    </div>
-    
-    <div className="flex items-center gap-2.5 text-white/60">
-      <div className="p-1.5 rounded-lg bg-white/5">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-      </div>
-      <span>{app.phone}</span>
-    </div>
-  </div>
+                        {/* Name */}
+                        <div className="mb-6">
+                          <h3 className="text-2xl font-bold text-white tracking-tight">{app.fullName}</h3>
+                        </div>
 
-  {/* Education Section */}
-  <div className="pt-4 border-t border-white/5 space-y-1">
-    <div className="flex items-baseline justify-between gap-4">
-      <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">University</span>
-      <span className="text-sm text-white/80 font-medium text-right">{app.university}</span>
-    </div>
-    <div className="flex items-baseline justify-between gap-4">
-      <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">Degree</span>
-      <span className="text-sm text-white/80 font-medium text-right">{app.degree}</span>
-    </div>
-  </div>
-</div>
-                    
-                    <div className="flex items-center gap-2 shrink-0 self-start">
-                      <a href={inlineResumeUrl(app.resumeUrl)} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-orange-600/10 border border-orange-500/20 text-orange-400 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-orange-600/20 transition-all"><FileText className="w-3.5 h-3.5"/> Resume</a>
-                      {app.status === "accepted" && (
-                        <button onClick={() => handleSendInvite(app._id)} disabled={inviteLoading === app._id} className="flex items-center gap-2 px-5 py-2.5 bg-orange-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-orange-600/10">
-                          {inviteLoading === app._id ? <Loader2 className="animate-spin w-4 h-4"/> : <Mail className="w-4 h-4"/>} Invite
-                        </button>
-                      )}
+                        {/* Contact */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-4 mb-6 text-sm">
+                          <div className="flex items-center gap-2.5 text-white/60">
+                            <div className="p-1.5 rounded-lg bg-white/5">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
+                            </div>
+                            <span className="truncate">{app.email}</span>
+                          </div>
+                          <div className="flex items-center gap-2.5 text-white/60">
+                            <div className="p-1.5 rounded-lg bg-white/5">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></svg>
+                            </div>
+                            <span>{app.phone}</span>
+                          </div>
+                        </div>
+
+                        {/* Education */}
+                        <div className="pt-4 border-t border-white/5 space-y-1">
+                          <div className="flex items-baseline justify-between gap-4">
+                            <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">University</span>
+                            <span className="text-sm text-white/80 font-medium text-right">{app.university}</span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-4">
+                            <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">Degree</span>
+                            <span className="text-sm text-white/80 font-medium text-right">{app.degree}</span>
+                          </div>
+                          <div className="flex items-baseline justify-between gap-4">
+                            <span className="text-[10px] uppercase font-bold text-white/30 tracking-widest shrink-0">Year</span>
+                            <span className="text-sm text-white/80 font-medium text-right">{app.year}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0 self-start">
+                        <a href={inlineResumeUrl(app.resumeUrl)} target="_blank" className="flex items-center gap-2 px-4 py-2 bg-orange-600/10 border border-orange-500/20 text-orange-400 rounded-xl text-[10px] font-bold uppercase tracking-widest hover:bg-orange-600/20 transition-all">
+                          <FileText className="w-3.5 h-3.5" /> Resume
+                        </a>
+                        {app.status === "accepted" && (
+                          <button onClick={() => handleSendInvite(app._id)} disabled={inviteLoading === app._id} className="flex items-center gap-2 px-5 py-2.5 bg-orange-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-orange-600/10">
+                            {inviteLoading === app._id ? <Loader2 className="animate-spin w-4 h-4" /> : <Mail className="w-4 h-4" />} Invite
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Status Buttons */}
+                    <div className="mt-6 pt-6 border-t border-white/5 flex flex-wrap gap-2">
+                      {["pending", "reviewing", "accepted", "rejected"].map(s => (
+                        <button key={s} onClick={() => updateStatus(app._id, s)} className={`px-4 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest border transition-all ${app.status === s ? STATUS_COLORS[s] : "bg-white/5 border-white/10 text-white/30 hover:text-white"}`}>{s}</button>
+                      ))}
                     </div>
                   </div>
-                  <div className="mt-6 pt-6 border-t border-white/5 flex flex-wrap gap-2">
-                    {["pending", "reviewing", "accepted", "rejected"].map(s => (
-                      <button key={s} onClick={() => updateStatus(app._id, s)} className={`px-4 py-2 rounded-xl text-[9px] font-bold uppercase tracking-widest border transition-all ${app.status === s ? STATUS_COLORS[s] : "bg-white/5 border-white/10 text-white/30 hover:text-white"}`}>{s}</button>
-                    ))}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </div>
         )}
 
+        {/* ── Jobs Tab ── */}
         {tab === "jobs" && (
           <div className="space-y-4">
             {jobs.map(job => (
@@ -608,7 +700,7 @@ const handleInviteAllAccepted = async () => {
                   <button onClick={() => toggleJob(job._id, job.isOpen)} className={`p-2.5 rounded-xl border transition-all ${job.isOpen ? "bg-green-600/10 border-green-500/20 text-green-400" : "bg-white/5 border-white/10 text-white/20"}`}>
                     {job.isOpen ? <ToggleRight className="w-5 h-5" /> : <ToggleLeft className="w-5 h-5" />}
                   </button>
-                  <button onClick={() => deleteJob(job._id)} className="p-2.5 bg-white/5 hover:bg-red-600/10 rounded-xl text-white/20 hover:text-red-400 border border-white/5 hover:border-red-500/20 transition-all"><Trash2 className="w-5 h-5"/></button>
+                  <button onClick={() => deleteJob(job._id)} className="p-2.5 bg-white/5 hover:bg-red-600/10 rounded-xl text-white/20 hover:text-red-400 border border-white/5 hover:border-red-500/20 transition-all"><Trash2 className="w-5 h-5" /></button>
                 </div>
               </div>
             ))}
@@ -618,7 +710,7 @@ const handleInviteAllAccepted = async () => {
         {tab === "slots" && <SlotsTab secret={secret} />}
       </div>
 
-      {/* New Job Modal */}
+      {/* ── New Job Modal ── */}
       {showJobForm && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
           <div className="bg-neutral-900 border border-white/10 w-full max-w-2xl rounded-[2rem] overflow-hidden shadow-2xl">
@@ -628,33 +720,33 @@ const handleInviteAllAccepted = async () => {
             </div>
             <div className="p-8 max-h-[70vh] overflow-y-auto space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <MField label="Job Title" value={jobForm.title} onChange={v => setJobForm({...jobForm, title: v})} />
+                <MField label="Job Title" value={jobForm.title} onChange={v => setJobForm({ ...jobForm, title: v })} />
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] text-white/40 uppercase font-bold px-1">Department</label>
-                  <select value={jobForm.department} onChange={e => setJobForm({...jobForm, department: e.target.value})} className="bg-black border border-white/10 p-3.5 rounded-2xl text-sm outline-none">
+                  <select value={jobForm.department} onChange={e => setJobForm({ ...jobForm, department: e.target.value })} className="bg-black border border-white/10 p-3.5 rounded-2xl text-sm outline-none">
                     {DEPARTMENTS.map(d => <option key={d} value={d}>{d}</option>)}
                   </select>
                 </div>
-                <MField label="Location" value={jobForm.location} onChange={v => setJobForm({...jobForm, location: v})} />
+                <MField label="Location" value={jobForm.location} onChange={v => setJobForm({ ...jobForm, location: v })} />
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[10px] text-white/40 uppercase font-bold px-1">Type</label>
-                  <select value={jobForm.type} onChange={e => setJobForm({...jobForm, type: e.target.value})} className="bg-black border border-white/10 p-3.5 rounded-2xl text-sm outline-none">
+                  <select value={jobForm.type} onChange={e => setJobForm({ ...jobForm, type: e.target.value })} className="bg-black border border-white/10 p-3.5 rounded-2xl text-sm outline-none">
                     {JOB_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
               </div>
-              <MField label="Experience Required" value={jobForm.experience} onChange={v => setJobForm({...jobForm, experience: v})} />
+              <MField label="Experience Required" value={jobForm.experience} onChange={v => setJobForm({ ...jobForm, experience: v })} />
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-white/40 uppercase font-bold px-1">Description</label>
-                <textarea rows={3} value={jobForm.description} onChange={e => setJobForm({...jobForm, description: e.target.value})} className="bg-black border border-white/10 p-4 rounded-2xl text-sm outline-none resize-none" />
+                <textarea rows={3} value={jobForm.description} onChange={e => setJobForm({ ...jobForm, description: e.target.value })} className="bg-black border border-white/10 p-4 rounded-2xl text-sm outline-none resize-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-white/40 uppercase font-bold px-1">Responsibilities (One per line)</label>
-                <textarea rows={4} value={jobForm.responsibilities} onChange={e => setJobForm({...jobForm, responsibilities: e.target.value})} className="bg-black border border-white/10 p-4 rounded-2xl text-sm outline-none resize-none" />
+                <textarea rows={4} value={jobForm.responsibilities} onChange={e => setJobForm({ ...jobForm, responsibilities: e.target.value })} className="bg-black border border-white/10 p-4 rounded-2xl text-sm outline-none resize-none" />
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-[10px] text-white/40 uppercase font-bold px-1">Requirements (One per line)</label>
-                <textarea rows={4} value={jobForm.requirements} onChange={e => setJobForm({...jobForm, requirements: e.target.value})} className="bg-black border border-white/10 p-4 rounded-2xl text-sm outline-none resize-none" />
+                <textarea rows={4} value={jobForm.requirements} onChange={e => setJobForm({ ...jobForm, requirements: e.target.value })} className="bg-black border border-white/10 p-4 rounded-2xl text-sm outline-none resize-none" />
               </div>
             </div>
             <div className="p-8 border-t border-white/5 flex justify-end gap-3">
@@ -664,38 +756,40 @@ const handleInviteAllAccepted = async () => {
           </div>
         </div>
       )}
+
+      {/* ── Bulk Invite Progress Modal ── */}
       {isBulkInviting && (
-  <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-    <div className="bg-neutral-900 border border-white/10 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl">
-      <div className="p-8 border-b border-white/5 flex justify-between items-center">
-        <div>
-          <h3 className="text-xl font-bold">Sending Invites</h3>
-          <p className="text-white/40 text-xs mt-1">Processing {totalToInvite} candidates...</p>
-        </div>
-        <button onClick={() => setIsBulkInviting(false)} className="p-2 text-white/30 hover:text-white"><X /></button>
-      </div>
-      <div className="p-6 max-h-[400px] overflow-y-auto space-y-3">
-        {inviteLogs.map((log, idx) => (
-          <div key={idx} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.03] border border-white/5">
-            <div className="flex items-center gap-3">
-              <Mail className={`w-4 h-4 ${log.status === 'sending' ? 'text-orange-500 animate-pulse' : 'text-white/20'}`} />
-              <span className="text-sm text-white/80">{log.email}</span>
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
+          <div className="bg-neutral-900 border border-white/10 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <div className="p-8 border-b border-white/5 flex justify-between items-center">
+              <div>
+                <h3 className="text-xl font-bold">Sending Invites</h3>
+                <p className="text-white/40 text-xs mt-1">Processing {totalToInvite} candidates...</p>
+              </div>
+              <button onClick={() => setIsBulkInviting(false)} className="p-2 text-white/30 hover:text-white"><X /></button>
             </div>
-            {log.status === 'waiting' && <Clock className="w-4 h-4 text-white/20" />}
-            {log.status === 'sending' && <Loader2 className="w-4 h-4 text-orange-500 animate-spin" />}
-            {log.status === 'success' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
-            {log.status === 'error' && <X className="w-4 h-4 text-red-500" />}
+            <div className="p-6 max-h-[400px] overflow-y-auto space-y-3">
+              {inviteLogs.map((log, idx) => (
+                <div key={idx} className="flex items-center justify-between p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+                  <div className="flex items-center gap-3">
+                    <Mail className={`w-4 h-4 ${log.status === 'sending' ? 'text-orange-500 animate-pulse' : 'text-white/20'}`} />
+                    <span className="text-sm text-white/80">{log.email}</span>
+                  </div>
+                  {log.status === 'waiting' && <Clock className="w-4 h-4 text-white/20" />}
+                  {log.status === 'sending' && <Loader2 className="w-4 h-4 text-orange-500 animate-spin" />}
+                  {log.status === 'success' && <CheckCircle2 className="w-4 h-4 text-green-500" />}
+                  {log.status === 'error' && <X className="w-4 h-4 text-red-500" />}
+                </div>
+              ))}
+            </div>
+            <div className="p-8 border-t border-white/5">
+              <button onClick={() => setIsBulkInviting(false)} className="w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-sm">
+                {inviteLogs.every(l => l.status === 'success' || l.status === 'error') ? "Done" : "Close"}
+              </button>
+            </div>
           </div>
-        ))}
-      </div>
-      <div className="p-8 border-t border-white/5">
-        <button onClick={() => setIsBulkInviting(false)} className="w-full py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-sm">
-          {inviteLogs.every(l => l.status === 'success' || l.status === 'error') ? "Done" : "Close"}
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+        </div>
+      )}
     </main>
   )
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { uploadResume } from "@/lib/cloudinary"
 import { Application } from "@/lib/types"
 
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Check duplicate — same email + same job
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const existing = await db.collection("applications").findOne({
@@ -206,3 +206,4 @@ async function sendApplicationEmail(email: string, name: string, jobTitle: strin
   })
   
 }
+

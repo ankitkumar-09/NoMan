@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 import { randomBytes } from "crypto"
 
@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     // Fetch the application
@@ -223,3 +223,4 @@ export async function POST(req: NextRequest) {
     )
   }
 }
+

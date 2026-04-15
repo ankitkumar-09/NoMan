@@ -187,10 +187,10 @@ export default function JobDetailPage({ params }: { params: Promise<{ jobId: str
   )
 }
 
-function Section({ title, children }: any) {
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return <div className="space-y-4 p-6 rounded-2xl bg-white/[0.02] border border-white/10"><h3 className="text-xs font-bold uppercase tracking-widest text-orange-500">{title}</h3>{children}</div>
 }
-function Row({ children }: any) { return <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div> }
-function Field({ label, name, ...props }: any) {
+function Row({ children }: { children: React.ReactNode }) { return <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">{children}</div> }
+function Field({ label, name, ...props }: { label: string; name: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return <div className="flex flex-col gap-1.5 w-full"><label className="text-xs text-white/40 uppercase font-bold tracking-wider">{label}</label><input {...props} name={name} className="px-4 py-3 rounded-xl bg-black border border-white/10 focus:border-orange-500/50 text-white text-sm outline-none" /></div>
 }

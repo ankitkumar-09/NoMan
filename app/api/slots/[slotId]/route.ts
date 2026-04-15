@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 
 function isAuthorized(req: NextRequest) {
@@ -167,7 +167,7 @@ export async function GET(
 ) {
   const { slotId } = await context.params
   try {
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const slot = await db
@@ -192,7 +192,7 @@ export async function PATCH(
   const { slotId } = await context.params
 
   try {
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const slot = await db
@@ -297,7 +297,7 @@ export async function DELETE(
   }
 
   try {
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     await db

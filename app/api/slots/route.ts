@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 
 function isAuthorized(req: NextRequest) {
   return req.headers.get("x-admin-secret") === process.env.ADMIN_SECRET
@@ -8,7 +8,7 @@ function isAuthorized(req: NextRequest) {
 // GET — all slots (public, sorted by date)
 export async function GET() {
   try {
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const slots = await db
@@ -54,7 +54,7 @@ export async function POST(req: NextRequest) {
       createdAt: new Date(),
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
     const result = await db.collection("slots").insertOne(slot)
 
@@ -63,3 +63,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to create slot" }, { status: 500 })
   }
 }
+

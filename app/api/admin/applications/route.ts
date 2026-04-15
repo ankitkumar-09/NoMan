@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 
 function isAuthorized(req: NextRequest) {
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     if (jobId) query.jobId = jobId
     if (status) query.status = status
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const applications = await db
@@ -53,7 +53,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "Invalid status" }, { status: 400 })
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     await db.collection("applications").updateOne(
@@ -79,7 +79,7 @@ export async function DELETE(req: NextRequest) {
   try {
     const { applicationId } = await req.json()
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     await db
@@ -94,3 +94,4 @@ export async function DELETE(req: NextRequest) {
     )
   }
 }
+

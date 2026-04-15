@@ -312,7 +312,7 @@ function SlotsContent() {
           </span>
         </h1>
         <p className="text-white/50 text-sm sm:text-base max-w-xl mx-auto relative z-10">
-          You're invited to interview for{" "}
+          You&apos;re invited to interview for{" "}
           <span className="text-white font-semibold">{verifyData?.jobTitle}</span>.
           Select your preferred slot below.
         </p>

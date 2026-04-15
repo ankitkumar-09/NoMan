@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { Job } from "@/lib/types"
 
 // GET — fetch all open jobs (public)
@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
     const adminSecret = req.headers.get("x-admin-secret")
     const isAdmin = adminSecret === process.env.ADMIN_SECRET
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
     
     // If not admin, only show open jobs. 
@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       createdAt: new Date(),
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
    const { _id, ...insertData } = job
 const result = await db.collection("jobs").insertOne(insertData)
@@ -61,3 +61,5 @@ const result = await db.collection("jobs").insertOne(insertData)
     return NextResponse.json({ error: "Failed to create job" }, { status: 500 })
   }
 }
+
+

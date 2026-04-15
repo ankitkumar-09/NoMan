@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 
 // GET — single job detail (public)
@@ -15,7 +15,7 @@ export async function GET(
       return NextResponse.json({ error: "Invalid Job ID format" }, { status: 400 })
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const job = await db
@@ -47,7 +47,7 @@ export async function PATCH(
     }
 
     const { isOpen } = await req.json()
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     await db.collection("jobs").updateOne(
@@ -74,7 +74,7 @@ export async function DELETE(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     await db.collection("jobs").deleteOne({ _id: new ObjectId(jobId) })

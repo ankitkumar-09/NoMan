@@ -3,7 +3,11 @@
 import { useState } from "react"
 import { Linkedin, Instagram, Youtube, Mail, Loader2, CheckCircle2, X, Phone, MapPin, Rocket } from "lucide-react"
 
-export function Footer() {
+interface FooterProps {
+  hideNewsletter?: boolean
+}
+
+export function Footer({ hideNewsletter = false }: FooterProps) {
   const currentYear = new Date().getFullYear()
 
   const [email, setEmail] = useState("")
@@ -153,71 +157,73 @@ export function Footer() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="mb-12 sm:mb-16 rounded-2xl sm:rounded-[2.5rem] bg-white/[0.02] border border-white/10 overflow-hidden relative">
-          <div className="flex justify-center pt-8 sm:pt-10">
-            <span className="inline-flex items-center gap-2 bg-orange-600/15 border border-orange-500/30 text-orange-400 text-[11px] font-semibold uppercase tracking-[0.18em] px-4 py-1.5 rounded-full">
-              <Rocket className="w-3 h-3" />
-              Beta Access Available
-            </span>
-          </div>
+        { !hideNewsletter && (
+          <div className="mb-12 sm:mb-16 rounded-2xl sm:rounded-[2.5rem] bg-white/[0.02] border border-white/10 overflow-hidden relative">
+            <div className="flex justify-center pt-8 sm:pt-10">
+              <span className="inline-flex items-center gap-2 bg-orange-600/15 border border-orange-500/30 text-orange-400 text-[11px] font-semibold uppercase tracking-[0.18em] px-4 py-1.5 rounded-full">
+                <Rocket className="w-3 h-3" />
+                Beta Access Available
+              </span>
+            </div>
 
-          <div className="p-6 sm:p-8 md:p-10 relative z-10">
-            {status === "success" ? (
-              <div className="flex flex-col items-center gap-4 py-4 text-center">
-                <CheckCircle2 className="w-12 h-12 text-orange-500" />
-                <h3 className="text-white font-bold text-2xl sm:text-3xl">You're on the list!</h3>
-                <p className="text-white/50 text-sm sm:text-base max-w-sm">
-                  Check your inbox — a confirmation email is on its way. Beta invites go out to this list first.
-                </p>
-              </div>
-            ) : (
-              <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-10 text-center lg:text-left">
-                <div className="space-y-3 lg:max-w-sm">
-                  <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl leading-tight">
-                    Stay Updated & Get Early Access
-                  </h3>
-                  <p className="text-white/50 text-xs sm:text-sm md:text-base leading-relaxed">
-                    Subscribe to receive the latest studio news, dev updates, and — most importantly — exclusive invites to{" "}
-                    <span className="text-orange-400 font-semibold">beta test our internal app</span> before anyone else.
+            <div className="p-6 sm:p-8 md:p-10 relative z-10">
+              {status === "success" ? (
+                <div className="flex flex-col items-center gap-4 py-4 text-center">
+                  <CheckCircle2 className="w-12 h-12 text-orange-500" />
+                  <h3 className="text-white font-bold text-2xl sm:text-3xl">You&apos;re on the list!</h3>
+                  <p className="text-white/50 text-sm sm:text-base max-w-sm">
+                    Check your inbox — a confirmation email is on its way. Beta invites go out to this list first.
                   </p>
-                  <ul className="flex flex-col sm:flex-row lg:flex-col gap-1.5 items-center lg:items-start text-white/40 text-xs">
-                    {["Early game announcements", "Beta testing invites", "Behind-the-scenes updates"].map((item) => (
-                      <li key={item} className="flex items-center gap-2">
-                        <span className="w-1 h-1 rounded-full bg-orange-500/70 shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
                 </div>
-
-                <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto lg:min-w-[420px]">
-                  <div className="relative w-full">
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle") }}
-                      required
-                      placeholder="Enter your email"
-                      className={`px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-2xl bg-black border ${
-                        status === "error" ? "border-red-500/60" : "border-white/10 focus:border-orange-500/50"
-                      } text-white text-xs sm:text-sm w-full outline-none transition-colors`}
-                    />
-                    {status === "error" && (
-                      <p className="absolute -bottom-5 left-1 text-red-400 text-[11px]">{errorMsg}</p>
-                    )}
+              ) : (
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-8 md:gap-10 text-center lg:text-left">
+                  <div className="space-y-3 lg:max-w-sm">
+                    <h3 className="text-white font-bold text-xl sm:text-2xl md:text-3xl leading-tight">
+                      Stay Updated & Get Early Access
+                    </h3>
+                    <p className="text-white/50 text-xs sm:text-sm md:text-base leading-relaxed">
+                      Subscribe to receive the latest studio news, dev updates, and — most importantly — exclusive invites to{" "}
+                      <span className="text-orange-400 font-semibold">beta test our internal app</span> before anyone else.
+                    </p>
+                    <ul className="flex flex-col sm:flex-row lg:flex-col gap-1.5 items-center lg:items-start text-white/40 text-xs">
+                      {["Early game announcements", "Beta testing invites", "Behind-the-scenes updates"].map((item) => (
+                        <li key={item} className="flex items-center gap-2">
+                          <span className="w-1 h-1 rounded-full bg-orange-500/70 shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={status === "loading"}
-                    className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold flex items-center justify-center gap-2 text-xs sm:text-sm transition-colors shrink-0 disabled:opacity-60"
-                  >
-                    {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" /> : "Subscribe"}
-                  </button>
-                </form>
-              </div>
-            )}
+
+                  <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full lg:w-auto lg:min-w-[420px]">
+                    <div className="relative w-full">
+                      <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => { setEmail(e.target.value); if (status === "error") setStatus("idle") }}
+                        required
+                        placeholder="Enter your email"
+                        className={`px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-2xl bg-black border ${
+                          status === "error" ? "border-red-500/60" : "border-white/10 focus:border-orange-500/50"
+                        } text-white text-xs sm:text-sm w-full outline-none transition-colors`}
+                      />
+                      {status === "error" && (
+                        <p className="absolute -bottom-5 left-1 text-red-400 text-[11px]">{errorMsg}</p>
+                      )}
+                    </div>
+                    <button
+                      type="submit"
+                      disabled={status === "loading"}
+                      className="px-6 sm:px-8 py-3 sm:py-4 rounded-lg sm:rounded-2xl bg-orange-600 hover:bg-orange-500 text-white font-bold flex items-center justify-center gap-2 text-xs sm:text-sm transition-colors shrink-0 disabled:opacity-60"
+                    >
+                      {status === "loading" ? <Loader2 className="w-4 h-4 animate-spin" /> : "Subscribe"}
+                    </button>
+                  </form>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Bottom Bar */}
         <div className="border-t border-white/10 pt-6 sm:pt-8 md:pt-10 text-center sm:text-left">

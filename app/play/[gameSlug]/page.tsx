@@ -3,11 +3,12 @@
 import { useParams, useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/layout/navbar"
-
+import { Footer } from "@/components/layout/footer"
+import { BackToTop } from "@/components/ui/back-to-top"
 import { PLAY_GAMES } from "@/lib/data/play-games-data"
 import { ArrowLeft, Maximize2, RotateCcw, Info } from "lucide-react"
 import dynamic from "next/dynamic"
-import { useState, useMemo } from "react"
+import { useState, useMemo, type ComponentType } from "react"
 
 // Lazy load game components
 const TicTacToe = dynamic(() => import("@/components/play-games/TicTacToe"), { ssr: false })
@@ -19,7 +20,7 @@ const BikeRacing = dynamic(() => import("@/components/play-games/BikeRacing"), {
 const MemoryMatch = dynamic(() => import("@/components/play-games/MemoryMatch"), { ssr: false })
 const PongGame = dynamic(() => import("@/components/play-games/PongGame"), { ssr: false })
 
-const GAME_COMPONENTS: Record<string, any> = {
+const GAME_COMPONENTS: Record<string, ComponentType> = {
   "tic-tac-toe": TicTacToe,
   "snake": SnakeGame,
   "flappy-bird": FlappyBird,
@@ -71,28 +72,28 @@ export default function GameDetailPage() {
               </button>
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                   <h1 className="text-3xl font-black text-white italic truncate">{game.title}</h1>
+                   <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-wide uppercase truncate">{game.title}</h1>
                    <span className="px-2 py-0.5 rounded bg-white/10 text-[10px] font-black uppercase text-white/50 tracking-widest">{game.category}</span>
                 </div>
-                <p className="text-white/40 text-sm font-medium italic">{game.description}</p>
+                <p className="text-white/60 text-xs sm:text-sm font-medium tracking-wide uppercase opacity-70 leading-relaxed max-w-md">{game.description}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
                <button 
                 onClick={() => setGameKey(prev => prev + 1)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-white/70 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95"
+                className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white/70 text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95"
                >
                  <RotateCcw className="w-4 h-4" /> Reset
                </button>
                <button 
                 onClick={() => setShowInfo(!showInfo)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-black uppercase tracking-widest transition-all ${showInfo ? 'bg-red-600/20 border-red-600/50 text-red-400' : 'bg-white/5 border-white/10 text-white/70'}`}
+                className={`flex items-center gap-2 px-6 py-2.5 rounded-full border text-xs font-black uppercase tracking-widest transition-all ${showInfo ? 'bg-red-600/20 border-red-600/50 text-red-400' : 'bg-white/5 border-white/10 text-white/70'}`}
                >
                  <Info className="w-4 h-4" /> Info
                </button>
                <button 
-                className="w-10 h-10 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/10 transition-colors"
+                className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/10 transition-colors"
                 title="Fullscreen Toggle (Demo only)"
                >
                  <Maximize2 className="w-5 h-5" />
@@ -141,7 +142,8 @@ export default function GameDetailPage() {
         </div>
       </div>
 
-
+      <Footer hideNewsletter={true} />
+      <BackToTop />
     </main>
   )
 }

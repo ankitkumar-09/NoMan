@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 
 // GET — top 10 scores
 export async function GET() {
   try {
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const scores = await db
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 })
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     // Update only if new score is better (lower moves)
@@ -50,3 +50,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to save" }, { status: 500 })
   }
 }
+

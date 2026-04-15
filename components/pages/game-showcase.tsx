@@ -22,19 +22,47 @@ function GameThumbnail({ image, title, className = "" }: GameThumbnailProps) {
   )
 }
 
-const GAMES = [
-  { title: "Game 1", image: "/images/racing/3.png" },
-  { title: "Game 2", image: "/images/racing/6.png" },
-  { title: "Game 3", image: "/images/racing/10.png" },
-  { title: "Game 4", image: "/images/teacher/1.png" },
-  { title: "Game 5", image: "/images/racing/3.png" },
-  { title: "Game 6", image: "/images/racing/7.png" },
-  { title: "Game 7", image: "/images/racing/11.png"},
-  { title: "Game 8", image: "/images/racing/10.png" },
+const BASE_GAMES = [
+  { title: "Game 1", image: "/images/racing/1.png" },
+  { title: "Game 2", image: "/images/racing/3.png" },
+  { title: "Game 3", image: "/images/racing/5.png" },
+  { title: "Game 4", image: "/images/racing/6.png" },
+  { title: "Game 5", image: "/images/racing/7.png" },
+  { title: "Game 6", image: "/images/racing/8.png" },
+  { title: "Game 7", image: "/images/racing/9.png" },
+  { title: "Game 8", image: "/images/racing/11.png" },
+  { title: "Game 9", image: "/images/racing/12.png" },
+  { title: "Game 10", image: "/images/racing/15.png" },
+  { title: "Game 11", image: "/images/racing/16.png" },
+  { title: "Game 12", image: "/images/teacher/1.png" },
+]
+
+const ZEBRA_CAR_IMAGE = "/images/racing/10.png"
+
+const FLAPPY_ENTERTAINMENT = [
+  { title: "Flappy Entertainment 1", image: "/images/entertainment/7.png" },
+  { title: "Flappy Entertainment 2", image: "/images/entertainment/8.png" },
+  { title: "Flappy Entertainment 3", image: "/images/entertainment/9.png" },
+  { title: "Flappy Entertainment 4", image: "/images/entertainment/10.png" },
 ]
 
 export function GameShowcase() {
-  const collage = [...GAMES, ...GAMES, ...GAMES]
+  const collage = [
+    BASE_GAMES[0],
+    FLAPPY_ENTERTAINMENT[0],
+    BASE_GAMES[1],
+    { title: "Zebra Car 1", image: ZEBRA_CAR_IMAGE },
+    FLAPPY_ENTERTAINMENT[1],
+    BASE_GAMES[2],
+    BASE_GAMES[3],
+    FLAPPY_ENTERTAINMENT[2],
+    BASE_GAMES[4],
+    BASE_GAMES[5],
+    { title: "Zebra Car 2", image: ZEBRA_CAR_IMAGE },
+    BASE_GAMES[6],
+    FLAPPY_ENTERTAINMENT[3],
+    { title: "Zebra Car 3", image: ZEBRA_CAR_IMAGE },
+  ]
 
   return (
     <section className="py-8 px-3 sm:px-4 md:px-6 overflow-visible bg-black">

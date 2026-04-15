@@ -5,6 +5,25 @@ import { motion } from "framer-motion"
 import { ArrowUpRight, Play, Pause } from "lucide-react"
 import { ProgressTimeline } from "@/components/progress-timeline"
 
+interface GameCardProps {
+  title: string
+  subtitle: string
+  image: string
+  logo?: string
+  accentColor?: string
+  accentTextColor?: string
+  pageBgColor?: string
+  focusPoint?: string
+  paused?: boolean
+  onPauseToggle?: () => void
+  showButtons?: boolean
+  progress?: {
+    active?: number
+    total?: number
+    segmentStates?: number[]
+  }
+}
+
 function PauseIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
@@ -22,7 +41,7 @@ function PlayIcon({ className }: { className?: string }) {
   )
 }
 
-export function GameCard(props: any) {
+export function GameCard(props: GameCardProps) {
   const {
     title,
     subtitle,

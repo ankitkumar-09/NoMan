@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Menu, X } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import { cn } from "@/lib/utils/utils"
 
 const TEXT = "WELCOME TO NOMAN STUDIOS®"
@@ -141,21 +142,21 @@ export function Navbar() {
         {menuOpen && (
           <div className="absolute top-16 left-0 right-0 sm:right-0 sm:left-auto w-full sm:w-56 bg-black/95 backdrop-blur-2xl rounded-xl border border-white/10 p-3 shadow-2xl z-50 mx-0 sm:mx-0">
             <div className="space-y-2 text-white/80 text-sm font-medium">
-              <a
+              <Link
                 href="/"
                 onClick={() => setMenuOpen(false)}
                 className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
               >
                 HOME
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/games"
                 onClick={() => setMenuOpen(false)}
                 className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
               >
                 GAMES
-              </a>
+              </Link>
 
               <button
                 onClick={() => handleScrollToSection("news")}
@@ -164,12 +165,6 @@ export function Navbar() {
                 NEWS
               </button>
 
-                <button
-                onClick={() => window.location.href = "https://nomangames.store/careers"}
-                className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
-              >
-                CAREERS
-              </button>
               <button
                 onClick={() => handleScrollToSection("footer")}
                 className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
@@ -178,19 +173,19 @@ export function Navbar() {
               </button>
 
               <button
-                onClick={handleContactClick}
+                onClick={() => handleScrollToSection("footer")}
                 className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
               >
                 CONTACT
               </button>
 
-              <a
+              <Link
                 href="/play"
                 onClick={() => setMenuOpen(false)}
                 className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg text-red-500 font-black border-t border-white/5 mt-1 pt-3"
               >
                 🎮 PLAY ARCADE
-              </a>
+              </Link>
             </div>
           </div>
         )}

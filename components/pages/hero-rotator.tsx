@@ -49,7 +49,7 @@ export function HeroRotator() {
   const [paused, setPaused] = useState(false)
 
   const touchStartRef = useRef(0)
-  const startTimeRef = useRef<number>(Date.now())
+  const startTimeRef = useRef<number>(0)
   const carriedElapsedRef = useRef<number>(0)
 
   const DURATION_MS = 10000
@@ -58,7 +58,6 @@ export function HeroRotator() {
   const theme = THEMES[active] ?? THEMES[0]
 
   useEffect(() => {
-    setProgress(0)
     carriedElapsedRef.current = 0
     startTimeRef.current = Date.now()
   }, [active])
@@ -74,6 +73,9 @@ export function HeroRotator() {
       setProgress(newProgress)
 
       if (newProgress >= 1) {
+        setProgress(0)
+        carriedElapsedRef.current = 0
+        startTimeRef.current = Date.now()
         setActive((prev) => (prev + 1) % SLIDES.length)
       }
     }, 50)
@@ -82,10 +84,16 @@ export function HeroRotator() {
   }, [paused])
 
   const handleLeftClick = () => {
+    setProgress(0)
+    carriedElapsedRef.current = 0
+    startTimeRef.current = Date.now()
     setActive((prev) => (prev - 1 + SLIDES.length) % SLIDES.length)
   }
 
   const handleRightClick = () => {
+    setProgress(0)
+    carriedElapsedRef.current = 0
+    startTimeRef.current = Date.now()
     setActive((prev) => (prev + 1) % SLIDES.length)
   }
 

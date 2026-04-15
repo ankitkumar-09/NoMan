@@ -8,17 +8,16 @@ const TEXT = "WELCOME TO NOMAN STUDIOS®"
 export function WelcomeScreen({ onComplete }: { onComplete: () => void }) {
     const [displayWeight, setDisplayWeight] = useState(0)
     const [isExiting, setIsExiting] = useState(false)
-    const [shouldRender, setShouldRender] = useState(false)
+    const [shouldRender] = useState(() => {
+        if (typeof window === "undefined") return false
+        return !sessionStorage.getItem("intro_played")
+    })
 
-    // Check if intro has played already on mount
     useEffect(() => {
-        const hasPlayed = sessionStorage.getItem('intro_played')
-        if (hasPlayed) {
-            onComplete() // Skip straight to main content
-        } else {
-            setShouldRender(true) // Start the animation
+        if (!shouldRender) {
+            onComplete()
         }
-    }, [onComplete])
+    }, [onComplete, shouldRender])
 
     // Typewriter effect
     useEffect(() => {

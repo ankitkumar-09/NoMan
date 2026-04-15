@@ -291,7 +291,7 @@
 
 
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 import { ObjectId } from "mongodb"
 
 function isAuthorized(req: NextRequest) {
@@ -502,7 +502,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     const application = await db
@@ -543,3 +543,4 @@ export async function POST(req: NextRequest) {
     )
   }
 }
+

@@ -28,15 +28,17 @@ const GAMES = [
   },
 ]
 
+const MARQUEE_GAMES = [...GAMES, ...GAMES, ...GAMES]
+
 export function GameLibrary() {
   const marqueeRef = useRef<HTMLDivElement>(null)
-  const [marqueeGames, setMarqueeGames] = useState<typeof GAMES>([])
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === "undefined") return false
+    return window.innerWidth < 768
+  })
 
   useEffect(() => {
-    setMarqueeGames([...GAMES, ...GAMES, ...GAMES])
     const checkMobile = () => setIsMobile(window.innerWidth < 768)
-    checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
@@ -66,7 +68,7 @@ export function GameLibrary() {
                 ease: [0.25, 0.1, 0.25, 1],
               }}
             >
-              {marqueeGames.map((game, idx) => (
+              {MARQUEE_GAMES.map((game, idx) => (
                 <button
                   key={`left-${game.id}-${idx}`}
                   onClick={handleViewMore}
@@ -104,7 +106,7 @@ export function GameLibrary() {
                 ease: [0.25, 0.1, 0.25, 1],
               }}
             >
-              {marqueeGames.map((game, idx) => (
+              {MARQUEE_GAMES.map((game, idx) => (
                 <div
                   key={`right-${game.id}-${idx}`}
                   className="relative flex-shrink-0 w-24 sm:w-32 md:w-44 lg:w-56 h-full rounded-lg sm:rounded-xl overflow-hidden"

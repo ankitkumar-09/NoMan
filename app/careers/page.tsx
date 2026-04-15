@@ -37,7 +37,7 @@ export default function CareersPage() {
 
         <span className="inline-flex items-center gap-2 bg-orange-600/15 border border-orange-500/30 text-orange-400 text-[11px] font-semibold uppercase tracking-[0.18em] px-4 py-1.5 rounded-full mb-6">
           <Rocket className="w-3 h-3" />
-          We're Hiring
+          We&apos;re Hiring
         </span>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight mb-4 relative z-10">
@@ -45,7 +45,7 @@ export default function CareersPage() {
           <span className="text-orange-500">Shape Stories.</span>
         </h1>
         <p className="text-white/50 text-sm sm:text-base max-w-xl mx-auto relative z-10">
-          Join NoMan Studios and help us craft world-class gaming experiences. We're a small team with big ambitions.
+          Join NoMan Studios and help us craft world-class gaming experiences. We&apos;re a small team with big ambitions.
         </p>
       </section>
 

@@ -7,11 +7,14 @@ const W = 320
 const H = 500
 const BIRD_X = 80
 const BIRD_R = 14
-const GRAVITY = 0.08
-const FLAP = -3.0
-const PIPE_W = 52
-const GAP = 200
-const PIPE_SPEED = 0.6
+const BIRD_HITBOX_R = 11
+const GRAVITY = 0.18
+const FLAP = -5.6
+const MAX_FALL_SPEED = 2.1
+const PIPE_W = 44
+const GAP = 170
+const PIPE_SPEED = 0.9
+const PIPE_SPAWN_FRAMES = 178
 
 interface Pipe { x: number; top: number }
 
@@ -139,16 +142,17 @@ export default function FlappyBird() {
     ctx.fillText(String(g.score), W / 2, 50)
   }, [])
 
-  const tick = useCallback(() => {
+  const tick = useCallback(function tickFrame() {
     const g = gameRef.current
     if (!g.running) return
 
     g.frame++
     g.vel += GRAVITY
+    if (g.vel > MAX_FALL_SPEED) g.vel = MAX_FALL_SPEED
     g.birdY += g.vel
 
     // Spawn pipes
-    if (g.frame % 90 === 0) {
+    if (g.frame % PIPE_SPAWN_FRAMES === 0) {
       const top = 50 + Math.random() * (H - 40 - GAP - 100)
       g.pipes.push({ x: W, top })
     }
@@ -158,7 +162,7 @@ export default function FlappyBird() {
 
     // Score
     g.pipes.forEach((p) => {
-      if (Math.floor(p.x + PIPE_SPEED) > BIRD_X - BIRD_R && Math.floor(p.x) <= BIRD_X - BIRD_R) {
+      if (Math.floor(p.x + PIPE_SPEED) > BIRD_X - BIRD_HITBOX_R && Math.floor(p.x) <= BIRD_X - BIRD_HITBOX_R) {
         g.score++
         setScore(g.score)
       }
@@ -168,13 +172,13 @@ export default function FlappyBird() {
     g.pipes = g.pipes.filter((p) => p.x + PIPE_W > -10)
 
     // Collision
-    const hitGround = g.birdY + BIRD_R > H - 40
-    const hitCeiling = g.birdY - BIRD_R < 0
+    const hitGround = g.birdY + BIRD_HITBOX_R > H - 40
+    const hitCeiling = g.birdY - BIRD_HITBOX_R < 0
     const hitPipe = g.pipes.some(
       (p) =>
-        BIRD_X + BIRD_R > p.x &&
-        BIRD_X - BIRD_R < p.x + PIPE_W &&
-        (g.birdY - BIRD_R < p.top || g.birdY + BIRD_R > p.top + GAP)
+        BIRD_X + BIRD_HITBOX_R > p.x &&
+        BIRD_X - BIRD_HITBOX_R < p.x + PIPE_W &&
+        (g.birdY - BIRD_HITBOX_R < p.top || g.birdY + BIRD_HITBOX_R > p.top + GAP)
     )
 
     if (hitGround || hitCeiling || hitPipe) {
@@ -187,7 +191,7 @@ export default function FlappyBird() {
     }
 
     draw()
-    rafRef.current = requestAnimationFrame(tick)
+    rafRef.current = requestAnimationFrame(tickFrame)
   }, [draw])
 
   const flap = useCallback(() => {
@@ -243,12 +247,12 @@ export default function FlappyBird() {
         </div>
       </div>
 
-      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl w-full max-w-[320px] aspect-[16/25] flex justify-center items-center">
+      <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
         <canvas
           ref={canvasRef}
           width={W}
           height={H}
-          className="block cursor-pointer w-full max-w-[320px] h-auto aspect-[16/25]"
+          className="block cursor-pointer"
           onClick={() => (gameRef.current.running ? flap() : startGame())}
         />
 

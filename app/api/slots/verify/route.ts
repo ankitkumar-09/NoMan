@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import clientPromise from "@/lib/mongodb"
+import getMongoClient from "@/lib/mongodb"
 
 // POST — verify token, increment visit count, return applicant data
 export async function POST(req: NextRequest) {
@@ -13,7 +13,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const client = await clientPromise
+    const client = await getMongoClient()
     const db = client.db("noman")
 
     // Find invite by token
@@ -86,3 +86,4 @@ export async function POST(req: NextRequest) {
     )
   }
 }
+

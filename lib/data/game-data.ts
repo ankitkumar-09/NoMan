@@ -29,7 +29,7 @@ export const GAMES_DATA: Record<string, Game> = {
     platform: "Android",
     releaseDate: "March 23, 2026",
     rating: "Everyone",
-    status: "countdown",
+    status: "released",
     description: "Arcade flying game with Normal and AR modes",
     youtube: "https://www.youtube.com/channel/UCQWzNg1ToM8umNt0YUaIVhw",
     linkedin: "https://www.linkedin.com/company/nomanprod/",

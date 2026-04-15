@@ -1,7 +1,9 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { getPlayerId, getPlayerName, setPlayerName } from "@/lib/player"
+import { Trophy, X } from "lucide-react"
 
 const EMOJIS = ["🎮", "🚀", "⚡", "🔥", "💎", "🎯", "🌟", "🎪"]
 const PAIRS = [...EMOJIS, ...EMOJIS]
@@ -20,6 +22,12 @@ interface Card {
   emoji: string
   flipped: boolean
   matched: boolean
+}
+
+interface LeaderboardEntry {
+  playerId: string
+  name: string
+  bestMoves: number
 }
 
 export default function MemoryMatch() {
@@ -42,9 +50,103 @@ export default function MemoryMatch() {
   const [bestMoves, setBestMoves] = useState<number | null>(null)
   const [gameWon, setGameWon] = useState(false)
 
+  // Leaderboard state
+  const [showLeaderboard, setShowLeaderboard] = useState(false)
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([])
+  const [loadingBoard, setLoadingBoard] = useState(false)
+  const [myRank, setMyRank] = useState<number | null>(null)
+
+  // Name prompt
+  const [showNamePrompt, setShowNamePrompt] = useState(false)
+  const [nameInput, setNameInput] = useState("")
+  const [nameError, setNameError] = useState("")
+  const [pendingMoves, setPendingMoves] = useState<number | null>(null)
+  const [playerName, setLocalPlayerName] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
+
+  useEffect(() => {
+    const name = getPlayerName()
+    setLocalPlayerName(name)
+  }, [])
+
+  const fetchLeaderboard = async () => {
+    setLoadingBoard(true)
+    try {
+      const res = await fetch("/api/leaderboard")
+      const data = await res.json()
+      setLeaderboard(data.scores || [])
+
+      const pid = getPlayerId()
+      const rank = data.scores.findIndex(
+        (s: LeaderboardEntry) => s.playerId === pid
+      )
+      setMyRank(rank === -1 ? null : rank + 1)
+    } catch {
+      console.error("Failed to fetch leaderboard")
+    } finally {
+      setLoadingBoard(false)
+    }
+  }
+
+  const submitScore = async (name: string, finalMoves: number) => {
+    setSubmitting(true)
+    try {
+      const playerId = getPlayerId()
+      await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ playerId, name, moves: finalMoves }),
+      })
+      await fetchLeaderboard()
+      setShowLeaderboard(true)
+    } catch {
+      console.error("Failed to submit score")
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const handleWin = (finalMoves: number) => {
+    setGameWon(true)
+    if (bestMoves === null || finalMoves < bestMoves) {
+      setBestMoves(finalMoves)
+    }
+
+    const name = getPlayerName()
+    if (!name) {
+      setPendingMoves(finalMoves)
+      setShowNamePrompt(true)
+    } else {
+      submitScore(name, finalMoves)
+    }
+  }
+
+  const handleNameSubmit = () => {
+    if (!nameInput.trim()) {
+      setNameError("Please enter a name.")
+      return
+    }
+    if (nameInput.trim().length > 20) {
+      setNameError("Max 20 characters.")
+      return
+    }
+    setPlayerName(nameInput.trim())
+    setLocalPlayerName(nameInput.trim())
+    setShowNamePrompt(false)
+    if (pendingMoves !== null) {
+      submitScore(nameInput.trim(), pendingMoves)
+    }
+  }
+
   const handleFlip = useCallback(
     (idx: number) => {
-      if (locked || cards[idx].flipped || cards[idx].matched || selected.length >= 2) return
+      if (
+        locked ||
+        cards[idx].flipped ||
+        cards[idx].matched ||
+        selected.length >= 2
+      )
+        return
 
       const newCards = [...cards]
       newCards[idx].flipped = true
@@ -65,11 +167,8 @@ export default function MemoryMatch() {
           setMatches(newMatches)
 
           if (newMatches === EMOJIS.length) {
-            const totalMoves = moves + 1
-            setGameWon(true)
-            if (bestMoves === null || totalMoves < bestMoves) {
-              setBestMoves(totalMoves)
-            }
+            const finalMoves = moves + 1
+            handleWin(finalMoves)
           }
         } else {
           setLocked(true)
@@ -95,10 +194,13 @@ export default function MemoryMatch() {
     setGameWon(false)
   }, [initCards])
 
+  const currentPlayerId = typeof window !== "undefined" ? getPlayerId() : ""
+
   return (
     <div className="flex flex-col items-center gap-6 select-none">
+
       {/* Stats */}
-      <div className="flex gap-4 text-sm font-semibold">
+      <div className="flex gap-4 text-sm font-semibold flex-wrap justify-center">
         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-cyan-500/20 border border-cyan-500/30">
           <span className="text-cyan-400 text-xs">MOVES</span>
           <span className="text-xl text-white">{moves}</span>
@@ -113,6 +215,15 @@ export default function MemoryMatch() {
             <span className="text-xl text-white">{bestMoves}</span>
           </div>
         )}
+        <button
+          onClick={() => {
+            fetchLeaderboard()
+            setShowLeaderboard(true)
+          }}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-orange-500/20 border border-orange-500/30 text-orange-400 hover:bg-orange-500/30 transition-all text-xs font-bold"
+        >
+          <Trophy className="w-3.5 h-3.5" /> LEADERBOARD
+        </button>
       </div>
 
       {/* Board */}
@@ -164,7 +275,9 @@ export default function MemoryMatch() {
             exit={{ opacity: 0 }}
             className="flex flex-col items-center gap-3"
           >
-            <p className="text-emerald-400 font-bold text-lg">🎉 All matched in {moves} moves!</p>
+            <p className="text-emerald-400 font-bold text-lg">
+              🎉 All matched in {moves} moves!
+            </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -187,6 +300,160 @@ export default function MemoryMatch() {
           Shuffle & Reset
         </motion.button>
       )}
+
+      {/* ── Name Prompt Modal ── */}
+      <AnimatePresence>
+        {showNamePrompt && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-neutral-900 border border-white/10 w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl p-8 space-y-6 text-center"
+            >
+              <div className="space-y-2">
+                <p className="text-3xl">🏆</p>
+                <h3 className="text-xl font-bold text-white">You Won!</h3>
+                <p className="text-white/40 text-sm">
+                  Enter your name to save your score to the leaderboard.
+                </p>
+              </div>
+              <div className="space-y-3">
+                <input
+                  autoFocus
+                  type="text"
+                  maxLength={20}
+                  value={nameInput}
+                  onChange={(e) => {
+                    setNameInput(e.target.value)
+                    setNameError("")
+                  }}
+                  onKeyDown={(e) => e.key === "Enter" && handleNameSubmit()}
+                  placeholder="Your name"
+                  className="w-full px-4 py-3 rounded-xl bg-black border border-white/10 focus:border-orange-500/50 text-white text-sm outline-none text-center"
+                />
+                {nameError && (
+                  <p className="text-red-400 text-xs">{nameError}</p>
+                )}
+                <button
+                  onClick={handleNameSubmit}
+                  disabled={submitting}
+                  className="w-full py-3 rounded-xl bg-orange-600 hover:bg-orange-500 text-white font-bold text-sm transition-colors disabled:opacity-60"
+                >
+                  {submitting ? "Saving..." : "Save Score"}
+                </button>
+                <button
+                  onClick={() => setShowNamePrompt(false)}
+                  className="w-full py-2 text-white/30 hover:text-white text-xs transition-colors"
+                >
+                  Skip
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Leaderboard Modal ── */}
+      <AnimatePresence>
+        {showLeaderboard && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-neutral-900 border border-white/10 w-full max-w-md rounded-3xl overflow-hidden shadow-2xl"
+            >
+              <div className="p-6 border-b border-white/5 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Trophy className="w-5 h-5 text-orange-500" />
+                  <h3 className="text-xl font-bold text-white">Leaderboard</h3>
+                </div>
+                <button
+                  onClick={() => setShowLeaderboard(false)}
+                  className="text-white/40 hover:text-white"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-3 max-h-[60vh] overflow-y-auto">
+                {loadingBoard ? (
+                  <div className="text-center py-8 text-white/30 text-sm">
+                    Loading...
+                  </div>
+                ) : leaderboard.length === 0 ? (
+                  <div className="text-center py-8 text-white/30 text-sm">
+                    No scores yet. Be the first!
+                  </div>
+                ) : (
+                  leaderboard.map((entry, i) => {
+                    const isMe = entry.playerId === currentPlayerId
+                    const medals = ["🥇", "🥈", "🥉"]
+                    return (
+                      <div
+                        key={entry.playerId}
+                        className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
+                          isMe
+                            ? "bg-orange-600/10 border-orange-500/30"
+                            : "bg-white/[0.02] border-white/5"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-lg w-6 text-center">
+                            {i < 3 ? medals[i] : `${i + 1}.`}
+                          </span>
+                          <span
+                            className={`font-semibold text-sm ${isMe ? "text-orange-400" : "text-white"}`}
+                          >
+                            {entry.name}
+                            {isMe && (
+                              <span className="ml-2 text-[10px] text-orange-500/70 font-normal">
+                                (you)
+                              </span>
+                            )}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-white font-bold text-sm">
+                            {entry.bestMoves}
+                          </span>
+                          <span className="text-white/30 text-xs">moves</span>
+                        </div>
+                      </div>
+                    )
+                  })
+                )}
+              </div>
+
+              {myRank && myRank > 10 && (
+                <div className="px-6 pb-4 text-center text-white/30 text-xs">
+                  Your rank: #{myRank}
+                </div>
+              )}
+
+              <div className="p-6 border-t border-white/5">
+                <button
+                  onClick={() => setShowLeaderboard(false)}
+                  className="w-full py-2.5 bg-white/10 text-white rounded-xl text-sm font-semibold hover:bg-white/15 transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

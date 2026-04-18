@@ -164,7 +164,12 @@ export function Navbar() {
               >
                 NEWS
               </button>
-
+             <Link
+  href="/careers"
+  className="block w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
+>
+  CAREERS
+</Link>
               <button
                 onClick={() => handleScrollToSection("footer")}
                 className="w-full text-left px-4 py-2.5 hover:bg-red-600/20 rounded-lg"
@@ -179,13 +184,7 @@ export function Navbar() {
                 CONTACT
               </button>
 
-              <Link
-                href="/play"
-                onClick={() => setMenuOpen(false)}
-                className="block px-4 py-2.5 hover:bg-red-600/20 rounded-lg text-red-500 font-black border-t border-white/5 mt-1 pt-3"
-              >
-                🎮 PLAY ARCADE
-              </Link>
+             
             </div>
           </div>
         )}

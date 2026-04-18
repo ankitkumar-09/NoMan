@@ -7,11 +7,12 @@ import { motion } from 'framer-motion'
 import { ArrowLeft, ChevronDown, Youtube, Linkedin, Instagram, Download, Clock } from 'lucide-react'
 import { Navbar } from '@/components/layout/navbar'
 import { BackToTop } from '@/components/ui/back-to-top'
-import { GAMES_DATA, Game } from '@/lib/data/game-data' // ✅ Import shared data
+import { GAMES_DATA, Game } from '@/lib/data/game-data'
 
 interface GameDetailPageProps {
   params: Promise<{ gameId: string }>
 }
+
 function CountdownTimer({ releaseDate }: { releaseDate: string }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
@@ -52,11 +53,13 @@ function CountdownTimer({ releaseDate }: { releaseDate: string }) {
     </div>
   )
 }
+
 export default function GameDetailPage({ params }: GameDetailPageProps) {
   const router = useRouter()
   const [expandedDescription, setExpandedDescription] = useState(false)
   const [game, setGame] = useState<Game | null>(null)
   const [loaded, setLoaded] = useState(false)
+  const [lightboxImg, setLightboxImg] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.resolve(params).then((resolvedParams) => {
@@ -65,6 +68,15 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
       setLoaded(true)
     })
   }, [params])
+
+  // Close lightbox on Escape key
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxImg(null)
+    }
+    window.addEventListener("keydown", handleKey)
+    return () => window.removeEventListener("keydown", handleKey)
+  }, [])
 
   if (!loaded) {
     return (
@@ -91,7 +103,6 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
     )
   }
 
-  // ✅ Use game.gameDescription directly (no shortDescription needed)
   const shortDescription = game.gameDescription.split('\n\n')[0]
 
   const handleGoBack = () => router.push('/games')
@@ -122,7 +133,13 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
             transition={{ duration: 0.6 }}
             className="relative w-full h-64 sm:h-80 md:h-[400px] lg:h-[500px] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl"
           >
-            <Image src={game.image} alt={game.title} fill className="object-contain object-top -translate-y-4 sm:-translate-y-5 md:-translate-y-6 scale-[0.97] sm:scale-[0.98] md:scale-[0.99] md:object-cover" priority />
+            <Image
+              src={game.image}
+              alt={game.title}
+              fill
+              className="object-contain object-top -translate-y-4 sm:-translate-y-5 md:-translate-y-6 scale-[0.97] sm:scale-[0.98] md:scale-[0.99] md:object-cover"
+              priority
+            />
             <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
 
             <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8">
@@ -245,7 +262,8 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 + idx * 0.1 }}
-                  className="relative aspect-video rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden group cursor-pointer"
+                  onClick={() => setLightboxImg(screenshot)}
+                  className="relative aspect-video rounded-lg sm:rounded-xl md:rounded-2xl overflow-hidden group cursor-zoom-in"
                 >
                   <Image
                     src={screenshot}
@@ -254,6 +272,11 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
                     className="object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-white text-xs font-semibold bg-black/50 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                      Click to expand
+                    </span>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -287,6 +310,45 @@ export default function GameDetailPage({ params }: GameDetailPageProps) {
         </div>
       </div>
 
+      {/* Lightbox */}
+      {lightboxImg && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setLightboxImg(null)}
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-md p-4 cursor-zoom-out"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-5xl max-h-[90vh] aspect-video"
+          >
+            <Image
+              src={lightboxImg}
+              alt="Screenshot fullscreen"
+              fill
+              className="object-contain"
+            />
+          </motion.div>
+
+          {/* Close button */}
+          <button
+            onClick={() => setLightboxImg(null)}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/25 flex items-center justify-center text-white text-lg transition-all border border-white/20"
+          >
+            ✕
+          </button>
+
+          {/* Hint */}
+          <p className="absolute bottom-4 text-white/30 text-xs">
+            Click anywhere or press Esc to close
+          </p>
+        </motion.div>
+      )}
 
       <BackToTop />
     </main>

@@ -15,30 +15,22 @@ export default function GamesPage() {
   const games = Object.values(GAMES_DATA)
 
   return (
-    <main className="min-h-screen bg-black overflow-x-hidden">
+    <main className="min-h-screen bg-black">
       <Navbar />
 
-      <section className="relative pt-32 pb-6 px-6 overflow-hidden">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-red-600/10 blur-[120px] rounded-full pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto relative z-10 flex items-center justify-center gap-4">
+      <header className="w-full px-3 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8 bg-black border-b border-white/10 mt-20">
+        <div className="mx-auto max-w-7xl flex items-center gap-3 sm:gap-4">
           <button
             onClick={() => router.push("/")}
-            className="p-3 w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors"
+            className="p-1.5 sm:p-2 hover:bg-white/10 rounded-lg transition-colors duration-300"
           >
-            <ArrowLeft className="w-6 h-6 text-white" />
+            <ArrowLeft className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </button>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-4xl md:text-6xl font-black text-white italic tracking-tighter">
-              GAME <span className="text-red-600">LIBRARY</span>
-            </h1>
-          </motion.div>
+          <h1 className="text-3xl sm:text-3xl md:text-4xl font-extrabold tracking-wide text-white truncate">
+            Game Library
+          </h1>
         </div>
-      </section>
+      </header>
 
       <section className="w-full px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12">
         <div className="mx-auto w-full max-w-7xl">

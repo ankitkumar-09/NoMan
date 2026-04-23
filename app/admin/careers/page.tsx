@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState, useRef } from "react"
+import { EmailTemplateTab } from "@/components/EmailTemplateTab"
 import {
   Plus, X, Loader2, ChevronDown, ChevronUp,
   Briefcase, Users, ToggleLeft, ToggleRight,
@@ -10,7 +11,7 @@ import {
 } from "lucide-react"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-
+type Tab = "jobs" | "applications" | "slots" | "email"
 interface Application {
   _id: string
   fullName: string
@@ -272,7 +273,7 @@ export default function AdminCareersPage() {
   const [totalToInvite, setTotalToInvite] = useState(0)
   const [secret, setSecret] = useState("")
   const [authed, setAuthed] = useState(false)
-  const [tab, setTab] = useState<"jobs" | "applications" | "slots">("jobs")
+  const [tab, setTab] = useState<Tab>("jobs")
   const [jobs, setJobs] = useState<Job[]>([])
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(false)
@@ -296,14 +297,29 @@ export default function AdminCareersPage() {
     y === "All" || applications.some(a => a.year === y)
   )
 
-  const handleAuth = async () => {
-    setLoading(true)
-    try {
-      const res = await fetch("/api/jobs", { headers: { "x-admin-secret": secret } })
-      if (res.ok) { setAuthed(true); fetchAll() }
-      else alert("Unauthorized Secret Key")
-    } finally { setLoading(false) }
+const handleAuth = async () => {
+  setLoading(true)
+  try {
+    const res = await fetch("/api/admin/init", {
+      headers: { "x-admin-secret": secret },
+    })
+
+    if (!res.ok) {
+      alert("Unauthorized Secret Key")
+      return
+    }
+
+    const data = await res.json()
+    setJobs(data.jobs || [])
+    setApplications(data.applications || [])
+    setAuthed(true)
+  } catch (err) {
+    alert("Something went wrong.")
+    console.error(err)
+  } finally {
+    setLoading(false)
   }
+}
 
   const handlePostJob = async () => {
     setLoading(true)
@@ -456,23 +472,35 @@ export default function AdminCareersPage() {
     reader.readAsText(file)
   }
 
-  const handleSendInvite = async (id: string) => {
-    setInviteLoading(id)
-    try {
-      const res = await fetch("/api/admin/invite", { method: "POST", headers, body: JSON.stringify({ applicationId: id }) })
-      if (res.ok) { fetchAll(); alert("Invite sent!") }
-    } finally { setInviteLoading(null) }
+ const handleSendInvite = async (id: string) => {
+  setInviteLoading(id)
+  try {
+    const res = await fetch("/api/admin/invite", { method: "POST", headers, body: JSON.stringify({ applicationId: id }) })
+    if (res.ok) {
+      setApplications(prev =>
+        prev.map(a => a._id === id ? { ...a, inviteSent: true, inviteSentAt: new Date().toISOString() } : a)
+      )
+      alert("Invite sent!")
+    }
+  } finally {
+    setInviteLoading(null)
   }
+}
 
   const updateStatus = async (applicationId: string, status: string) => {
-    await fetch("/api/admin/applications", { method: "PATCH", headers, body: JSON.stringify({ applicationId, status }) })
-    fetchAll()
-  }
+  setApplications(prev =>
+    prev.map(a => a._id === applicationId ? { ...a, status: status as Application["status"] } : a)
+  )
+  await fetch("/api/admin/applications", { method: "PATCH", headers, body: JSON.stringify({ applicationId, status }) })
+}
 
   const toggleJob = async (id: string, current: boolean) => {
-    await fetch(`/api/jobs/${id}`, { method: "PATCH", headers, body: JSON.stringify({ isOpen: !current }) })
-    fetchAll()
-  }
+  setJobs(prev =>
+    prev.map(j => j._id === id ? { ...j, isOpen: !current } : j)
+  )
+  await fetch(`/api/jobs/${id}`, { method: "PATCH", headers, body: JSON.stringify({ isOpen: !current }) })
+}
+
 
   const deleteJob = async (id: string) => {
     if (!confirm("Delete this listing?")) return
@@ -525,7 +553,7 @@ export default function AdminCareersPage() {
 
         {/* Tabs */}
         <div className="flex gap-1 p-1 bg-white/5 border border-white/5 rounded-2xl w-fit">
-          {(["jobs", "applications", "slots"] as const).map((t) => (
+          {(["jobs", "applications", "slots", "email"] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)} className={`px-6 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all ${tab === t ? "bg-orange-600 text-white" : "text-white/30 hover:text-white"}`}>
               {t}
             </button>
@@ -708,6 +736,8 @@ export default function AdminCareersPage() {
         )}
 
         {tab === "slots" && <SlotsTab secret={secret} />}
+        {tab === "email" && <EmailTemplateTab secret={secret} />}
+
       </div>
 
       {/* ── New Job Modal ── */}

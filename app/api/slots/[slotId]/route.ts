@@ -13,7 +13,8 @@ async function sendSlotEmail(
   slotDate: string,
   slotTime: string,
   slotDuration: string,
-  slotNote: string
+  slotNote: string,
+  slotLink: string
 ) {
   if (process.env.SEND_SLOT_EMAIL !== "true") return
 
@@ -42,7 +43,7 @@ async function sendSlotEmail(
           email: "studios@nomangames.store",
         },
         to: [{ email, name }],
-        subject: `📅 Interview Slot Confirmed — ${slotTitle}`,
+        subject: `Interview Slot Confirmed — ${slotTitle}`,
         htmlContent: `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,100 +51,154 @@ async function sendSlotEmail(
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Slot Confirmed</title>
 </head>
-<body style="margin:0;padding:0;background-color:#050505;font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#050505;padding:60px 20px;">
-    <tr>
-      <td align="center">
-        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:500px;background-color:#0f0f0f;border:1px solid #262626;border-radius:2px;overflow:hidden;">
-          <tr>
-            <td align="center" style="padding:50px 0 20px;">
-              <img src="https://res.cloudinary.com/dpnpmkhmb/image/upload/v1773735174/1_knbqwl.png" alt="NoMan Studios" width="56" height="56" style="display:block;border-radius:4px;border:1px solid #333333;" />
-              <div style="height:1px;width:30px;background-color:#ea580c;margin-top:20px;"></div>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding:0 45px 40px;text-align:center;">
-              <h1 style="color:#ffffff;font-size:22px;font-weight:900;margin:0 0 8px;letter-spacing:2px;text-transform:uppercase;">Slot Confirmed</h1>
-              <p style="color:#ea580c;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;margin:0 0 30px;">${slotTitle}</p>
-              <p style="color:#888888;font-size:14px;line-height:1.8;margin:0 0 24px;">
-                Hi <span style="color:#ffffff;font-weight:700;">${name}</span>,
-              </p>
-              <p style="color:#888888;font-size:14px;line-height:1.8;margin:0 0 30px;">
-                Your interview slot has been successfully booked. Here are your slot details:
-              </p>
-              <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#1a1a1a;border:1px solid #2a2a2a;border-radius:4px;margin-bottom:30px;">
-                <tr>
-                  <td style="padding:24px 28px;">
-                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
-                      <tr>
-                        <td style="padding:8px 0;border-bottom:1px solid #222222;">
-                          <span style="color:#555555;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Role</span><br/>
-                          <span style="color:#ffffff;font-size:14px;font-weight:600;">${slotTitle}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding:8px 0;border-bottom:1px solid #222222;">
-                          <span style="color:#555555;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Date</span><br/>
-                          <span style="color:#ffffff;font-size:14px;font-weight:600;">${formattedDate}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding:8px 0;border-bottom:1px solid #222222;">
-                          <span style="color:#555555;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Time</span><br/>
-                          <span style="color:#ffffff;font-size:14px;font-weight:600;">${slotTime}</span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding:8px 0;${slotNote ? "border-bottom:1px solid #222222;" : ""}">
-                          <span style="color:#555555;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Duration</span><br/>
-                          <span style="color:#ffffff;font-size:14px;font-weight:600;">${slotDuration}</span>
-                        </td>
-                      </tr>
-                      ${slotNote ? `
-                      <tr>
-                        <td style="padding:8px 0;">
-                          <span style="color:#555555;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;">Note</span><br/>
-                          <span style="color:#aaaaaa;font-size:13px;">${slotNote}</span>
-                        </td>
-                      </tr>` : ""}
-                    </table>
-                  </td>
-                </tr>
-              </table>
-              <p style="color:#666666;font-size:13px;line-height:1.8;margin:0 0 35px;">
-                The interview link and further instructions will be shared with you shortly before the scheduled time.
-              </p>
-              <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:12px;">
-                <tr>
-                  <td align="center" style="background-color:#ea580c;border-radius:2px;">
-                    <a href="https://www.nomangames.store" style="display:inline-block;color:#ffffff;font-size:12px;font-weight:800;text-decoration:none;padding:16px 45px;text-transform:uppercase;letter-spacing:2px;">
-                      Explore Our Games
-                    </a>
-                  </td>
-                </tr>
-              </table>
-              <p style="color:#444444;font-size:11px;margin:0;">We look forward to speaking with you.</p>
-            </td>
-          </tr>
-          <tr>
-            <td style="background-color:#0a0a0a;padding:40px;border-top:1px solid #222222;text-align:center;">
-              <table align="center" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:25px;">
-                <tr>
-                  <td style="padding:0 15px;"><a href="https://www.linkedin.com/company/nomanprod/"><img src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png" width="18" height="18" alt="LinkedIn" style="filter:invert(1);opacity:0.6;" /></a></td>
-                  <td style="padding:0 15px;"><a href="https://www.instagram.com/noman__.games/"><img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" width="18" height="18" alt="Instagram" style="filter:invert(1);opacity:0.6;" /></a></td>
-                  <td style="padding:0 15px;"><a href="https://www.youtube.com/channel/UCQWzNg1ToM8umNt0YUaIVhw"><img src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png" width="18" height="18" alt="YouTube" style="filter:invert(1);opacity:0.6;" /></a></td>
-                </tr>
-              </table>
-              <p style="color:#444444;font-size:10px;margin:0;letter-spacing:1px;line-height:1.6;font-weight:600;text-transform:uppercase;">
-                &copy; ${currentYear} NOMAN STUDIOS &middot; CHENNAI, INDIA<br/>
-                THIS IS AN AUTOMATED MESSAGE — PLEASE DO NOT REPLY
-              </p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+
+<body style="margin:0;padding:0;background:#050505;font-family:'Segoe UI',Roboto,Arial;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#080808;padding:40px 0;">
+<tr>
+<td align="center">
+
+<!-- MAIN CARD -->
+<table width="100%" cellpadding="0" cellspacing="0"
+  style="max-width:720px;background:#0f0f0f;border:1px solid #222;border-radius:4px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.8);">
+
+  <!-- HERO -->
+  <tr>
+    <td style="padding:56px 52px 36px;">
+      <table width="100%">
+        <tr>
+          <!-- LEFT -->
+          <td style="vertical-align:top;">
+            <p style="margin:0 0 14px;font-size:11px;font-weight:700;letter-spacing:0.25em;color:#ea580c;">
+              NOMAN GAME STUDIO
+            </p>
+
+            <h1 style="margin:0 0 14px;font-size:36px;font-weight:800;color:#fff;line-height:1.2;">
+              Slot Confirmed
+            </h1>
+
+            <div style="width:42px;height:3px;background:#ea580c;margin:18px 0;"></div>
+
+            <p style="margin:0;font-size:14px;color:#777;line-height:1.8;">
+              Hi <strong style="color:#fff;">${name}</strong>, your interview slot has been successfully booked.
+            </p>
+          </td>
+
+          <!-- RIGHT LOGO -->
+          <td align="right" style="vertical-align:top;">
+            <img 
+              src="https://res.cloudinary.com/dpnpmkhmb/image/upload/v1773735174/1_knbqwl.png"
+              width="110"
+              style="border-radius:10px;border:1px solid #2c2c2c;box-shadow:0 0 30px rgba(234,88,12,0.2);"
+            />
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- SLOT DETAILS -->
+  <tr>
+    <td style="padding:0 52px 36px;">
+      <table width="100%" style="background:#111;border:1px solid #222;border-radius:4px;">
+        <tr>
+          <td style="padding:28px;">
+            <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="50%" style="padding-bottom:18px;border-right:1px solid #1a1a1a;padding-right:16px;">
+                  <p style="margin:0 0 6px;font-size:11px;color:#555;text-transform:uppercase;">Role</p>
+                  <p style="margin:0;font-size:15px;color:#fff;font-weight:700;">${slotTitle}</p>
+                </td>
+                <td width="50%" style="padding-bottom:18px;padding-left:16px;">
+                  <p style="margin:0 0 6px;font-size:11px;color:#555;text-transform:uppercase;">Date</p>
+                  <p style="margin:0;font-size:14px;color:#fff;">${formattedDate}</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-bottom:18px;border-right:1px solid #1a1a1a;padding-right:16px;">
+                  <p style="margin:0 0 6px;font-size:11px;color:#555;text-transform:uppercase;">Time</p>
+                  <p style="margin:0;font-size:14px;color:#fff;">${slotTime}</p>
+                </td>
+                <td style="padding-bottom:18px;padding-left:16px;">
+                  <p style="margin:0 0 6px;font-size:11px;color:#555;text-transform:uppercase;">Duration</p>
+                  <p style="margin:0;font-size:14px;color:#fff;">${slotDuration}</p>
+                </td>
+              </tr>
+              ${slotNote ? `
+              <tr>
+                <td colspan="2" style="padding-top:10px;border-top:1px solid #222;">
+                  <p style="margin:10px 0 6px;font-size:11px;color:#555;text-transform:uppercase;">Note</p>
+                  <p style="margin:0;font-size:13px;color:#aaa;">${slotNote}</p>
+                </td>
+              </tr>
+              ` : ""}
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- JOIN MEETING SECTION -->
+  <tr>
+    <td style="padding:0 52px 36px;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center" style="background:#ea580c;border-radius:4px;padding:18px;">
+            <a href="${slotLink}" 
+               style="color:#ffffff;text-decoration:none;font-size:16px;font-weight:bold;display:block;">
+              JOIN MEETING NOW
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td style="padding-top:12px;">
+            <p style="margin:0 0 6px;font-size:11px;color:#555;text-transform:uppercase;font-weight:700;">
+              Meeting Link:
+            </p>
+            <p style="margin:0;font-size:12px;color:#777;word-break:break-all;">
+              <a href="${slotLink}" style="color:#ea580c;text-decoration:none;">${slotLink}</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- EXPLORE CTA -->
+  <tr>
+    <td style="padding:0 52px 36px;">
+      <table width="100%">
+        <tr>
+          <td align="left">
+            <a href="https://www.nomangames.store"
+              style="display:inline-block;color:#777;text-decoration:none;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;border:1px solid #333;padding:10px 20px;border-radius:4px;">
+              Explore Our Games →
+            </a>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background:#0a0a0a;padding:30px 40px;border-top:1px solid #1a1a1a;text-align:center;">
+      <p style="margin:0 0 6px;font-size:11px;color:#444;">
+        We look forward to speaking with you.
+      </p>
+      <p style="margin:0;font-size:10px;color:#333;">
+        © ${currentYear} NoMan Game Studio
+      </p>
+    </td>
+  </tr>
+
+</table>
+
+</td>
+</tr>
+</table>
+
 </body>
 </html>`,
       }),
@@ -274,7 +329,8 @@ export async function PATCH(
       slot.date,
       slot.time,
       slot.duration,
-      slot.note || ""
+      slot.note || "",
+      slot.link || ""
     )
 
     return NextResponse.json({ success: true }, { status: 200 })

@@ -30,6 +30,8 @@ interface Application {
   inviteSent?: boolean
   inviteSentAt?: string
   createdAt: string
+  slotInviteSent?: boolean
+slotInviteSentAt?: string
 }
 
 interface Job {
@@ -96,7 +98,6 @@ function exportAcceptedCSV(applications: Application[]) {
     alert("No accepted applicants to export.")
     return
   }
-
   const headers = ["Full Name", "Email", "Phone", "Degree", "University", "Job Title", "Applied On", "Invite Sent"]
   const rows = accepted.map((a) => [
     a.fullName, a.email, a.phone || "", a.degree || "", a.university || "",
@@ -123,7 +124,6 @@ function SlotsTab({ secret }: { secret: string }) {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null)
-
   const [form, setForm] = useState({
     title: "", date: "", time: "", duration: "30 min", link: "", note: ""
   })
@@ -277,8 +277,9 @@ export default function AdminCareersPage() {
   const [jobs, setJobs] = useState<Job[]>([])
   const [applications, setApplications] = useState<Application[]>([])
   const [loading, setLoading] = useState(false)
-  const [inviteLoading, setInviteLoading] = useState<string | null>(null)
-
+  // Around line where you see this:
+const [inviteLoading, setInviteLoading] = useState<string | null>(null)
+const [slotInviteLoading, setSlotInviteLoading] = useState<string | null>(null) // ← add RIGHT HERE
   const [showJobForm, setShowJobForm] = useState(false)
   const [jobForm, setJobForm] = useState(BLANK_JOB)
   const [expandedJob, setExpandedJob] = useState<string | null>(null)
@@ -471,7 +472,26 @@ const handleAuth = async () => {
     }
     reader.readAsText(file)
   }
-
+const handleSendSlotInvite = async (id: string) => {
+  setSlotInviteLoading(id)
+  try {
+    const res = await fetch("/api/admin/slot-invite", {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ applicationId: id }),
+    })
+    if (res.ok) {
+      setApplications(prev =>
+        prev.map(a => a._id === id ? { ...a, slotInviteSent: true, slotInviteSentAt: new Date().toISOString() } : a)
+      )
+      alert("Slot invite sent!")
+    } else {
+      alert("Failed to send slot invite.")
+    }
+  } finally {
+    setSlotInviteLoading(null)
+  }
+}
  const handleSendInvite = async (id: string) => {
   setInviteLoading(id)
   try {
@@ -486,6 +506,7 @@ const handleAuth = async () => {
     setInviteLoading(null)
   }
 }
+
 
   const updateStatus = async (applicationId: string, status: string) => {
   setApplications(prev =>
@@ -546,9 +567,11 @@ const handleAuth = async () => {
             >
               Send All Invites
             </button>
+            
 
             <button onClick={() => setShowJobForm(true)} className="px-5 py-2.5 bg-orange-600 hover:bg-orange-500 rounded-xl font-bold text-[10px] uppercase tracking-widest transition-all">Post Role</button>
           </div>
+          
         </div>
 
         {/* Tabs */}
@@ -699,7 +722,19 @@ const handleAuth = async () => {
                             {inviteLoading === app._id ? <Loader2 className="animate-spin w-4 h-4" /> : <Mail className="w-4 h-4" />} Invite
                           </button>
                         )}
-                      </div>
+                         {app.status === "accepted" && (
+    <button
+      onClick={() => handleSendSlotInvite(app._id)}
+disabled={slotInviteLoading === app._id}      className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl text-[10px] font-bold uppercase tracking-widest shadow-xl shadow-blue-600/10 disabled:opacity-40"
+    >
+   {slotInviteLoading === app._id 
+  ? <Loader2 className="animate-spin w-4 h-4" /> 
+  : <Calendar className="w-4 h-4" />
+}
+{app.slotInviteSent ? "Resend Slot" : "Slot Invite"}
+    </button>
+  )}
+</div>
                     </div>
 
                     {/* Status Buttons */}
